@@ -238,7 +238,7 @@ class _RoundTableState extends State<RoundTable> {
                 '${totals[p]!.total}',
                 bold: true,
                 size: 28,
-                color: view.state.rounds.isNotEmpty && totals[p]!.rank == 1
+                color: view.roundComplete.any((done) => done) && totals[p]!.rank == 1
                     ? scheme.tertiary
                     : scheme.onSurface,
               ),

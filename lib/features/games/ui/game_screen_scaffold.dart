@@ -14,6 +14,7 @@ class GameScreenScaffold extends StatefulWidget {
     required this.top,
     this.panel,
     this.maxPanelFraction = 0.45,
+    this.panelInset,
   });
 
   /// Standings and round table. Fills the space above the panel.
@@ -23,6 +24,10 @@ class GameScreenScaffold extends StatefulWidget {
   final Widget? panel;
 
   final double maxPanelFraction;
+
+  /// Optional: receives the height the panel covers, for callers that show
+  /// overlays (like the undo snackbar) from outside the scaffold.
+  final ValueNotifier<double>? panelInset;
 
   /// Height the panel covers right now, so other overlays (like the undo
   /// snackbar) can float above it. 0 without a panel or outside a scaffold.
@@ -39,11 +44,13 @@ class GameScreenScaffold extends StatefulWidget {
 
 class _GameScreenScaffoldState extends State<GameScreenScaffold> {
   final _panelKey = GlobalKey();
-  final _inset = ValueNotifier<double>(0);
+  final _ownInset = ValueNotifier<double>(0);
+
+  ValueNotifier<double> get _inset => widget.panelInset ?? _ownInset;
 
   @override
   void dispose() {
-    _inset.dispose();
+    _ownInset.dispose();
     super.dispose();
   }
 

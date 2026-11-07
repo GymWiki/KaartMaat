@@ -517,5 +517,34 @@
         "type": "int"
       }
     }
-  }
+  },
+  "roundDeleted": "Ronde {number} verwijderd",
+  "@roundDeleted": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "showProgress": "Verloop bekijken",
+  "bidShort": "bod {bid}",
+  "@bidShort": {
+    "placeholders": {
+      "bid": {
+        "type": "int"
+      }
+    }
+  },
+  "bidAndWon": "bod {bid} · {tricks}",
+  "@bidAndWon": {
+    "placeholders": {
+      "bid": {
+        "type": "int"
+      },
+      "tricks": {
+        "type": "int"
+      }
+    }
+  },
+  "toTricks": "Naar slagen"
 }

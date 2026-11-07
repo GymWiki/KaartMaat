@@ -26,12 +26,16 @@ class LiveScorePreview extends StatelessWidget {
     this.badges = const [],
     this.sum,
     this.message,
+    this.messageIsError = true,
   });
 
   final List<PreviewScore> scores;
   final List<String> badges;
   final int? sum;
   final String? message;
+
+  /// A blocking problem (red) or a plain hint such as a running total.
+  final bool messageIsError;
 
   static String signed(int points) => points > 0 ? '+$points' : '$points';
 
@@ -47,7 +51,10 @@ class LiveScorePreview extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Semantics(
           liveRegion: true,
-          child: Text(message!, style: TextStyle(color: scheme.error, fontSize: 15)),
+          child: Text(message!,
+              style: TextStyle(
+                  color: messageIsError ? scheme.error : scheme.onSurfaceVariant,
+                  fontSize: 15)),
         ),
       );
     }

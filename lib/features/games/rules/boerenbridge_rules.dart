@@ -102,6 +102,69 @@ class BoerenbridgeRules extends GameRules {
     return forbidden >= 0 ? forbidden : null;
   }
 
+  // ---- Helpers for the input panel -------------------------------------
+
+  /// The bid the dealer may not make, as soon as everybody else has bid.
+  /// Null while someone has not bid yet, or when the restriction is off.
+  int? forbiddenBidForDealer(
+      GameConfig config, int roundNumber, Map<String, int?> bids) {
+    final dealer = this.dealer(config, roundNumber);
+    var others = 0;
+    for (final p in config.participants) {
+      if (p == dealer) continue;
+      final bid = bids[p];
+      if (bid == null) return null;
+      others += bid;
+    }
+    return forbiddenDealerBid(config, roundNumber, others);
+  }
+
+  /// Bids [player] cannot pick right now (only the dealer has any).
+  Set<int> disabledBids(
+      GameConfig config, int roundNumber, String player, Map<String, int?> bids) {
+    if (player != dealer(config, roundNumber)) return const {};
+    final forbidden = forbiddenBidForDealer(config, roundNumber, bids);
+    return forbidden == null ? const {} : {forbidden};
+  }
+
+  /// Tricks the last player in bidding order wins: whatever is left. Null
+  /// until everybody else has a value, or when the others already won more
+  /// tricks than were played.
+  int? autoLastTricks(
+      GameConfig config, int roundNumber, Map<String, int?> tricks) {
+    final last = bidOrder(config, roundNumber).last;
+    var others = 0;
+    for (final p in config.participants) {
+      if (p == last) continue;
+      final t = tricks[p];
+      if (t == null) return null;
+      others += t;
+    }
+    final cards = cardsInRound(config, roundNumber);
+    final left = cards - others;
+    return left >= 0 && left <= cards ? left : null;
+  }
+
+  /// Tricks [player] cannot pick right now: more than are left, and for the
+  /// last player everything except the automatic value.
+  Set<int> disabledTricks(
+      GameConfig config, int roundNumber, String player, Map<String, int?> tricks) {
+    final cards = cardsInRound(config, roundNumber);
+    final all = {for (var i = 0; i <= cards; i++) i};
+    final order = bidOrder(config, roundNumber);
+    if (player == order.last) {
+      final auto = autoLastTricks(config, roundNumber, tricks);
+      return auto == null ? all : all.difference({auto});
+    }
+    var others = 0;
+    for (final p in order.take(order.length - 1)) {
+      if (p == player) continue;
+      others += tricks[p] ?? 0;
+    }
+    final left = cards - others;
+    return {for (var i = left + 1; i <= cards; i++) i};
+  }
+
   // ---- Validation and scoring ------------------------------------------
 
   static int? _int(Entry? e, String key) => e?[key] is int ? e![key] as int : null;

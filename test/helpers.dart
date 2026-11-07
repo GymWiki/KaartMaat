@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kaartmaat/core/l10n/gen/app_localizations.dart';
 import 'package:kaartmaat/core/theme/app_theme.dart';
@@ -19,8 +21,11 @@ Future<void> pumpApp(
   Widget child, {
   ThemeData? theme,
   bool scaffold = true,
+  List<Override> overrides = const [],
 }) =>
-    tester.pumpWidget(MaterialApp(
+    tester.pumpWidget(ProviderScope(
+      overrides: overrides,
+      child: MaterialApp(
       theme: theme ?? AppTheme.light(),
       locale: const Locale('nl'),
       supportedLocales: AppLocalizations.supportedLocales,
@@ -31,6 +36,7 @@ Future<void> pumpApp(
         GlobalCupertinoLocalizations.delegate,
       ],
       home: scaffold ? Scaffold(body: child) : child,
+      ),
     ));
 
 /// An unfinished "custom" game with players 1..[players] and one round per

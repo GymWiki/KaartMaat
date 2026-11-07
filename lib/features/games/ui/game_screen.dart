@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,11 +8,19 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../../core/ui/suits.dart';
+import '../../../core/ui/touch.dart';
+import '../../../core/ui/undo_snackbar.dart';
 import '../../history/share.dart';
 import '../../settings/data/settings_repository.dart';
+import '../data/draft_store.dart';
 import '../data/game_repository.dart';
 import '../data/game_state.dart';
 import '../games_registry.dart';
+import '../rules/game_rules.dart';
+import 'game_screen_scaffold.dart';
+import 'panel_context.dart';
+import 'progress_chart.dart';
+import 'round_table.dart';
 import 'standings_view.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
@@ -21,22 +31,66 @@ class GameScreen extends ConsumerStatefulWidget {
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends ConsumerState<GameScreen> {
+class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObserver {
+  late final DraftSaver _saver =
+      DraftSaver(ref.read(draftStoreProvider), widget.gameId);
+  final _panelInset = ValueNotifier<double>(0);
+
+  Map<String, Object?>? _draft;
+  bool _draftLoaded = false;
+
+  /// An earlier round that is loaded in the panel for correction.
+  int? _editingRound;
+
+  /// Bumped to rebuild the panel from [_draft] (after an undo).
+  int _generation = 0;
+
   @override
   void initState() {
     super.initState();
-    WakelockPlus.enable();
+    WidgetsBinding.instance.addObserver(this);
+    _keepAwake(true);
+    ref.read(draftStoreProvider).load(widget.gameId).then((d) {
+      if (!mounted) return;
+      setState(() {
+        _draft = d;
+        _draftLoaded = true;
+        if (d != null && d['editing'] == true && d['round'] is int) {
+          _editingRound = d['round'] as int;
+        }
+      });
+    });
   }
 
   @override
   void dispose() {
-    WakelockPlus.disable();
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_saver.flush());
+    _saver.dispose();
+    _panelInset.dispose();
+    _keepAwake(false);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Never lose a half-filled panel: write it out when the app leaves the screen.
+    if (state != AppLifecycleState.resumed) unawaited(_saver.flush());
+  }
+
+  void _keepAwake(bool on) {
+    try {
+      unawaited((on ? WakelockPlus.enable() : WakelockPlus.disable()).catchError((_) {}));
+    } catch (_) {
+      // no wakelock support (tests, desktop): the game still works
+    }
   }
 
   GameRepository get _repo => ref.read(gameRepositoryProvider);
 
-  Future<void> _undo(GameState state) async {
+  // ---- classic (separate input screen) ---------------------------------
+
+  Future<void> _undoWithDialog(GameState state) async {
     final l10n = context.l10n;
     final last = state.rounds.last.number;
     if (await confirmDialog(context, l10n.undoConfirm(last),
@@ -52,6 +106,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         actionLabel: l10n.finishGame)) {
       return;
     }
+    await _saver.discard();
     await _repo.finish(state.id);
     if (mounted) context.pushReplacement('/finished/${state.id}');
   }
@@ -65,6 +120,204 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     await _repo.deleteGame(state.id);
     if (mounted) context.pop();
   }
+
+  // ---- one-screen games (input panel) ----------------------------------
+
+  void _startEditing(int number) {
+    haptic(ref);
+    unawaited(_saver.discard());
+    setState(() {
+      _editingRound = number;
+      _draft = null;
+      _generation++;
+    });
+  }
+
+  void _stopEditing() {
+    haptic(ref);
+    unawaited(_saver.discard());
+    setState(() {
+      _editingRound = null;
+      _draft = null;
+      _generation++;
+    });
+  }
+
+  /// Shows the undo snackbar once the (possibly new) panel has been laid out
+  /// and measured, so it floats above the panel instead of covering it.
+  void _showUndo(String message, Future<void> Function() onUndo) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // The scaffold measures the panel in this same phase: wait one more frame.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        UndoSnackbar.show(
+          context,
+          message: message,
+          bottomInset: _panelInset.value,
+          onFeedback: () => haptic(ref),
+          onUndo: onUndo,
+        );
+      });
+      WidgetsBinding.instance.scheduleFrame();
+    });
+  }
+
+  /// Removes the last round without a dialog; the snackbar can bring it back.
+  Future<void> _undoLastRound(GameState state) async {
+    if (state.rounds.isEmpty) return;
+    final last = state.rounds.last;
+    final l10n = context.l10n;
+    haptic(ref);
+    await _repo.deleteLastRound(state.id);
+    if (!mounted) return;
+    _showUndo(l10n.roundDeleted(last.number), () => _repo.addRound(state.id, last.entries));
+  }
+
+  Future<void> _savePanelRound(
+    int number,
+    Entries entries, {
+    required bool complete,
+    Map<String, Object?>? undoDraft,
+  }) async {
+    final l10n = context.l10n;
+    final current = ref.read(gameStateProvider(widget.gameId)).value;
+    final previous =
+        current?.rounds.where((r) => r.number == number).firstOrNull?.entries;
+    if (previous != null) {
+      await _repo.updateRound(widget.gameId, number, entries);
+    } else {
+      await _repo.addRound(widget.gameId, entries);
+    }
+    if (!complete || !mounted) return;
+
+    await _saver.discard();
+    setState(() {
+      _editingRound = null;
+      _draft = null;
+      _generation++;
+    });
+    if (!mounted) return;
+    _showUndo(l10n.roundSaved(number), () async {
+      if (previous == null) {
+        await _repo.deleteLastRound(widget.gameId);
+      } else {
+        await _repo.updateRound(widget.gameId, number, previous);
+      }
+      if (!mounted) return;
+      // Bring the panel back as it was before saving.
+      if (undoDraft != null) _saver.schedule(undoDraft);
+      setState(() {
+        _draft = undoDraft;
+        _generation++;
+      });
+    });
+  }
+
+  void _showProgress(GameView view) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Text(context.l10n.progressTitle,
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 12),
+            ProgressChart(view: view),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _panelScreen(GameState state, GameView view, GameDefinition def) {
+    final l10n = context.l10n;
+    final editing = _editingRound != null;
+    final number = _editingRound ?? view.nextRoundNumber;
+    final existing =
+        state.rounds.where((r) => r.number == number).firstOrNull?.entries;
+
+    Widget? panel;
+    if (!_draftLoaded) {
+      panel = null;
+    } else if (!editing && !view.canAddRound) {
+      panel = SizedBox(
+        height: kTouchTarget,
+        child: FilledButton(
+          onPressed: () => _finish(state),
+          child: Text(l10n.finishGame),
+        ),
+      );
+    } else {
+      panel = KeyedSubtree(
+        key: ValueKey('panel-$number-$editing-$_generation'),
+        child: def.panelBuilder!(PanelContext(
+          view: view,
+          roundNumber: number,
+          existing: existing,
+          editing: editing,
+          draft: _saver,
+          initialDraft: _draft,
+          onSave: (entries, {required complete, undoDraft}) =>
+              _savePanelRound(number, entries, complete: complete, undoDraft: undoDraft),
+          onCancel: _stopEditing,
+        )),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(def.name(l10n)),
+        actions: [
+          IconButton(
+            tooltip: l10n.showProgress,
+            icon: const Icon(Icons.show_chart),
+            onPressed: () => _showProgress(view),
+          ),
+          PopupMenuButton<String>(
+            onSelected: (v) => switch (v) {
+              'undo' => _undoLastRound(state),
+              'share' => showShareResult(context, view),
+              'finish' => _finish(state),
+              _ => _delete(state),
+            },
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                value: 'undo',
+                enabled: state.rounds.isNotEmpty,
+                child: Text(l10n.undoLast),
+              ),
+              PopupMenuItem(value: 'share', child: Text(l10n.shareResult)),
+              PopupMenuItem(value: 'finish', child: Text(l10n.finishGame)),
+              PopupMenuItem(value: 'delete', child: Text(l10n.deleteGame)),
+            ],
+          ),
+        ],
+      ),
+      body: GameScreenScaffold(
+        panelInset: _panelInset,
+        top: RoundTable(
+          view: view,
+          currentRound: view.canAddRound ? view.nextRoundNumber : null,
+          editingRound: _editingRound,
+          onTapRound: (n) => n == view.nextRoundNumber && view.canAddRound
+              ? _stopEditing()
+              : _startEditing(n),
+          cellDetail: def.cellDetail == null
+              ? null
+              : (i, p) => def.cellDetail!(l10n, view, i, p),
+          cellHighlight: def.cellHighlight == null
+              ? null
+              : (i, p) => def.cellHighlight!(view, i, p),
+        ),
+        panel: panel,
+      ),
+    );
+  }
+
+  // ---- build -----------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +334,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     final view = GameView(state);
     final def = definitionFor(state.type);
-    final next = view.nextRoundNumber;
+    if (def.panelBuilder != null) return _panelScreen(state, view, def);
 
+    final next = view.nextRoundNumber;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -114,7 +368,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               primaryLabel:
                   def.primaryLabel?.call(l10n, view) ?? l10n.enterRound(next),
               onFinish: () => _finish(state),
-              onUndo: state.rounds.isEmpty ? null : () => _undo(state),
+              onUndo: state.rounds.isEmpty ? null : () => _undoWithDialog(state),
               onNewRound: () => context.push('/game/${state.id}/round/$next'),
             ),
             StandingsView(

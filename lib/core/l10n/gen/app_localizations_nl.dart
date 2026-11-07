@@ -814,4 +814,25 @@ class AppLocalizationsNl extends AppLocalizations {
   String roundSaved(int number) {
     return 'Ronde $number opgeslagen';
   }
+
+  @override
+  String roundDeleted(int number) {
+    return 'Ronde $number verwijderd';
+  }
+
+  @override
+  String get showProgress => 'Verloop bekijken';
+
+  @override
+  String bidShort(int bid) {
+    return 'bod $bid';
+  }
+
+  @override
+  String bidAndWon(int bid, int tricks) {
+    return 'bod $bid · $tricks';
+  }
+
+  @override
+  String get toTricks => 'Naar slagen';
 }

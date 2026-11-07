@@ -1515,6 +1515,36 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Ronde {number} opgeslagen'**
   String roundSaved(int number);
+
+  /// No description provided for @roundDeleted.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ronde {number} verwijderd'**
+  String roundDeleted(int number);
+
+  /// No description provided for @showProgress.
+  ///
+  /// In nl, this message translates to:
+  /// **'Verloop bekijken'**
+  String get showProgress;
+
+  /// No description provided for @bidShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'bod {bid}'**
+  String bidShort(int bid);
+
+  /// No description provided for @bidAndWon.
+  ///
+  /// In nl, this message translates to:
+  /// **'bod {bid} · {tricks}'**
+  String bidAndWon(int bid, int tricks);
+
+  /// No description provided for @toTricks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Naar slagen'**
+  String get toTricks;
 }
 
 class _AppLocalizationsDelegate

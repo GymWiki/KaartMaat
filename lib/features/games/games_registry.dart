@@ -15,6 +15,8 @@ import 'ui/boerenbridge_entry.dart';
 import 'ui/calculator_entry.dart';
 import 'ui/canasta_header.dart';
 import 'ui/boerenbridge_header.dart';
+import 'ui/boerenbridge_panel.dart';
+import 'ui/panel_context.dart';
 import 'ui/hearts_entry.dart';
 import 'ui/klaverjas_entry.dart';
 import 'ui/klaverjas_header.dart';
@@ -42,6 +44,9 @@ class GameDefinition {
     this.headerBuilder,
     this.primaryLabel,
     this.newGameHint,
+    this.panelBuilder,
+    this.cellDetail,
+    this.cellHighlight,
   });
 
   final GameRules rules;
@@ -58,6 +63,18 @@ class GameDefinition {
 
   /// Extra explanation on the new-game screen (e.g. how teams are formed).
   final String Function(AppLocalizations l10n)? newGameHint;
+
+  /// The input panel on the game screen. Games without one still use the
+  /// separate input screen.
+  final Widget Function(PanelContext ctx)? panelBuilder;
+
+  /// Small second line in a round-table cell (e.g. bid and tricks won).
+  final String? Function(AppLocalizations l10n, GameView view, int roundIndex,
+      String participant)? cellDetail;
+
+  /// Marks a round-table cell with a check (e.g. an exact bid).
+  final bool Function(GameView view, int roundIndex, String participant)?
+      cellHighlight;
 
   String get id => rules.type;
   int get minPlayers => rules.minPlayers;
@@ -77,6 +94,18 @@ final Map<String, GameDefinition> gameDefinitions = {
       onSubmit: onSubmit,
     ),
     headerBuilder: (view) => BoerenbridgeHeader(view: view),
+    panelBuilder: (ctx) => BoerenbridgePanel(ctx: ctx),
+    cellDetail: (l, view, i, p) {
+      final e = view.state.rounds[i].entries[p];
+      final bid = e?['bid'];
+      if (bid is! int) return null;
+      final tricks = e?['tricks'];
+      return tricks is int ? l.bidAndWon(bid, tricks) : l.bidShort(bid);
+    },
+    cellHighlight: (view, i, p) {
+      final e = view.state.rounds[i].entries[p];
+      return e?['bid'] is int && e?['bid'] == e?['tricks'];
+    },
     primaryLabel: (l, view) => view.openRound != null
         ? l.enterTricks(view.nextRoundNumber)
         : l.enterBids(view.nextRoundNumber),
