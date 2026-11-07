@@ -2,9 +2,10 @@ import '../rules/game_rules.dart';
 import '../rules/rules_registry.dart';
 
 class PlayerRef {
-  const PlayerRef({required this.id, required this.name});
+  const PlayerRef({required this.id, required this.name, this.avatar = 0});
   final int id;
   final String name;
+  final int avatar;
   String get key => '$id';
 }
 

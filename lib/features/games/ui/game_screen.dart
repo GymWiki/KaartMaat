@@ -90,12 +90,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           actions: [
             PopupMenuButton<String>(
               onSelected: (v) => switch (v) {
-                'copy' => copyResult(context, ref, view),
+                'copy' => showShareResult(context, view),
                 'finish' => _finish(state),
                 _ => _delete(state),
               },
               itemBuilder: (_) => [
-                PopupMenuItem(value: 'copy', child: Text(l10n.copyResult)),
+                PopupMenuItem(value: 'copy', child: Text(l10n.shareResult)),
                 PopupMenuItem(value: 'finish', child: Text(l10n.finishGame)),
                 PopupMenuItem(value: 'delete', child: Text(l10n.deleteGame)),
               ],

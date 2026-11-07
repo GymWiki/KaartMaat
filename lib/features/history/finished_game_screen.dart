@@ -26,9 +26,9 @@ class FinishedGameScreen extends ConsumerWidget {
         title: Text(definitionFor(state.type).name(l10n)),
         actions: [
           IconButton(
-            tooltip: l10n.copyResult,
+            tooltip: l10n.shareResult,
             icon: const Icon(Icons.ios_share),
-            onPressed: () => copyResult(context, ref, view),
+            onPressed: () => showShareResult(context, view),
           ),
           IconButton(
             tooltip: l10n.deleteGame,

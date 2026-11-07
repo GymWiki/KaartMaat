@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/db/database.dart';
 import '../../../core/db/providers.dart';
+import '../../../core/ui/avatars.dart' show avatarCount;
 import '../../games/data/game_state.dart';
 
 enum PlayerNameError { empty, exists }
@@ -15,7 +16,10 @@ class PlayerRepository {
         ..where((p) => p.deletedAt.isNull())
         ..orderBy([(p) => OrderingTerm.asc(p.name.lower())]))
       .watch()
-      .map((rows) => [for (final r in rows) PlayerRef(id: r.id, name: r.name)]);
+      .map((rows) => [
+            for (final r in rows)
+              PlayerRef(id: r.id, name: r.name, avatar: r.avatar),
+          ]);
 
   /// Returns the new id, or the reason the name was refused.
   Future<({int? id, PlayerNameError? error})> add(String name) async {
@@ -24,6 +28,8 @@ class PlayerRepository {
     final id = await db
         .into(db.players)
         .insert(PlayersCompanion.insert(name: name.trim()));
+    // Spread the built-in avatars over new players.
+    await setAvatar(id, id % avatarCount);
     return (id: id, error: null);
   }
 
@@ -34,6 +40,10 @@ class PlayerRepository {
         .write(PlayersCompanion(name: Value(name.trim())));
     return null;
   }
+
+  Future<void> setAvatar(int id, int avatar) =>
+      (db.update(db.players)..where((p) => p.id.equals(id)))
+          .write(PlayersCompanion(avatar: Value(avatar)));
 
   Future<void> delete(int id) =>
       (db.update(db.players)..where((p) => p.id.equals(id)))

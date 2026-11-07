@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/ui/avatars.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../groups/ui/groups_tab.dart';
 import '../data/player_repository.dart';
@@ -89,6 +90,14 @@ class _PlayersList extends ConsumerWidget {
               children: [
                 for (final p in players)
                   ListTile(
+                    leading: InkResponse(
+                      radius: 28,
+                      onTap: () async {
+                        final i = await pickAvatar(context, current: p.avatar);
+                        if (i != null) await repo.setAvatar(p.id, i);
+                      },
+                      child: PlayerAvatar(index: p.avatar, size: 44),
+                    ),
                     title: Text(p.name, style: const TextStyle(fontSize: 18)),
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                       IconButton(

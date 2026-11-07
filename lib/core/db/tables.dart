@@ -8,6 +8,9 @@ class Players extends Table {
 
   /// Soft delete: finished games keep referencing the player.
   DateTimeColumn get deletedAt => dateTime().nullable()();
+
+  /// Index into the built-in avatar set (see core/ui/avatars.dart).
+  IntColumn get avatar => integer().withDefault(const Constant(0))();
 }
 
 @DataClassName('GroupRow')

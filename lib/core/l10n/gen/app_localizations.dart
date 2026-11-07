@@ -1461,6 +1461,24 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'{wins} winsten in {games} spellen'**
   String kaartkoningWins(int wins, int games);
+
+  /// No description provided for @shareResult.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitslag delen'**
+  String get shareResult;
+
+  /// No description provided for @shareImage.
+  ///
+  /// In nl, this message translates to:
+  /// **'Deel als afbeelding'**
+  String get shareImage;
+
+  /// No description provided for @shareWatermark.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitslag bijgehouden met de Kaartmaat App'**
+  String get shareWatermark;
 }
 
 class _AppLocalizationsDelegate

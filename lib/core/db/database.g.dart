@@ -57,8 +57,24 @@ class $PlayersTable extends Players with TableInfo<$PlayersTable, PlayerRow> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _avatarMeta = const VerificationMeta('avatar');
   @override
-  List<GeneratedColumn> get $columns => [id, name, createdAt, deletedAt];
+  late final GeneratedColumn<int> avatar = GeneratedColumn<int>(
+    'avatar',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    createdAt,
+    deletedAt,
+    avatar,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -94,6 +110,12 @@ class $PlayersTable extends Players with TableInfo<$PlayersTable, PlayerRow> {
         deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
       );
     }
+    if (data.containsKey('avatar')) {
+      context.handle(
+        _avatarMeta,
+        avatar.isAcceptableOrUnknown(data['avatar']!, _avatarMeta),
+      );
+    }
     return context;
   }
 
@@ -119,6 +141,10 @@ class $PlayersTable extends Players with TableInfo<$PlayersTable, PlayerRow> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}deleted_at'],
       ),
+      avatar: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}avatar'],
+      )!,
     );
   }
 
@@ -135,11 +161,15 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
 
   /// Soft delete: finished games keep referencing the player.
   final DateTime? deletedAt;
+
+  /// Index into the built-in avatar set (see core/ui/avatars.dart).
+  final int avatar;
   const PlayerRow({
     required this.id,
     required this.name,
     required this.createdAt,
     this.deletedAt,
+    required this.avatar,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -150,6 +180,7 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
     if (!nullToAbsent || deletedAt != null) {
       map['deleted_at'] = Variable<DateTime>(deletedAt);
     }
+    map['avatar'] = Variable<int>(avatar);
     return map;
   }
 
@@ -161,6 +192,7 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
       deletedAt: deletedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(deletedAt),
+      avatar: Value(avatar),
     );
   }
 
@@ -174,6 +206,7 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
       name: serializer.fromJson<String>(json['name']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      avatar: serializer.fromJson<int>(json['avatar']),
     );
   }
   @override
@@ -184,6 +217,7 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
       'name': serializer.toJson<String>(name),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'avatar': serializer.toJson<int>(avatar),
     };
   }
 
@@ -192,11 +226,13 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
     String? name,
     DateTime? createdAt,
     Value<DateTime?> deletedAt = const Value.absent(),
+    int? avatar,
   }) => PlayerRow(
     id: id ?? this.id,
     name: name ?? this.name,
     createdAt: createdAt ?? this.createdAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    avatar: avatar ?? this.avatar,
   );
   PlayerRow copyWithCompanion(PlayersCompanion data) {
     return PlayerRow(
@@ -204,6 +240,7 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
       name: data.name.present ? data.name.value : this.name,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      avatar: data.avatar.present ? data.avatar.value : this.avatar,
     );
   }
 
@@ -213,13 +250,14 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
-          ..write('deletedAt: $deletedAt')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('avatar: $avatar')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, createdAt, deletedAt);
+  int get hashCode => Object.hash(id, name, createdAt, deletedAt, avatar);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -227,7 +265,8 @@ class PlayerRow extends DataClass implements Insertable<PlayerRow> {
           other.id == this.id &&
           other.name == this.name &&
           other.createdAt == this.createdAt &&
-          other.deletedAt == this.deletedAt);
+          other.deletedAt == this.deletedAt &&
+          other.avatar == this.avatar);
 }
 
 class PlayersCompanion extends UpdateCompanion<PlayerRow> {
@@ -235,29 +274,34 @@ class PlayersCompanion extends UpdateCompanion<PlayerRow> {
   final Value<String> name;
   final Value<DateTime> createdAt;
   final Value<DateTime?> deletedAt;
+  final Value<int> avatar;
   const PlayersCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
+    this.avatar = const Value.absent(),
   });
   PlayersCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     this.createdAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
+    this.avatar = const Value.absent(),
   }) : name = Value(name);
   static Insertable<PlayerRow> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? deletedAt,
+    Expression<int>? avatar,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (createdAt != null) 'created_at': createdAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
+      if (avatar != null) 'avatar': avatar,
     });
   }
 
@@ -266,12 +310,14 @@ class PlayersCompanion extends UpdateCompanion<PlayerRow> {
     Value<String>? name,
     Value<DateTime>? createdAt,
     Value<DateTime?>? deletedAt,
+    Value<int>? avatar,
   }) {
     return PlayersCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       createdAt: createdAt ?? this.createdAt,
       deletedAt: deletedAt ?? this.deletedAt,
+      avatar: avatar ?? this.avatar,
     );
   }
 
@@ -290,6 +336,9 @@ class PlayersCompanion extends UpdateCompanion<PlayerRow> {
     if (deletedAt.present) {
       map['deleted_at'] = Variable<DateTime>(deletedAt.value);
     }
+    if (avatar.present) {
+      map['avatar'] = Variable<int>(avatar.value);
+    }
     return map;
   }
 
@@ -299,7 +348,8 @@ class PlayersCompanion extends UpdateCompanion<PlayerRow> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('createdAt: $createdAt, ')
-          ..write('deletedAt: $deletedAt')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('avatar: $avatar')
           ..write(')'))
         .toString();
   }
@@ -2049,6 +2099,7 @@ typedef $$PlayersTableCreateCompanionBuilder =
       required String name,
       Value<DateTime> createdAt,
       Value<DateTime?> deletedAt,
+      Value<int> avatar,
     });
 typedef $$PlayersTableUpdateCompanionBuilder =
     PlayersCompanion Function({
@@ -2056,6 +2107,7 @@ typedef $$PlayersTableUpdateCompanionBuilder =
       Value<String> name,
       Value<DateTime> createdAt,
       Value<DateTime?> deletedAt,
+      Value<int> avatar,
     });
 
 final class $$PlayersTableReferences
@@ -2125,6 +2177,11 @@ class $$PlayersTableFilterComposer
 
   ColumnFilters<DateTime> get deletedAt => $composableBuilder(
     column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get avatar => $composableBuilder(
+    column: $table.avatar,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2207,6 +2264,11 @@ class $$PlayersTableOrderingComposer
     column: $table.deletedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get avatar => $composableBuilder(
+    column: $table.avatar,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PlayersTableAnnotationComposer
@@ -2229,6 +2291,9 @@ class $$PlayersTableAnnotationComposer
 
   GeneratedColumn<DateTime> get deletedAt =>
       $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get avatar =>
+      $composableBuilder(column: $table.avatar, builder: (column) => column);
 
   Expression<T> gamePlayersRefs<T extends Object>(
     Expression<T> Function($$GamePlayersTableAnnotationComposer a) f,
@@ -2313,11 +2378,13 @@ class $$PlayersTableTableManager
                 Value<String> name = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> avatar = const Value.absent(),
               }) => PlayersCompanion(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 deletedAt: deletedAt,
+                avatar: avatar,
               ),
           createCompanionCallback:
               ({
@@ -2325,11 +2392,13 @@ class $$PlayersTableTableManager
                 required String name,
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> avatar = const Value.absent(),
               }) => PlayersCompanion.insert(
                 id: id,
                 name: name,
                 createdAt: createdAt,
                 deletedAt: deletedAt,
+                avatar: avatar,
               ),
           withReferenceMapper: (p0) => p0
               .map(

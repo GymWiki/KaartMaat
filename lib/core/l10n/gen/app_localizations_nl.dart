@@ -786,4 +786,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String kaartkoningWins(int wins, int games) {
     return '$wins winsten in $games spellen';
   }
+
+  @override
+  String get shareResult => 'Uitslag delen';
+
+  @override
+  String get shareImage => 'Deel als afbeelding';
+
+  @override
+  String get shareWatermark => 'Uitslag bijgehouden met de Kaartmaat App';
 }

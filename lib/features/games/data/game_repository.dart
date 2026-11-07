@@ -64,6 +64,7 @@ class GameRepository {
           PlayerRef(
             id: row.readTable(db.players).id,
             name: row.readTable(db.players).name,
+            avatar: row.readTable(db.players).avatar,
           ),
       ],
       rounds: [

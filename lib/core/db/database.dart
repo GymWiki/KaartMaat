@@ -12,7 +12,7 @@ class AppDatabase extends _$AppDatabase {
       : super(executor ?? driftDatabase(name: 'kaartmaat'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -22,6 +22,9 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(groups);
             await m.createTable(groupMembers);
             await m.addColumn(games, games.groupId);
+          }
+          if (from < 3) {
+            await m.addColumn(players, players.avatar);
           }
         },
         beforeOpen: (details) async {
