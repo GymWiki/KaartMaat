@@ -81,21 +81,25 @@ class _PointsEntryState extends ConsumerState<PointsEntry> {
                     onTap: () => setState(() => _focus = i),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      child: Row(children: [
-                        Expanded(
-                          child: Text(widget.view.nameOf(_ids[i]),
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              widget.view.nameOf(_ids[i]),
                               style: Theme.of(context).textTheme.titleMedium,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        Text(
-                          _text[_ids[i]]!.isEmpty ? '–' : _text[_ids[i]]!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ]),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            _text[_ids[i]]!.isEmpty ? '–' : _text[_ids[i]]!,
+                            style: Theme.of(context).textTheme.headlineMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -108,29 +112,29 @@ class _PointsEntryState extends ConsumerState<PointsEntry> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(children: [
-                  for (final sign in [-1, 1])
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
-                        child: SizedBox(
-                          height: 56,
-                          child: FilledButton(
-                            onPressed: () => _adjust(sign),
-                            child: Text(sign < 0 ? '−$_step' : '+$_step'),
+                Row(
+                  children: [
+                    for (final sign in [-1, 1])
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+                          child: SizedBox(
+                            height: 56,
+                            child: FilledButton(
+                              onPressed: () => _adjust(sign),
+                              child: Text(sign < 0 ? '−$_step' : '+$_step'),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ]),
+                  ],
+                ),
                 BigNumberPad(onKey: _key),
                 const SizedBox(height: 4),
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
-                    onPressed: _last
-                        ? _submit
-                        : () => setState(() => _focus++),
+                    onPressed: _last ? _submit : () => setState(() => _focus++),
                     child: Text(_last ? l10n.saveRound : l10n.next),
                   ),
                 ),

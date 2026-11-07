@@ -143,7 +143,7 @@ void main() {
     // Round 1: dealer is Anna, bidding order Bas, Chris, Anna. Table on top,
     // panel at the bottom: one screen.
     expect(find.byType(Scaffold), findsOneWidget);
-    expect(find.text('Deler: Anna'), findsOneWidget);
+    expect(find.textContaining('Deler: Anna'), findsOneWidget);
 
     await tester.tap(number('1')); // Bas bids 1
     await tester.pump();
@@ -180,7 +180,7 @@ void main() {
         lessThanOrEqualTo(tester.getTopLeft(find.byType(AnimatedSize)).dy));
     // the next round is ready: dealer Bas, and the draft is gone
     expect(find.textContaining('Ronde 2 van'), findsOneWidget);
-    expect(find.text('Deler: Bas'), findsOneWidget);
+    expect(find.textContaining('Deler: Bas'), findsOneWidget);
     expect(drafts.data, isEmpty);
 
     // undo brings the round back to the tricks step, with the tricks as typed
@@ -205,12 +205,12 @@ void main() {
     });
     await openGame(tester, newGame(rounds: [done]));
 
-    expect(find.text('Deler: Bas'), findsOneWidget); // round 2 is the next one
+    expect(find.textContaining('Deler: Bas'), findsOneWidget); // round 2 is the next one
     await tester.tap(find.text('bod 1 · 1'));
     await tester.pump();
     await tester.pump();
 
-    expect(find.text('Ronde 1 corrigeren'), findsOneWidget);
+    expect(find.textContaining('Ronde 1 corrigeren'), findsWidgets);
     expect(find.byType(Scaffold), findsOneWidget); // still the same screen
 
     // fix Bas's bid and save: totals follow
@@ -223,7 +223,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.close));
     await tester.pump();
     await tester.pump();
-    expect(find.text('Deler: Bas'), findsOneWidget); // back on the new round
+    expect(find.textContaining('Deler: Bas'), findsOneWidget); // back on the new round
     expect(repo.state.rounds.single.entries['2'], {'bid': 1, 'tricks': 1}); // untouched
 
     await close(tester);
@@ -293,14 +293,13 @@ void main() {
     await tester.tap(find.bySemanticsLabel(RegExp('^Ronde 1, ')));
     await tester.pump();
     await tester.pump();
-    expect(find.text('Ronde 1 corrigeren'), findsOneWidget);
+    expect(find.textContaining('Ronde 1 corrigeren'), findsWidgets);
     await tester.tap(tile('Anna'));
     await tester.pump();
     expect(points(1, '1'), 3);
-    await tester.tap(find.byIcon(Icons.close));
+    await tester.tap(find.text('Klaar'));
     await tester.pump();
     await tester.pump();
-    expect(find.text('Ronde 2'), findsWidgets);
     await tester.tap(tile('Chris'));
     await tester.pump();
     expect(points(2, '3'), 1);

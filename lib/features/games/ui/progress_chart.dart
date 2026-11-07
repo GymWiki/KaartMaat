@@ -48,11 +48,18 @@ class ProgressChart extends StatelessWidget {
           runSpacing: 4,
           children: [
             for (var i = 0; i < ids.length; i++)
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                Icon(Icons.circle, size: 12, color: playerColors[i % playerColors.length]),
-                const SizedBox(width: 6),
-                Text(view.nameOf(ids[i])),
-              ]),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.circle,
+                    size: 12,
+                    color: playerColors[i % playerColors.length],
+                  ),
+                  const SizedBox(width: 6),
+                  Text(view.nameOf(ids[i])),
+                ],
+              ),
           ],
         ),
       ],
@@ -92,7 +99,10 @@ class _ChartPainter extends CustomPainter {
 
     void label(String text, Offset at) {
       final tp = TextPainter(
-        text: TextSpan(text: text, style: TextStyle(fontSize: 11, color: textColor)),
+        text: TextSpan(
+          text: text,
+          style: TextStyle(fontSize: 11, color: textColor),
+        ),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, at - Offset(tp.width / 2, tp.height / 2));
@@ -102,7 +112,9 @@ class _ChartPainter extends CustomPainter {
     if (lo < 0) label('$lo', Offset(left / 2, y(lo)));
     label('0', Offset(left / 2, y(0)));
     label('1', Offset(x(1), size.height - bottom / 2));
-    if (rounds > 1) label('$rounds', Offset(x(rounds), size.height - bottom / 2));
+    if (rounds > 1) {
+      label('$rounds', Offset(x(rounds), size.height - bottom / 2));
+    }
 
     for (var s = 0; s < series.length; s++) {
       final paint = Paint()
@@ -116,7 +128,10 @@ class _ChartPainter extends CustomPainter {
       }
       canvas.drawPath(path, paint);
       canvas.drawCircle(
-          Offset(x(rounds), y(series[s].last)), 4, paint..style = PaintingStyle.fill);
+        Offset(x(rounds), y(series[s].last)),
+        4,
+        paint..style = PaintingStyle.fill,
+      );
     }
   }
 

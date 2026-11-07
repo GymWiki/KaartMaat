@@ -174,7 +174,7 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
       },
       child: SizedBox(
         width: width,
-        height: 96,
+        height: ids.length > 4 ? 76 : 96,
         child: Material(
           color: scheme.surfaceContainerHighest,
           shape: RoundedRectangleBorder(
@@ -189,7 +189,7 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
                   onTap: () => _change(p, step),
                   onLongPress: () => _change(p, -step),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
+                    padding: EdgeInsets.fromLTRB(12, ids.length > 4 ? 4 : 8, 4, ids.length > 4 ? 4 : 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,12 +211,14 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
                           child: Text(
                             '$total',
                             style: text.displaySmall?.copyWith(
-                              fontSize: 34,
+                              fontSize: ids.length > 4 ? 30 : 34,
                               height: 1.0,
                             ),
                           ),
                         ),
                         Text(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           l10n.counterThisRound(
                             inRound > 0 ? '+$inRound' : '$inRound',
                           ),
@@ -261,30 +263,12 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final text = Theme.of(context).textTheme;
     final custom = !_presets.contains(step);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                ctx.editing ? l10n.editRound(number) : l10n.roundTitle(number),
-                style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-              ),
-            ),
-            if (ctx.editing)
-              IconButton(
-                tooltip: l10n.cancel,
-                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-                onPressed: ctx.onCancel,
-                icon: const Icon(Icons.close),
-              ),
-          ],
-        ),
         Row(
           children: [
             for (final preset in _presets) ...[
@@ -340,12 +324,10 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
               child: SizedBox(
                 height: kTouchTarget,
                 child: FilledButton(
-                  onPressed: ctx.onNewRound == null || ctx.editing
-                      ? null
-                      : _nextRound,
+                  onPressed: ctx.editing ? ctx.onCancel : (ctx.onNewRound == null ? null : _nextRound),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text(l10n.nextRound),
+                    child: Text(ctx.editing ? l10n.calcDone : l10n.nextRound),
                   ),
                 ),
               ),

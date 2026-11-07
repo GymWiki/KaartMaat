@@ -55,14 +55,14 @@ class _ToepenEntryState extends ConsumerState<ToepenEntry> {
   int get _effective => _knocks + (_sit.poverty.isEmpty ? 0 : 1);
 
   Entries _entries() => {
-        for (final p in _config.participants)
-          p: {
-            'winner': p == _winner,
-            'knocks': _knocks,
-            if (p != _winner && !_sit.out.contains(p) && _fold[p] != null)
-              'foldAt': _fold[p],
-          },
-      };
+    for (final p in _config.participants)
+      p: {
+        'winner': p == _winner,
+        'knocks': _knocks,
+        if (p != _winner && !_sit.out.contains(p) && _fold[p] != null)
+          'foldAt': _fold[p],
+      },
+  };
 
   void _setKnocks(int k) {
     haptic(ref);
@@ -94,55 +94,69 @@ class _ToepenEntryState extends ConsumerState<ToepenEntry> {
                   color: scheme.tertiaryContainer,
                   child: ListTile(
                     leading: const Icon(Icons.warning_amber),
-                    title: Text(l10n.toepenInPoverty(
-                        _sit.poverty.map(widget.view.nameOf).join(', '))),
+                    title: Text(
+                      l10n.toepenInPoverty(
+                        _sit.poverty.map(widget.view.nameOf).join(', '),
+                      ),
+                    ),
                     subtitle: Text(l10n.toepenPovertyKnock),
                   ),
                 ),
               Text(l10n.toepenWinner, style: text.titleMedium),
               const SizedBox(height: 8),
-              Wrap(spacing: 8, runSpacing: 8, children: [
-                for (final p in alive)
-                  ChoiceChip(
-                    label: Text(widget.view.nameOf(p)),
-                    selected: _winner == p,
-                    onSelected: (_) {
-                      haptic(ref);
-                      setState(() {
-                        _winner = p;
-                        _fold[p] = null;
-                      });
-                    },
-                  ),
-              ]),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final p in alive)
+                    ChoiceChip(
+                      label: Text(widget.view.nameOf(p)),
+                      selected: _winner == p,
+                      onSelected: (_) {
+                        haptic(ref);
+                        setState(() {
+                          _winner = p;
+                          _fold[p] = null;
+                        });
+                      },
+                    ),
+                ],
+              ),
               const SizedBox(height: 20),
               Text(l10n.toepenKnocks, style: text.titleMedium),
               const SizedBox(height: 8),
-              Row(children: [
-                SizedBox(
-                  width: 72,
-                  height: 56,
-                  child: FilledButton.tonal(
-                    onPressed: _knocks > 0 ? () => _setKnocks(_knocks - 1) : null,
-                    child: const Icon(Icons.remove),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 72,
+                    height: 56,
+                    child: FilledButton.tonal(
+                      onPressed: _knocks > 0
+                          ? () => _setKnocks(_knocks - 1)
+                          : null,
+                      child: const Icon(Icons.remove),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text('$_knocks',
-                        style: text.displaySmall
-                            ?.copyWith(fontWeight: FontWeight.bold)),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        '$_knocks',
+                        style: text.displaySmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 72,
-                  height: 56,
-                  child: FilledButton(
-                    onPressed: () => _setKnocks(_knocks + 1),
-                    child: const Icon(Icons.add),
+                  SizedBox(
+                    width: 72,
+                    height: 56,
+                    child: FilledButton(
+                      onPressed: () => _setKnocks(_knocks + 1),
+                      child: const Icon(Icons.add),
+                    ),
                   ),
-                ),
-              ]),
+                ],
+              ),
               const SizedBox(height: 20),
               for (final p in alive)
                 if (p != _winner)
@@ -154,23 +168,27 @@ class _ToepenEntryState extends ConsumerState<ToepenEntry> {
                         children: [
                           Text(widget.view.nameOf(p), style: text.titleMedium),
                           const SizedBox(height: 8),
-                          Wrap(spacing: 8, runSpacing: 8, children: [
-                            ChoiceChip(
-                              label: Text(l10n.toepenStay),
-                              selected: _fold[p] == null,
-                              onSelected: (_) =>
-                                  setState(() => _fold[p] = null),
-                            ),
-                            for (var j = 1; j <= _effective; j++)
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
                               ChoiceChip(
-                                label: Text(l10n.toepenFoldAt(j)),
-                                selected: _fold[p] == j,
-                                onSelected: (_) {
-                                  haptic(ref);
-                                  setState(() => _fold[p] = j);
-                                },
+                                label: Text(l10n.toepenStay),
+                                selected: _fold[p] == null,
+                                onSelected: (_) =>
+                                    setState(() => _fold[p] = null),
                               ),
-                          ]),
+                              for (var j = 1; j <= _effective; j++)
+                                ChoiceChip(
+                                  label: Text(l10n.toepenFoldAt(j)),
+                                  selected: _fold[p] == j,
+                                  onSelected: (_) {
+                                    haptic(ref);
+                                    setState(() => _fold[p] = j);
+                                  },
+                                ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -180,23 +198,32 @@ class _ToepenEntryState extends ConsumerState<ToepenEntry> {
                   color: scheme.surfaceContainerHighest,
                   child: Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Column(children: [
-                      for (final p in _config.participants)
-                        Row(children: [
-                          Expanded(child: Text(widget.view.nameOf(p))),
-                          Text('+${scores[p]}  →  ${_sit.totals[p]! + scores[p]!}',
-                              style: text.titleMedium),
-                          if (_sit.totals[p]! + scores[p]! >=
-                              _config.intSetting(ToepenRules.limitKey))
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Text(l10n.toepenOutBadge,
-                                  style: TextStyle(
+                    child: Column(
+                      children: [
+                        for (final p in _config.participants)
+                          Row(
+                            children: [
+                              Expanded(child: Text(widget.view.nameOf(p))),
+                              Text(
+                                '+${scores[p]}  →  ${_sit.totals[p]! + scores[p]!}',
+                                style: text.titleMedium,
+                              ),
+                              if (_sit.totals[p]! + scores[p]! >=
+                                  _config.intSetting(ToepenRules.limitKey))
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Text(
+                                    l10n.toepenOutBadge,
+                                    style: TextStyle(
                                       color: scheme.error,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                        ]),
-                    ]),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
             ],
@@ -205,21 +232,28 @@ class _ToepenEntryState extends ConsumerState<ToepenEntry> {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              if (_winner == null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(l10n.toepenChooseWinner,
-                      style: TextStyle(color: scheme.error)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_winner == null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      l10n.toepenChooseWinner,
+                      style: TextStyle(color: scheme.error),
+                    ),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: issue == null
+                        ? () => widget.onSubmit(entries)
+                        : null,
+                    child: Text(l10n.saveRound),
+                  ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: issue == null ? () => widget.onSubmit(entries) : null,
-                  child: Text(l10n.saveRound),
-                ),
-              ),
-            ]),
+              ],
+            ),
           ),
         ),
       ],

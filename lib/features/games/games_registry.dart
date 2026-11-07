@@ -55,6 +55,7 @@ class GameDefinition {
     this.cellDetail,
     this.cellHighlight,
     this.liveRound = false,
+    this.statusLine,
   });
 
   final GameRules rules;
@@ -79,6 +80,12 @@ class GameDefinition {
   /// Small second line in a round-table cell (e.g. bid and tricks won).
   final String? Function(AppLocalizations l10n, GameView view, int roundIndex,
       String participant)? cellDetail;
+
+  /// One line above the table: round, dealer, cards. Defaults to the round
+  /// number. [editing] is true while an earlier round is corrected.
+  final String Function(
+          AppLocalizations l10n, GameView view, int roundNumber, bool editing)?
+      statusLine;
 
   /// Counting games: the panel edits the latest round on every tap, and
   /// "next round" starts a new one, instead of confirming a round at a time.
@@ -107,6 +114,15 @@ final Map<String, GameDefinition> gameDefinitions = {
     ),
     headerBuilder: (view) => BoerenbridgeHeader(view: view),
     panelBuilder: (ctx) => BoerenbridgePanel(ctx: ctx),
+    statusLine: (l, view, n, editing) {
+      const rules = BoerenbridgeRules();
+      final cfg = view.config;
+      return [
+        editing ? l.editRound(n) : l.roundOf(n, rules.totalRounds(cfg)),
+        l.cardsCount(rules.cardsInRound(cfg, n)),
+        l.dealerLabel(view.nameOf(rules.dealer(cfg, n))),
+      ].join(' · ');
+    },
     cellDetail: (l, view, i, p) {
       final e = view.state.rounds[i].entries[p];
       final bid = e?['bid'];
@@ -132,6 +148,17 @@ final Map<String, GameDefinition> gameDefinitions = {
     headerBuilder: (view) => KlaverjasHeader(view: view),
     newGameHint: (l) => l.teamsHint,
     panelBuilder: (ctx) => KlaverjasPanel(ctx: ctx),
+    statusLine: (l, view, n, editing) {
+      const rules = KlaverjasRules();
+      final cfg = view.config;
+      final total = rules.plannedRounds(cfg);
+      return [
+        editing
+            ? l.editRound(n)
+            : (total == null ? l.roundTitle(n) : l.roundOf(n, total)),
+        l.dealerLabel(view.nameOf(rules.dealer(cfg, n))),
+      ].join(' · ');
+    },
     cellDetail: (l, view, i, team) {
       const rules = KlaverjasRules();
       final round = view.state.rounds[i];

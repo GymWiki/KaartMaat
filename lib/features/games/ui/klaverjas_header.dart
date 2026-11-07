@@ -31,15 +31,20 @@ class KlaverjasHeader extends StatelessWidget {
       color: Theme.of(context).colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Row(children: [
-          Expanded(
-            child: Text(
-              planned == null ? l10n.roundTitle(n) : l10n.roundOf(n, planned),
-              style: text.titleLarge,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                planned == null ? l10n.roundTitle(n) : l10n.roundOf(n, planned),
+                style: text.titleLarge,
+              ),
             ),
-          ),
-          Text(l10n.dealerLabel(view.nameOf(dealer)), style: text.titleMedium),
-        ]),
+            Text(
+              l10n.dealerLabel(view.nameOf(dealer)),
+              style: text.titleMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -333,44 +333,36 @@ class _KlaverjasPanelState extends ConsumerState<KlaverjasPanel> {
     final scheme = Theme.of(context).colorScheme;
     final view = ctx.view;
     final rules = _rules;
-    final total = rules.plannedRounds(config);
     final value = _cardsValue;
     final issue = rules.validateRound(config, _round);
     final canConfirm = issue == null && value != null;
     final outcome = canConfirm ? rules.outcome(config, _round) : null;
     final other = KlaverjasRules.other(playing);
-    final dealer = rules.dealer(config, number);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                ctx.editing
-                    ? l10n.editRound(number)
-                    : (total == null
-                          ? l10n.roundTitle(number)
-                          : l10n.roundOf(number, total)),
-                style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+        if (ctx.editing) ...[
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.editRound(number),
+                  style: text.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
-            ),
-            Text(
-              l10n.dealerLabel(view.nameOf(dealer)),
-              style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
-            ),
-            if (ctx.editing)
               IconButton(
                 tooltip: l10n.cancel,
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                 onPressed: ctx.onCancel,
                 icon: const Icon(Icons.close),
               ),
-          ],
-        ),
-        const SizedBox(height: kTouchGap),
+            ],
+          ),
+        ],
         Row(
           children: [
             for (final t in _teams) ...[
@@ -427,6 +419,25 @@ class _KlaverjasPanelState extends ConsumerState<KlaverjasPanel> {
             const SizedBox(width: kTouchGap),
             Semantics(
               button: true,
+              selected: roemPage,
+              label: l10n.pageRoem,
+              excludeSemantics: true,
+              child: SizedBox(
+                height: kTouchTarget,
+                child: FilterChip(
+                  selected: roemPage,
+                  showCheckmark: false,
+                  label: Text(
+                    '${l10n.pageRoem} · ${_roemTotal(KlaverjasRules.wij)} / ${_roemTotal(KlaverjasRules.zij)}',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onSelected: (_) => _update(() => roemPage = !roemPage),
+                ),
+              ),
+            ),
+            const SizedBox(width: kTouchGap),
+            Semantics(
+              button: true,
               selected: pit,
               label: l10n.pitLabel,
               excludeSemantics: true,
@@ -452,25 +463,6 @@ class _KlaverjasPanelState extends ConsumerState<KlaverjasPanel> {
               ),
             ),
           ],
-        ),
-        const SizedBox(height: kTouchGap),
-        SegmentedButton<bool>(
-          showSelectedIcon: false,
-          style: SegmentedButton.styleFrom(
-            minimumSize: const Size(0, 44),
-            visualDensity: VisualDensity.compact,
-          ),
-          segments: [
-            ButtonSegment(value: false, label: Text(l10n.pagePoints)),
-            ButtonSegment(
-              value: true,
-              label: Text(
-                '${l10n.pageRoem} · ${_roemTotal(KlaverjasRules.wij)} / ${_roemTotal(KlaverjasRules.zij)}',
-              ),
-            ),
-          ],
-          selected: {roemPage},
-          onSelectionChanged: (s) => _update(() => roemPage = s.first),
         ),
         const SizedBox(height: kTouchGap),
         if (!roemPage)

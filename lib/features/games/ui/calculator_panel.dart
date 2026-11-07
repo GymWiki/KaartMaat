@@ -47,7 +47,8 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
       amounts[p] = [];
     }
     final initial = ctx.initialDraft;
-    final usable = initial != null &&
+    final usable =
+        initial != null &&
         initial['round'] == number &&
         initial['editing'] == ctx.editing;
     if (usable) {
@@ -55,11 +56,21 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
       if (saved is Map) {
         for (final p in ids) {
           final list = saved[p];
-          if (list is List) amounts[p] = [for (final n in list) if (n is int) n];
+          if (list is List) {
+            amounts[p] = [
+              for (final n in list)
+                if (n is int) n,
+            ];
+          }
         }
       }
       final savedDone = initial['done'];
-      if (savedDone is List) done.addAll([for (final p in savedDone) if (p is String) p]);
+      if (savedDone is List) {
+        done.addAll([
+          for (final p in savedDone)
+            if (p is String) p,
+        ]);
+      }
       focus = (initial['focus'] as int? ?? 0).clamp(0, ids.length - 1);
       typed = initial['typed'] as String? ?? '';
       quickPage = initial['page'] == 'quick';
@@ -80,7 +91,10 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
   /// What is typed but not added yet.
   int get _pending => int.tryParse(typed) ?? 0;
 
-  List<String> get _remaining => [for (final p in ids) if (!done.contains(p)) p];
+  List<String> get _remaining => [
+    for (final p in ids)
+      if (!done.contains(p)) p,
+  ];
 
   /// The primary button saves the round when this is the last player to do.
   bool get _savesRound {
@@ -89,24 +103,24 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
   }
 
   Entries _entries() => {
-        for (final p in ids)
-          p: {
-            'amounts': [
-              ...amounts[p]!,
-              if (p == _current && _pending != 0) _pending,
-            ],
-          },
-      };
+    for (final p in ids)
+      p: {
+        'amounts': [
+          ...amounts[p]!,
+          if (p == _current && _pending != 0) _pending,
+        ],
+      },
+  };
 
   Map<String, Object?> _draftJson() => {
-        'round': number,
-        'editing': ctx.editing,
-        'amounts': amounts,
-        'done': done.toList(),
-        'focus': focus,
-        'typed': typed,
-        'page': quickPage ? 'quick' : 'digits',
-      };
+    'round': number,
+    'editing': ctx.editing,
+    'amounts': amounts,
+    'done': done.toList(),
+    'focus': focus,
+    'typed': typed,
+    'page': quickPage ? 'quick' : 'digits',
+  };
 
   void _update(VoidCallback change) {
     haptic(ref);
@@ -128,24 +142,28 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
   void _quick(int amount) => _update(() => amounts[_current]!.add(amount));
 
   void _undo() => _update(() {
-        if (typed.isNotEmpty) {
-          typed = '';
-        } else if (amounts[_current]!.isNotEmpty) {
-          amounts[_current]!.removeLast();
-        }
-      });
+    if (typed.isNotEmpty) {
+      typed = '';
+    } else if (amounts[_current]!.isNotEmpty) {
+      amounts[_current]!.removeLast();
+    }
+  });
 
   void _select(int i) => _update(() {
-        _commitTyped();
-        focus = i;
-      });
+    _commitTyped();
+    focus = i;
+  });
 
   void _primary() {
     haptic(ref);
     if (_savesRound) {
       _commitTyped();
       done.add(_current);
-      ctx.onSave(_entries(), complete: true, undoDraft: ctx.editing ? null : _draftJson());
+      ctx.onSave(
+        _entries(),
+        complete: true,
+        undoDraft: ctx.editing ? null : _draftJson(),
+      );
       return;
     }
     setState(() {
@@ -153,8 +171,12 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
       done.add(_current);
       final next = _remaining.first;
       // continue with the next player after this one that still has to go
-      final order = [for (var s = 1; s <= ids.length; s++) ids[(focus + s) % ids.length]];
-      focus = ids.indexOf(order.firstWhere((p) => !done.contains(p), orElse: () => next));
+      final order = [
+        for (var s = 1; s <= ids.length; s++) ids[(focus + s) % ids.length],
+      ];
+      focus = ids.indexOf(
+        order.firstWhere((p) => !done.contains(p), orElse: () => next),
+      );
     });
     ctx.draft.schedule(_draftJson());
   }
@@ -173,20 +195,31 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
     final total = _sum(_current) + _pending;
 
     final tape = Text.rich(
-      TextSpan(children: [
-        for (var i = 0; i < list.length; i++)
-          TextSpan(text: i == 0 ? _signed(list[i]) : (list[i] < 0 ? ' − ${-list[i]}' : ' + ${list[i]}')),
-        if (typed.isNotEmpty)
-          TextSpan(
-            text: (list.isEmpty ? '' : ' + ') + (typed == '-' ? '−' : typed.replaceFirst('-', '−')),
-            style: TextStyle(color: scheme.tertiary, fontWeight: FontWeight.w800),
-          ),
-        if (list.isEmpty && typed.isEmpty)
-          TextSpan(
-            text: l10n.calcTapeEmpty,
-            style: TextStyle(color: scheme.onSurfaceVariant),
-          ),
-      ]),
+      TextSpan(
+        children: [
+          for (var i = 0; i < list.length; i++)
+            TextSpan(
+              text: i == 0
+                  ? _signed(list[i])
+                  : (list[i] < 0 ? ' − ${-list[i]}' : ' + ${list[i]}'),
+            ),
+          if (typed.isNotEmpty)
+            TextSpan(
+              text:
+                  (list.isEmpty ? '' : ' + ') +
+                  (typed == '-' ? '−' : typed.replaceFirst('-', '−')),
+              style: TextStyle(
+                color: scheme.tertiary,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          if (list.isEmpty && typed.isEmpty)
+            TextSpan(
+              text: l10n.calcTapeEmpty,
+              style: TextStyle(color: scheme.onSurfaceVariant),
+            ),
+        ],
+      ),
       maxLines: 1,
       softWrap: false,
       style: const TextStyle(fontSize: 18),
@@ -197,24 +230,31 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (ctx.editing)
-          Row(children: [
-            Expanded(
-              child: Text(l10n.editRound(number),
-                  style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-            ),
-            IconButton(
-              tooltip: l10n.cancel,
-              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-              onPressed: ctx.onCancel,
-              icon: const Icon(Icons.close),
-            ),
-          ]),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.editRound(number),
+                  style: text.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              IconButton(
+                tooltip: l10n.cancel,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                onPressed: ctx.onCancel,
+                icon: const Icon(Icons.close),
+              ),
+            ],
+          ),
         PlayerSelector(
           chips: [
             for (final p in ids)
               PlayerChipData(
                 label: view.nameOf(p),
-                value: (p == _current ? _sum(p) + _pending : _sum(p)).toString(),
+                value: (p == _current ? _sum(p) + _pending : _sum(p))
+                    .toString(),
                 done: done.contains(p),
               ),
           ],
@@ -235,140 +275,171 @@ class _CalculatorPanelState extends ConsumerState<CalculatorPanel> {
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: scheme.outlineVariant),
             ),
-            child: Row(children: [
-              Expanded(
-                child: ClipRect(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    reverse: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    child: Align(alignment: Alignment.centerRight, child: tape),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text('= ${_signed(total)}', style: text.headlineSmall),
-            ]),
-          ),
-        ),
-        const SizedBox(height: kTouchGap),
-        if (widget.quick.isNotEmpty) ...[
-          SegmentedButton<bool>(
-            showSelectedIcon: false,
-            style: SegmentedButton.styleFrom(
-              minimumSize: const Size(0, 44),
-              visualDensity: VisualDensity.compact,
-            ),
-            segments: [
-              ButtonSegment(value: false, label: Text(l10n.pageDigits)),
-              ButtonSegment(value: true, label: Text(l10n.pageQuick)),
-            ],
-            selected: {quickPage},
-            onSelectionChanged: (s) => _update(() => quickPage = s.first),
-          ),
-          const SizedBox(height: kTouchGap),
-        ],
-        if (quickPage && widget.quick.isNotEmpty)
-          LayoutBuilder(builder: (context, constraints) {
-            const columns = 3;
-            final width = (constraints.maxWidth - kTouchGap * (columns - 1)) / columns;
-            return Wrap(spacing: kTouchGap, runSpacing: kTouchGap, children: [
-              for (final q in widget.quick)
-                SizedBox(
-                  width: width,
-                  height: kTouchTarget,
-                  child: Semantics(
-                    button: true,
-                    label: '${q.label(l10n)} ${q.amount > 0 ? '+' : ''}${q.amount}',
-                    excludeSemantics: true,
-                    child: Material(
-                      color: scheme.surfaceContainerHighest,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        side: BorderSide(color: scheme.outlineVariant),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(14),
-                        onTap: () => _quick(q.amount),
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '${q.amount > 0 ? '+' : ''}${q.amount}',
-                                style: TextStyle(
-                                  fontFamily: AppTheme.numeralFont,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18,
-                                  height: 1.1,
-                                  color: scheme.onSurface,
-                                ),
-                              ),
-                              Text(
-                                q.label(l10n),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 11, height: 1.1, color: scheme.onSurfaceVariant),
-                              ),
-                            ],
-                          ),
-                        ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ClipRect(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: tape,
                       ),
                     ),
                   ),
                 ),
-            ]);
-          })
+                const SizedBox(width: 10),
+                Text('= ${_signed(total)}', style: text.headlineSmall),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: kTouchGap),
+        if (quickPage && widget.quick.isNotEmpty)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              const columns = 3;
+              final width =
+                  (constraints.maxWidth - kTouchGap * (columns - 1)) / columns;
+              return Wrap(
+                spacing: kTouchGap,
+                runSpacing: kTouchGap,
+                children: [
+                  for (final q in widget.quick)
+                    SizedBox(
+                      width: width,
+                      height: kTouchTarget,
+                      child: Semantics(
+                        button: true,
+                        label:
+                            '${q.label(l10n)} ${q.amount > 0 ? '+' : ''}${q.amount}',
+                        excludeSemantics: true,
+                        child: Material(
+                          color: scheme.surfaceContainerHighest,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            side: BorderSide(color: scheme.outlineVariant),
+                          ),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(14),
+                            onTap: () => _quick(q.amount),
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '${q.amount > 0 ? '+' : ''}${q.amount}',
+                                    style: TextStyle(
+                                      fontFamily: AppTheme.numeralFont,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                      height: 1.1,
+                                      color: scheme.onSurface,
+                                    ),
+                                  ),
+                                  Text(
+                                    q.label(l10n),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      height: 1.1,
+                                      color: scheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          )
         else
           WideDigitPad(onKey: _key, signKey: true),
         const SizedBox(height: kTouchGap),
-        Row(children: [
-          Semantics(
-            button: true,
-            label: l10n.undoLastAmount,
-            excludeSemantics: true,
-            child: SizedBox(
-              width: kTouchTarget,
-              height: kTouchTarget,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.zero, minimumSize: const Size(kTouchTarget, kTouchTarget)),
-                onPressed: typed.isNotEmpty || list.isNotEmpty ? _undo : null,
-                child: const Icon(Icons.undo),
-              ),
-            ),
-          ),
-          const SizedBox(width: kTouchGap),
-          Semantics(
-            button: true,
-            label: l10n.calcAdd,
-            excludeSemantics: true,
-            child: SizedBox(
-              width: 72,
-              height: kTouchTarget,
-              child: FilledButton.tonal(
-                style: FilledButton.styleFrom(
-                    padding: EdgeInsets.zero, minimumSize: const Size(72, kTouchTarget)),
-                onPressed: _pending != 0 ? _add : null,
-                child: const Icon(Icons.add, size: 28),
-              ),
-            ),
-          ),
-          const SizedBox(width: kTouchGap),
-          Expanded(
-            child: SizedBox(
-              height: kTouchTarget,
-              child: FilledButton(
-                onPressed: _primary,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(_savesRound ? l10n.saveRoundShort : l10n.calcDone),
+        Row(
+          children: [
+            Semantics(
+              button: true,
+              label: l10n.undoLastAmount,
+              excludeSemantics: true,
+              child: SizedBox(
+                width: kTouchTarget,
+                height: kTouchTarget,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(kTouchTarget, kTouchTarget),
+                  ),
+                  onPressed: typed.isNotEmpty || list.isNotEmpty ? _undo : null,
+                  child: const Icon(Icons.undo),
                 ),
               ),
             ),
-          ),
-        ]),
+            const SizedBox(width: kTouchGap),
+            Semantics(
+              button: true,
+              label: l10n.calcAdd,
+              excludeSemantics: true,
+              child: SizedBox(
+                width: 72,
+                height: kTouchTarget,
+                child: FilledButton.tonal(
+                  style: FilledButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(72, kTouchTarget),
+                  ),
+                  onPressed: _pending != 0 ? _add : null,
+                  child: const Icon(Icons.add, size: 28),
+                ),
+              ),
+            ),
+            if (widget.quick.isNotEmpty) ...[
+              const SizedBox(width: kTouchGap),
+              Semantics(
+                button: true,
+                label: quickPage ? l10n.pageDigits : l10n.pageQuick,
+                excludeSemantics: true,
+                child: SizedBox(
+                  width: 84,
+                  height: kTouchTarget,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(84, kTouchTarget),
+                    ),
+                    onPressed: () => _update(() => quickPage = !quickPage),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(quickPage ? l10n.pageDigits : l10n.pageQuick),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(width: kTouchGap),
+            Expanded(
+              child: SizedBox(
+                height: kTouchTarget,
+                child: FilledButton(
+                  onPressed: _primary,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      _savesRound ? l10n.saveRoundShort : l10n.calcDone,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

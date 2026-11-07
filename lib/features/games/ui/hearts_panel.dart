@@ -52,7 +52,8 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
       hearts[p] = null;
     }
     final initial = ctx.initialDraft;
-    final usable = initial != null &&
+    final usable =
+        initial != null &&
         initial['round'] == number &&
         initial['editing'] == ctx.editing;
     if (usable) {
@@ -102,14 +103,21 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
 
   Map<String, int?> get _heartsForAuto => {...hearts, last: null};
 
-  ({int hearts, bool hasQueen})? get _auto => _rules.autoLast(config, _heartsForAuto, queenHolder);
+  ({int hearts, bool hasQueen})? get _auto =>
+      _rules.autoLast(config, _heartsForAuto, queenHolder);
 
-  Entries? get _entries =>
-      _rules.buildEntries(config, hearts: _heartsForAuto, queenHolder: queenHolder, moon: moon);
+  Entries? get _entries => _rules.buildEntries(
+    config,
+    hearts: _heartsForAuto,
+    queenHolder: queenHolder,
+    moon: moon,
+  );
 
   RoundIssue? get _issue {
     final e = _entries;
-    return e == null ? RoundIssue.missingEntry : _rules.validateRound(config, RoundData(number: number, entries: e));
+    return e == null
+        ? RoundIssue.missingEntry
+        : _rules.validateRound(config, RoundData(number: number, entries: e));
   }
 
   /// Points per player as shown on the chips; null while unknown.
@@ -118,16 +126,17 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
     return e == null ? null : e[p]!['points'] as int?;
   }
 
-  bool _holdsQueen(String p) => moon == null && (queenHolder == p || (p == last && queenHolder == null));
+  bool _holdsQueen(String p) =>
+      moon == null && (queenHolder == p || (p == last && queenHolder == null));
 
   Map<String, Object?> _draftJson() => {
-        'round': number,
-        'editing': ctx.editing,
-        'hearts': hearts,
-        'queen': queenHolder,
-        'moon': moon,
-        'focus': focus,
-      };
+    'round': number,
+    'editing': ctx.editing,
+    'hearts': hearts,
+    'queen': queenHolder,
+    'moon': moon,
+    'focus': focus,
+  };
 
   void _update(VoidCallback change) {
     haptic(ref);
@@ -170,7 +179,11 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
     final entries = _entries;
     if (entries == null) return;
     haptic(ref);
-    ctx.onSave(entries, complete: true, undoDraft: ctx.editing ? null : _draftJson());
+    ctx.onSave(
+      entries,
+      complete: true,
+      undoDraft: ctx.editing ? null : _draftJson(),
+    );
   }
 
   // ---- build -----------------------------------------------------------
@@ -195,7 +208,9 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
           color: selected ? scheme.primary : scheme.surfaceContainerHighest,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: selected ? scheme.primary : scheme.outlineVariant),
+            side: BorderSide(
+              color: selected ? scheme.primary : scheme.outlineVariant,
+            ),
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
@@ -213,8 +228,8 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
                       color: onTap == null
                           ? scheme.onSurface.withValues(alpha: 0.38)
                           : selected
-                              ? AppTheme.ink
-                              : scheme.onSurface,
+                          ? AppTheme.ink
+                          : scheme.onSurface,
                     ),
                   ),
                 ),
@@ -245,9 +260,7 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
       else
         for (var i = heartsLeft + 1; i <= heartsTotal; i++) i,
     };
-    final selectedHearts = isLast
-        ? _auto?.hearts
-        : hearts[player];
+    final selectedHearts = isLast ? _auto?.hearts : hearts[player];
 
     final handedOut = entries == null
         ? ids.fold<int>(0, (a, p) => a + (_pointsOf(p) ?? 0))
@@ -256,7 +269,9 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
     String? message;
     if (entries == null) {
       final auto = _auto;
-      message = auto == null && ids.where((p) => p != last).every((p) => hearts[p] != null)
+      message =
+          auto == null &&
+              ids.where((p) => p != last).every((p) => hearts[p] != null)
           ? l10n.heartsTooMany
           : null;
     } else if (issue != null) {
@@ -268,20 +283,24 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (ctx.editing)
-          Row(children: [
-            Expanded(
-              child: Text(
-                l10n.editRound(number),
-                style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.editRound(number),
+                  style: text.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
-            ),
-            IconButton(
-              tooltip: l10n.cancel,
-              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-              onPressed: ctx.onCancel,
-              icon: const Icon(Icons.close),
-            ),
-          ]),
+              IconButton(
+                tooltip: l10n.cancel,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                onPressed: ctx.onCancel,
+                icon: const Icon(Icons.close),
+              ),
+            ],
+          ),
         PlayerSelector(
           chips: [
             for (final p in ids)
@@ -304,50 +323,63 @@ class _HeartsPanelState extends ConsumerState<HeartsPanel> {
         ),
         const SizedBox(height: kTouchGap),
         QuickButtonRow(
+          // five or more players need a second row of chips: save height here
+          buttonSize: ids.length > 4 ? 48 : kTouchTarget,
+          gap: ids.length > 4 ? 6 : kTouchGap,
           values: [for (var i = 0; i <= heartsTotal; i++) i],
           selected: moon != null ? null : selectedHearts,
           disabled: disabledHearts,
           onSelected: _setHearts,
         ),
         const SizedBox(height: kTouchGap),
-        LayoutBuilder(builder: (context, constraints) {
-          const gaps = kTouchGap * 2;
-          final queenWidth = (constraints.maxWidth - gaps) * 0.34;
-          final moonWidth = (constraints.maxWidth - gaps) * 0.2;
-          return Row(children: [
-            _toggleButton(
-              label: l10n.heartsQueen(queenPoints),
-              selected: _holdsQueen(player),
-              onTap: moon != null ? null : _toggleQueen,
-              width: queenWidth,
-            ),
-            const SizedBox(width: kTouchGap),
-            if (moonEnabled) ...[
-              _toggleButton(
-                label: l10n.heartsMoon,
-                selected: moon == player,
-                onTap: _toggleMoon,
-                width: moonWidth,
-              ),
-              const SizedBox(width: kTouchGap),
-            ],
-            Expanded(
-              child: SizedBox(
-                height: kTouchTarget,
-                child: FilledButton(
-                  onPressed: canConfirm ? _confirm : null,
-                  child: FittedBox(fit: BoxFit.scaleDown, child: Text(l10n.saveRound)),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            const gaps = kTouchGap * 2;
+            final queenWidth = (constraints.maxWidth - gaps) * 0.34;
+            final moonWidth = (constraints.maxWidth - gaps) * 0.2;
+            return Row(
+              children: [
+                _toggleButton(
+                  label: l10n.heartsQueen(queenPoints),
+                  selected: _holdsQueen(player),
+                  onTap: moon != null ? null : _toggleQueen,
+                  width: queenWidth,
                 ),
-              ),
-            ),
-          ]);
-        }),
+                const SizedBox(width: kTouchGap),
+                if (moonEnabled) ...[
+                  _toggleButton(
+                    label: l10n.heartsMoon,
+                    selected: moon == player,
+                    onTap: _toggleMoon,
+                    width: moonWidth,
+                  ),
+                  const SizedBox(width: kTouchGap),
+                ],
+                Expanded(
+                  child: SizedBox(
+                    height: kTouchTarget,
+                    child: FilledButton(
+                      onPressed: canConfirm ? _confirm : null,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(l10n.saveRound),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
         const SizedBox(height: 6),
         Text(
           message ??
               (moon != null
                   ? l10n.heartsMoonShot
-                  : l10n.heartsHandedOut(handedOut, config.intSetting(HeartsRules.totalPointsKey))),
+                  : l10n.heartsHandedOut(
+                      handedOut,
+                      config.intSetting(HeartsRules.totalPointsKey),
+                    )),
           style: text.bodySmall?.copyWith(
             color: message != null ? scheme.error : scheme.onSurfaceVariant,
           ),

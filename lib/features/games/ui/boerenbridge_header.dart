@@ -35,23 +35,28 @@ class BoerenbridgeHeader extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(children: [
-              Expanded(
-                child: Text(l10n.roundOf(n, total), style: text.titleLarge),
-              ),
-              Text(l10n.cardsCount(rules.cardsInRound(view.config, n)),
-                  style: text.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
-            ]),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(l10n.roundOf(n, total), style: text.titleLarge),
+                ),
+                Text(
+                  l10n.cardsCount(rules.cardsInRound(view.config, n)),
+                  style: text.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 4),
-            Text(l10n.dealerLabel(view.nameOf(rules.dealer(view.config, n))),
-                style: text.titleMedium),
+            Text(
+              l10n.dealerLabel(view.nameOf(rules.dealer(view.config, n))),
+              style: text.titleMedium,
+            ),
             if (bids != null) ...[
               const SizedBox(height: 8),
               Text(
-                '${l10n.bidsSoFar}: ${[
-                  for (final p in view.config.participants)
-                    '${view.nameOf(p)} ${bids[p]?['bid']}',
-                ].join(' · ')}',
+                '${l10n.bidsSoFar}: ${[for (final p in view.config.participants) '${view.nameOf(p)} ${bids[p]?['bid']}'].join(' · ')}',
               ),
             ],
           ],

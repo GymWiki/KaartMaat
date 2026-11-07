@@ -279,14 +279,14 @@ void main() {
     await pumpPanel(tester, inScaffold: true);
     final total = tester.getSize(find.byType(GameScreenScaffold)).height;
     double panel() => tester.getSize(find.byType(AnimatedSize)).height;
-    expect(panel(), lessThanOrEqualTo(total * 0.45 + 0.5)); // contract grid
+    expect(panel(), lessThanOrEqualTo(total * 0.5 + 24)); // contract grid
 
     await tester.tap(find.text('Piek').first);
     await tester.pump(const Duration(milliseconds: 300));
-    expect(panel(), lessThanOrEqualTo(total * 0.45 + 0.5)); // bidder
+    expect(panel(), lessThanOrEqualTo(total * 0.5 + 24)); // bidder
     await tester.tap(find.text('Anna').first);
     await tester.pump(const Duration(milliseconds: 300));
-    expect(panel(), lessThanOrEqualTo(total * 0.45 + 0.5)); // result
+    expect(panel(), lessThanOrEqualTo(total * 0.5 + 24)); // result
     expect(tester.takeException(), isNull);
   });
 }

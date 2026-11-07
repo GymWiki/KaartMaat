@@ -65,7 +65,9 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
           'playing': t == playing,
           'pit': _pit && t == playing,
           if (cards != null)
-            'cards': t == playing ? cards : KlaverjasRules.totalCardPoints - cards,
+            'cards': t == playing
+                ? cards
+                : KlaverjasRules.totalCardPoints - cards,
           ..._roem[t]!,
         },
     };
@@ -88,20 +90,20 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
       team == KlaverjasRules.wij ? l10n.teamWij : l10n.teamZij;
 
   String _roemLabel(AppLocalizations l10n, String field) => switch (field) {
-        'three' => l10n.roemThree,
-        'four' => l10n.roemFour,
-        'stuk' => l10n.roemStuk,
-        'equal' => l10n.roemFourEqual,
-        _ => l10n.roemFourJacks,
-      };
+    'three' => l10n.roemThree,
+    'four' => l10n.roemFour,
+    'stuk' => l10n.roemStuk,
+    'equal' => l10n.roemFourEqual,
+    _ => l10n.roemFourJacks,
+  };
 
   int _roemValue(String field) => _config.intSetting(switch (field) {
-        'three' => KlaverjasRules.roemThreeKey,
-        'four' => KlaverjasRules.roemFourKey,
-        'stuk' => KlaverjasRules.roemStukKey,
-        'equal' => KlaverjasRules.roemFourEqualKey,
-        _ => KlaverjasRules.roemFourJacksKey,
-      });
+    'three' => KlaverjasRules.roemThreeKey,
+    'four' => KlaverjasRules.roemFourKey,
+    'stuk' => KlaverjasRules.roemStukKey,
+    'equal' => KlaverjasRules.roemFourEqualKey,
+    _ => KlaverjasRules.roemFourJacksKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -109,14 +111,20 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
     final text = Theme.of(context).textTheme;
     final scheme = Theme.of(context).colorScheme;
     final entries = _entries();
-    final issue = _rules.validateRound(_config, RoundData(number: 1, entries: entries));
-    final outcome = _rules.outcome(_config, RoundData(number: 1, entries: entries));
+    final issue = _rules.validateRound(
+      _config,
+      RoundData(number: 1, entries: entries),
+    );
+    final outcome = _rules.outcome(
+      _config,
+      RoundData(number: 1, entries: entries),
+    );
     final cards = int.tryParse(_cards);
     final hint = _playing == null
         ? l10n.choosePlaying
         : (!_pit && cards == null)
-            ? l10n.cardsEmpty
-            : (issue != null ? l10n.issueOutOfRange : null);
+        ? l10n.cardsEmpty
+        : (issue != null ? l10n.issueOutOfRange : null);
 
     return Column(
       children: [
@@ -126,34 +134,47 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
             children: [
               Text(l10n.playingTeam, style: text.titleMedium),
               const SizedBox(height: 8),
-              Row(children: [
-                for (final t in const [KlaverjasRules.wij, KlaverjasRules.zij])
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: ChoiceChip(
-                        showCheckmark: false,
-                        selected: _playing == t,
-                        onSelected: (_) {
-                          haptic(ref);
-                          setState(() => _playing = t);
-                        },
-                        label: SizedBox(
-                          width: double.infinity,
-                          child: Column(children: [
-                            Text(_teamLabel(l10n, t),
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold)),
-                            Text(widget.view.nameOf(t),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 13)),
-                          ]),
+              Row(
+                children: [
+                  for (final t in const [
+                    KlaverjasRules.wij,
+                    KlaverjasRules.zij,
+                  ])
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: ChoiceChip(
+                          showCheckmark: false,
+                          selected: _playing == t,
+                          onSelected: (_) {
+                            haptic(ref);
+                            setState(() => _playing = t);
+                          },
+                          label: SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              children: [
+                                Text(
+                                  _teamLabel(l10n, t),
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.view.nameOf(t),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ]),
+                ],
+              ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(l10n.pitLabel),
@@ -193,31 +214,42 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(children: [
-                            Text(_teamLabel(l10n, t), style: text.titleMedium),
-                            const Spacer(),
-                            Text(
-                              l10n.roemTotal(_rules.roemOf(_config, _roem[t])),
-                              style: text.titleMedium,
-                            ),
-                          ]),
-                          const SizedBox(height: 8),
-                          Wrap(spacing: 8, runSpacing: 8, children: [
-                            for (final f in KlaverjasRules.roemFields)
-                              GestureDetector(
-                                onLongPress: () => _roemTap(t, f, -1),
-                                child: ActionChip(
-                                  label: Text(
-                                    '${_roemLabel(l10n, f)} +${_roemValue(f)}'
-                                    '${_roem[t]![f]! > 0 ? '  ×${_roem[t]![f]}' : ''}',
-                                  ),
-                                  backgroundColor: _roem[t]![f]! > 0
-                                      ? scheme.primaryContainer
-                                      : null,
-                                  onPressed: () => _roemTap(t, f, 1),
-                                ),
+                          Row(
+                            children: [
+                              Text(
+                                _teamLabel(l10n, t),
+                                style: text.titleMedium,
                               ),
-                          ]),
+                              const Spacer(),
+                              Text(
+                                l10n.roemTotal(
+                                  _rules.roemOf(_config, _roem[t]),
+                                ),
+                                style: text.titleMedium,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final f in KlaverjasRules.roemFields)
+                                GestureDetector(
+                                  onLongPress: () => _roemTap(t, f, -1),
+                                  child: ActionChip(
+                                    label: Text(
+                                      '${_roemLabel(l10n, f)} +${_roemValue(f)}'
+                                      '${_roem[t]![f]! > 0 ? '  ×${_roem[t]![f]}' : ''}',
+                                    ),
+                                    backgroundColor: _roem[t]![f]! > 0
+                                        ? scheme.primaryContainer
+                                        : null,
+                                    onPressed: () => _roemTap(t, f, 1),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -235,9 +267,13 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
                         style: text.headlineSmall,
                       ),
                       if (outcome.nat)
-                        Text(l10n.natExplain,
-                            style: TextStyle(
-                                color: scheme.error, fontWeight: FontWeight.w600)),
+                        Text(
+                          l10n.natExplain,
+                          style: TextStyle(
+                            color: scheme.error,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       if (outcome.pit) Text(l10n.pitExplain),
                     ],
                   ),
@@ -249,20 +285,25 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              if (hint != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(hint, style: TextStyle(color: scheme.error)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (hint != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(hint, style: TextStyle(color: scheme.error)),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: issue == null
+                        ? () => widget.onSubmit(entries)
+                        : null,
+                    child: Text(l10n.saveRound),
+                  ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: issue == null ? () => widget.onSubmit(entries) : null,
-                  child: Text(l10n.saveRound),
-                ),
-              ),
-            ]),
+              ],
+            ),
           ),
         ),
       ],

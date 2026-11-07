@@ -37,8 +37,12 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
 
   /// A finished round that is being corrected: do not drop its tricks when
   /// the bids change, and do not jump to the tricks by itself.
-  late final bool existingComplete = ctx.existing != null &&
-      rules.isRoundComplete(config, RoundData(number: number, entries: ctx.existing!));
+  late final bool existingComplete =
+      ctx.existing != null &&
+      rules.isRoundComplete(
+        config,
+        RoundData(number: number, entries: ctx.existing!),
+      );
 
   final Map<String, int?> bids = {};
   final Map<String, int?> tricks = {};
@@ -50,7 +54,8 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
     super.initState();
     final initial = ctx.initialDraft;
     // Only a draft of this very round (and mode) is restored.
-    final draft = initial != null &&
+    final draft =
+        initial != null &&
             initial['round'] == number &&
             initial['editing'] == ctx.editing
         ? initial
@@ -82,12 +87,14 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
   bool get _allBids => order.every((p) => bids[p] != null);
 
   /// Tricks with the last player filled in automatically.
-  Map<String, int?> get _effTricks =>
-      {...tricks, order.last: rules.autoLastTricks(config, number, tricks)};
+  Map<String, int?> get _effTricks => {
+    ...tricks,
+    order.last: rules.autoLastTricks(config, number, tricks),
+  };
 
   List<bool> get _filled => [
-        for (final p in order) (tricksStep ? _effTricks[p] : bids[p]) != null,
-      ];
+    for (final p in order) (tricksStep ? _effTricks[p] : bids[p]) != null,
+  ];
 
   int? _firstUnfilled() {
     final filled = _filled;
@@ -97,7 +104,8 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
     return null;
   }
 
-  int? get _forbiddenDealerBid => rules.forbiddenBidForDealer(config, number, bids);
+  int? get _forbiddenDealerBid =>
+      rules.forbiddenBidForDealer(config, number, bids);
 
   bool get _bidsValid => _allBids && bids[dealer] != _forbiddenDealerBid;
 
@@ -113,16 +121,21 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
   }
 
   RoundIssue? get _issue => rules.validateRound(
-      config, RoundData(number: number, entries: _entries(withTricks: tricksStep)));
+    config,
+    RoundData(
+      number: number,
+      entries: _entries(withTricks: tricksStep),
+    ),
+  );
 
   Map<String, Object?> _draftJson() => {
-        'round': number,
-        'editing': ctx.editing,
-        'step': tricksStep ? 'tricks' : 'bids',
-        'bids': bids,
-        'tricks': tricks,
-        'focus': focus,
-      };
+    'round': number,
+    'editing': ctx.editing,
+    'step': tricksStep ? 'tricks' : 'bids',
+    'bids': bids,
+    'tricks': tricks,
+    'focus': focus,
+  };
 
   void _saveDraft() => ctx.draft.schedule(_draftJson());
 
@@ -196,8 +209,6 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final text = Theme.of(context).textTheme;
-    final scheme = Theme.of(context).colorScheme;
     final view = ctx.view;
     final player = order[focus];
     final eff = _effTricks;
@@ -215,66 +226,54 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
 
     final scores = tricksReady
         ? rules.scoreRound(
-            config, RoundData(number: number, entries: _entries(withTricks: true)))
+            config,
+            RoundData(number: number, entries: _entries(withTricks: true)),
+          )
         : null;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  ctx.editing
-                      ? l10n.editRound(number)
-                      : '${l10n.roundOf(number, rules.totalRounds(config))} · ${l10n.cardsCount(cards)}',
-                  style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+        Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: 44,
+                child: SegmentedButton<bool>(
+                  showSelectedIcon: false,
+                  style: SegmentedButton.styleFrom(
+                    minimumSize: const Size(0, 44),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  segments: [
+                    ButtonSegment(value: false, label: Text(l10n.bidsStep)),
+                    ButtonSegment(
+                      value: true,
+                      label: Text(l10n.tricksStep),
+                      enabled: _bidsValid,
+                    ),
+                  ],
+                  selected: {tricksStep},
+                  onSelectionChanged: (s) {
+                    if (s.first) {
+                      _goToTricks();
+                    } else {
+                      _showBids();
+                    }
+                  },
                 ),
-                Text(
-                  ctx.editing
-                      ? l10n.cardsCount(cards)
-                      : l10n.dealerLabel(view.nameOf(dealer)),
-                  style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
-                ),
-              ],
-            ),
-          ),
-          SegmentedButton<bool>(
-            showSelectedIcon: false,
-            style: SegmentedButton.styleFrom(
-              minimumSize: const Size(0, 44),
-              visualDensity: VisualDensity.compact,
-            ),
-            segments: [
-              ButtonSegment(value: false, label: Text(l10n.bidsStep)),
-              ButtonSegment(
-                value: true,
-                label: Text(l10n.tricksStep),
-                enabled: _bidsValid,
               ),
-            ],
-            selected: {tricksStep},
-            onSelectionChanged: (s) {
-              if (s.first) {
-                _goToTricks();
-              } else {
-                _showBids();
-              }
-            },
-          ),
-          if (ctx.editing)
-            IconButton(
-              tooltip: l10n.cancel,
-              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-              onPressed: ctx.onCancel,
-              icon: const Icon(Icons.close),
             ),
-        ]),
+            if (ctx.editing)
+              IconButton(
+                tooltip: l10n.cancel,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                onPressed: ctx.onCancel,
+                icon: const Icon(Icons.close),
+              ),
+          ],
+        ),
         const SizedBox(height: kTouchGap),
         PlayerSelector(
           chips: [
@@ -296,44 +295,50 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
         ),
         const SizedBox(height: kTouchGap),
         QuickButtonRow(
+          // many values: smaller buttons (still 48) so they fit two rows
+          buttonSize: cards > 9 ? 48 : kTouchTarget,
+          gap: cards > 9 ? 6 : kTouchGap,
           values: [for (var i = 0; i <= cards; i++) i],
           selected: currentValue,
           disabled: disabled,
           onSelected: _setValue,
         ),
         const SizedBox(height: kTouchGap),
-        Row(children: [
-          Expanded(
-            child: scores != null
-                ? LiveScorePreview(
-                    scores: [
-                      for (final p in order)
-                        PreviewScore(view.nameOf(p), scores[p] ?? 0),
-                    ],
-                  )
-                : LiveScorePreview(
-                    scores: const [],
-                    message: _preview(l10n, tricksReady: tricksReady),
-                    messageIsError: !tricksStep &&
-                        _allBids &&
-                        bids[dealer] == _forbiddenDealerBid,
-                  ),
-          ),
-          const SizedBox(width: kTouchGap),
-          SizedBox(
-            width: 156,
-            height: kTouchTarget,
-            child: FilledButton(
-              onPressed: tricksStep
-                  ? (canConfirm ? _confirm : null)
-                  : (canGoToTricks ? _goToTricks : null),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(tricksStep ? l10n.saveTricks : l10n.toTricks),
+        Row(
+          children: [
+            Expanded(
+              child: scores != null
+                  ? LiveScorePreview(
+                      scores: [
+                        for (final p in order)
+                          PreviewScore(view.nameOf(p), scores[p] ?? 0),
+                      ],
+                    )
+                  : LiveScorePreview(
+                      scores: const [],
+                      message: _preview(l10n, tricksReady: tricksReady),
+                      messageIsError:
+                          !tricksStep &&
+                          _allBids &&
+                          bids[dealer] == _forbiddenDealerBid,
+                    ),
+            ),
+            const SizedBox(width: kTouchGap),
+            SizedBox(
+              width: 156,
+              height: kTouchTarget,
+              child: FilledButton(
+                onPressed: tricksStep
+                    ? (canConfirm ? _confirm : null)
+                    : (canGoToTricks ? _goToTricks : null),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(tricksStep ? l10n.saveTricks : l10n.toTricks),
+                ),
               ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }

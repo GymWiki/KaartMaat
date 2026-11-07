@@ -31,9 +31,12 @@ class GameScreen extends ConsumerStatefulWidget {
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObserver {
-  late final DraftSaver _saver =
-      DraftSaver(ref.read(draftStoreProvider), widget.gameId);
+class _GameScreenState extends ConsumerState<GameScreen>
+    with WidgetsBindingObserver {
+  late final DraftSaver _saver = DraftSaver(
+    ref.read(draftStoreProvider),
+    widget.gameId,
+  );
   final _panelInset = ValueNotifier<double>(0);
 
   Map<String, Object?>? _draft;
@@ -80,7 +83,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 
   void _keepAwake(bool on) {
     try {
-      unawaited((on ? WakelockPlus.enable() : WakelockPlus.disable()).catchError((_) {}));
+      unawaited(
+        (on ? WakelockPlus.enable() : WakelockPlus.disable()).catchError(
+          (_) {},
+        ),
+      );
     } catch (_) {
       // no wakelock support (tests, desktop): the game still works
     }
@@ -93,8 +100,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   Future<void> _undoWithDialog(GameState state) async {
     final l10n = context.l10n;
     final last = state.rounds.last.number;
-    if (await confirmDialog(context, l10n.undoConfirm(last),
-        actionLabel: l10n.delete)) {
+    if (await confirmDialog(
+      context,
+      l10n.undoConfirm(last),
+      actionLabel: l10n.delete,
+    )) {
       haptic(ref);
       await _repo.deleteLastRound(state.id);
     }
@@ -102,8 +112,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 
   Future<void> _finish(GameState state) async {
     final l10n = context.l10n;
-    if (!await confirmDialog(context, l10n.finishConfirm,
-        actionLabel: l10n.finishGame)) {
+    if (!await confirmDialog(
+      context,
+      l10n.finishConfirm,
+      actionLabel: l10n.finishGame,
+    )) {
       return;
     }
     await _saver.discard();
@@ -113,8 +126,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 
   Future<void> _delete(GameState state) async {
     final l10n = context.l10n;
-    if (!await confirmDialog(context, l10n.deleteGameConfirm,
-        actionLabel: l10n.delete)) {
+    if (!await confirmDialog(
+      context,
+      l10n.deleteGameConfirm,
+      actionLabel: l10n.delete,
+    )) {
       return;
     }
     await _repo.deleteGame(state.id);
@@ -170,7 +186,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     haptic(ref);
     await _repo.deleteLastRound(state.id);
     if (!mounted) return;
-    _showUndo(l10n.roundDeleted(last.number), () => _repo.addRound(state.id, last.entries));
+    _showUndo(
+      l10n.roundDeleted(last.number),
+      () => _repo.addRound(state.id, last.entries),
+    );
   }
 
   Future<void> _savePanelRound(
@@ -181,8 +200,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   }) async {
     final l10n = context.l10n;
     final current = ref.read(gameStateProvider(widget.gameId)).value;
-    final previous =
-        current?.rounds.where((r) => r.number == number).firstOrNull?.entries;
+    final previous = current?.rounds
+        .where((r) => r.number == number)
+        .firstOrNull
+        ?.entries;
     if (previous != null) {
       await _repo.updateRound(widget.gameId, number, entries);
     } else {
@@ -221,12 +242,17 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       builder: (context) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(context.l10n.progressTitle,
-                style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 12),
-            ProgressChart(view: view),
-          ]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.l10n.progressTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 12),
+              ProgressChart(view: view),
+            ],
+          ),
         ),
       ),
     );
@@ -236,11 +262,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final l10n = context.l10n;
     final editing = _editingRound != null;
     // Live counting games keep working on the latest round.
-    final liveNumber =
-        def.liveRound && state.rounds.isNotEmpty ? state.rounds.last.number : view.nextRoundNumber;
+    final liveNumber = def.liveRound && state.rounds.isNotEmpty
+        ? state.rounds.last.number
+        : view.nextRoundNumber;
     final number = _editingRound ?? liveNumber;
-    final existing =
-        state.rounds.where((r) => r.number == number).firstOrNull?.entries;
+    final existing = state.rounds
+        .where((r) => r.number == number)
+        .firstOrNull
+        ?.entries;
 
     Widget? panel;
     if (!_draftLoaded) {
@@ -256,28 +285,35 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     } else {
       panel = KeyedSubtree(
         key: ValueKey('panel-$number-$editing-$_generation'),
-        child: def.panelBuilder!(PanelContext(
-          view: view,
-          roundNumber: number,
-          existing: existing,
-          editing: editing,
-          draft: _saver,
-          initialDraft: _draft,
-          onSave: (entries, {required complete, undoDraft}) =>
-              _savePanelRound(number, entries, complete: complete, undoDraft: undoDraft),
-          onCancel: _stopEditing,
-          onNewRound: def.liveRound
-              ? (entries) async {
-                  await _repo.addRound(widget.gameId, entries);
-                  if (!mounted) return;
-                  setState(() {
-                    _editingRound = null;
-                    _draft = null;
-                    _generation++;
-                  });
-                }
-              : null,
-        )),
+        child: def.panelBuilder!(
+          PanelContext(
+            view: view,
+            roundNumber: number,
+            existing: existing,
+            editing: editing,
+            draft: _saver,
+            initialDraft: _draft,
+            onSave: (entries, {required complete, undoDraft}) =>
+                _savePanelRound(
+                  number,
+                  entries,
+                  complete: complete,
+                  undoDraft: undoDraft,
+                ),
+            onCancel: _stopEditing,
+            onNewRound: def.liveRound
+                ? (entries) async {
+                    await _repo.addRound(widget.gameId, entries);
+                    if (!mounted) return;
+                    setState(() {
+                      _editingRound = null;
+                      _draft = null;
+                      _generation++;
+                    });
+                  }
+                : null,
+          ),
+        ),
       );
     }
 
@@ -312,19 +348,30 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       ),
       body: GameScreenScaffold(
         panelInset: _panelInset,
-        top: RoundTable(
-          view: view,
-          currentRound: view.canAddRound ? liveNumber : null,
-          editingRound: _editingRound,
-          onTapRound: (n) => n == liveNumber && view.canAddRound
-              ? _stopEditing()
-              : _startEditing(n),
-          cellDetail: def.cellDetail == null
-              ? null
-              : (i, p) => def.cellDetail!(l10n, view, i, p),
-          cellHighlight: def.cellHighlight == null
-              ? null
-              : (i, p) => def.cellHighlight!(view, i, p),
+        top: Column(
+          children: [
+            _StatusBar(
+              text:
+                  def.statusLine?.call(l10n, view, number, editing) ??
+                  (editing ? l10n.editRound(number) : l10n.roundTitle(number)),
+            ),
+            Expanded(
+              child: RoundTable(
+                view: view,
+                currentRound: view.canAddRound ? liveNumber : null,
+                editingRound: _editingRound,
+                onTapRound: (n) => n == liveNumber && view.canAddRound
+                    ? _stopEditing()
+                    : _startEditing(n),
+                cellDetail: def.cellDetail == null
+                    ? null
+                    : (i, p) => def.cellDetail!(l10n, view, i, p),
+                cellHighlight: def.cellHighlight == null
+                    ? null
+                    : (i, p) => def.cellHighlight!(view, i, p),
+              ),
+            ),
+          ],
         ),
         panel: panel,
       ),
@@ -342,7 +389,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       return Scaffold(
         appBar: AppBar(),
         body: Center(
-            child: async.isLoading ? const CircularProgressIndicator() : null),
+          child: async.isLoading ? const CircularProgressIndicator() : null,
+        ),
       );
     }
 
@@ -371,7 +419,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
             ),
           ],
           bottom: TabBar(
-            tabs: [Tab(text: l10n.tabGame), Tab(text: l10n.tabStanding)],
+            tabs: [
+              Tab(text: l10n.tabGame),
+              Tab(text: l10n.tabStanding),
+            ],
           ),
         ),
         body: TabBarView(
@@ -382,7 +433,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               primaryLabel:
                   def.primaryLabel?.call(l10n, view) ?? l10n.enterRound(next),
               onFinish: () => _finish(state),
-              onUndo: state.rounds.isEmpty ? null : () => _undoWithDialog(state),
+              onUndo: state.rounds.isEmpty
+                  ? null
+                  : () => _undoWithDialog(state),
               onNewRound: () => context.push('/game/${state.id}/round/$next'),
             ),
             StandingsView(
@@ -390,6 +443,33 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               onTapRound: (n) => context.push('/game/${state.id}/round/$n'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Round, dealer and cards for the round that is being entered.
+class _StatusBar extends StatelessWidget {
+  const _StatusBar({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Semantics(
+      liveRegion: true,
+      child: Container(
+        width: double.infinity,
+        color: scheme.surfaceContainerLow,
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Text(
+          text,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -433,7 +513,9 @@ class _ScoreTab extends StatelessWidget {
                     leading: const Icon(Icons.flag),
                     title: Text(l10n.gameOver),
                     trailing: TextButton(
-                        onPressed: onFinish, child: Text(l10n.finishGame)),
+                      onPressed: onFinish,
+                      child: Text(l10n.finishGame),
+                    ),
                   ),
                 ),
               for (var i = 0; i < view.config.participants.length; i++)
@@ -443,7 +525,8 @@ class _ScoreTab extends StatelessWidget {
                   total: totals[view.config.participants[i]]!.total,
                   delta: last?[view.config.participants[i]],
                   suit: suitAt(i),
-                  leading: view.state.rounds.isNotEmpty &&
+                  leading:
+                      view.state.rounds.isNotEmpty &&
                       totals[view.config.participants[i]]!.rank == 1,
                 ),
             ],
@@ -452,31 +535,33 @@ class _ScoreTab extends StatelessWidget {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Row(children: [
-              SizedBox(
-                width: 64,
-                height: 60,
-                child: OutlinedButton(
-                  onPressed: onUndo,
-                  child: Tooltip(
-                    message: l10n.undoLast,
-                    child: const Icon(Icons.undo),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 64,
+                  height: 60,
+                  child: OutlinedButton(
+                    onPressed: onUndo,
+                    child: Tooltip(
+                      message: l10n.undoLast,
+                      child: const Icon(Icons.undo),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: view.canAddRound
-                    ? FilledButton(
-                        onPressed: onNewRound,
-                        child: Text(primaryLabel),
-                      )
-                    : FilledButton(
-                        onPressed: onFinish,
-                        child: Text(l10n.finishGame),
-                      ),
-              ),
-            ]),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: view.canAddRound
+                      ? FilledButton(
+                          onPressed: onNewRound,
+                          child: Text(primaryLabel),
+                        )
+                      : FilledButton(
+                          onPressed: onFinish,
+                          child: Text(l10n.finishGame),
+                        ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -519,25 +604,34 @@ class _ScoreCard extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 20, 12),
-        child: Row(children: [
-          CornerIndex(rank: rank, suit: suit, highlight: leading),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(name,
-                style: text.titleMedium?.copyWith(fontWeight: FontWeight.w600, fontSize: 18),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis),
-          ),
-          if (delta != null)
-            Padding(
-              padding: const EdgeInsets.only(right: 14),
+        child: Row(
+          children: [
+            CornerIndex(rank: rank, suit: suit, highlight: leading),
+            const SizedBox(width: 14),
+            Expanded(
               child: Text(
-                delta! > 0 ? '+$delta' : '$delta',
-                style: text.headlineSmall?.copyWith(color: scheme.onSurfaceVariant),
+                name,
+                style: text.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-          Text('$total', style: text.displaySmall),
-        ]),
+            if (delta != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 14),
+                child: Text(
+                  delta! > 0 ? '+$delta' : '$delta',
+                  style: text.headlineSmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            Text('$total', style: text.displaySmall),
+          ],
+        ),
       ),
     );
   }

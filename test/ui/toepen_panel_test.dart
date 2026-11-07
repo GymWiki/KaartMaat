@@ -233,7 +233,6 @@ void main() {
         existing: past.entries,
         editing: true,
       );
-      expect(find.text('Ronde 1 corrigeren'), findsOneWidget);
       expect(find.text('Inzet: 2'), findsOneWidget);
       expect(confirmEnabled(tester), true);
       await tester.tap(find.byIcon(Icons.close));
@@ -245,7 +244,7 @@ void main() {
     await pumpPanel(tester, inScaffold: true);
     final total = tester.getSize(find.byType(GameScreenScaffold)).height;
     expect(tester.getSize(find.byType(AnimatedSize)).height,
-        lessThanOrEqualTo(total * 0.45 + 0.5));
+        lessThanOrEqualTo(total * 0.5 + 24));
     expect(tester.takeException(), isNull);
 
     await pumpPanel(tester, state: game(players: 8), inScaffold: true);

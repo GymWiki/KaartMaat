@@ -45,7 +45,8 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
   void initState() {
     super.initState();
     final initial = ctx.initialDraft;
-    final usable = initial != null &&
+    final usable =
+        initial != null &&
         initial['round'] == number &&
         initial['editing'] == ctx.editing;
     if (usable) {
@@ -73,8 +74,13 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
 
   int get _effective => knocks + (situation.poverty.isEmpty ? 0 : 1);
 
-  Entries get _entries => _rules.buildEntries(config, situation,
-      winner: winner, knocks: knocks, fold: fold);
+  Entries get _entries => _rules.buildEntries(
+    config,
+    situation,
+    winner: winner,
+    knocks: knocks,
+    fold: fold,
+  );
 
   RoundData get _round => RoundData(number: number, entries: _entries);
 
@@ -84,15 +90,16 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
       _rules.validateRound(config, _round) == null;
 
   /// Points per player for this round, with the effect of poverty.
-  Map<String, int> get _scores => _rules.roundScores(config, [...before, _round]).last;
+  Map<String, int> get _scores =>
+      _rules.roundScores(config, [...before, _round]).last;
 
   Map<String, Object?> _draftJson() => {
-        'round': number,
-        'editing': ctx.editing,
-        'winner': winner,
-        'knocks': knocks,
-        'fold': fold,
-      };
+    'round': number,
+    'editing': ctx.editing,
+    'winner': winner,
+    'knocks': knocks,
+    'fold': fold,
+  };
 
   void _update(VoidCallback change) {
     haptic(ref);
@@ -103,24 +110,28 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
   // ---- actions ---------------------------------------------------------
 
   void _setWinner(String p) => _update(() {
-        winner = p;
-        fold[p] = null;
-      });
+    winner = p;
+    fold[p] = null;
+  });
 
   void _knock(int delta) => _update(() {
-        knocks = (knocks + delta).clamp(0, 30);
-        // a fold at a knock that no longer exists makes no sense
-        fold.updateAll((_, f) => f != null && f > _effective ? null : f);
-      });
+    knocks = (knocks + delta).clamp(0, 30);
+    // a fold at a knock that no longer exists makes no sense
+    fold.updateAll((_, f) => f != null && f > _effective ? null : f);
+  });
 
   void _toggleFold(String p) => _update(() {
-        fold[p] = fold[p] == null ? _effective : null;
-        if (winner == p) winner = null;
-      });
+    fold[p] = fold[p] == null ? _effective : null;
+    if (winner == p) winner = null;
+  });
 
   void _confirm() {
     haptic(ref);
-    ctx.onSave(_entries, complete: true, undoDraft: ctx.editing ? null : _draftJson());
+    ctx.onSave(
+      _entries,
+      complete: true,
+      undoDraft: ctx.editing ? null : _draftJson(),
+    );
   }
 
   // ---- build -----------------------------------------------------------
@@ -140,13 +151,13 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
     final background = out
         ? scheme.surfaceContainer
         : isWinner
-            ? scheme.primary
-            : scheme.surfaceContainerHighest;
+        ? scheme.primary
+        : scheme.surfaceContainerHighest;
     final fg = out
         ? scheme.onSurface.withValues(alpha: 0.38)
         : isWinner
-            ? AppTheme.ink
-            : scheme.onSurface;
+        ? AppTheme.ink
+        : scheme.onSurface;
     final sub = isWinner ? AppTheme.ink : scheme.onSurfaceVariant;
 
     return Semantics(
@@ -167,104 +178,141 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
-              color: poverty && !isWinner ? scheme.tertiary : scheme.outlineVariant,
+              color: poverty && !isWinner
+                  ? scheme.tertiary
+                  : scheme.outlineVariant,
               width: poverty ? 2 : 1,
             ),
           ),
-          child: Row(children: [
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: out ? null : () => _setWinner(p),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 6, 4, 6),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        view.nameOf(p),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: fg),
-                      ),
-                      if (out)
-                        Text(l10n.toepenOutBadge, style: TextStyle(fontSize: 12, color: fg))
-                      else
-                        Row(children: [
-                          if (isWinner)
-                            Icon(Icons.check_circle, size: 16, color: AppTheme.ink)
-                          else
-                            Text(
-                              '+$gain',
-                              style: text.titleMedium?.copyWith(
-                                  color: fg, fontWeight: FontWeight.w800, height: 1.1),
-                            ),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              '${situation.totals[p]} → $after',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 12, color: dead ? scheme.error : sub),
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: out ? null : () => _setWinner(p),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 6, 4, 6),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          view.nameOf(p),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: fg,
+                          ),
+                        ),
+                        if (out)
+                          Text(
+                            l10n.toepenOutBadge,
+                            style: TextStyle(fontSize: 12, color: fg),
+                          )
+                        else
+                          Row(
+                            children: [
+                              if (isWinner)
+                                Icon(
+                                  Icons.check_circle,
+                                  size: 16,
+                                  color: AppTheme.ink,
+                                )
+                              else
+                                Text(
+                                  '+$gain',
+                                  style: text.titleMedium?.copyWith(
+                                    color: fg,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.1,
+                                  ),
+                                ),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  '${situation.totals[p]} → $after',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: dead ? scheme.error : sub,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        if (poverty && !out)
+                          Text(
+                            l10n.toepenPovertyBadge,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: isWinner ? AppTheme.ink : scheme.tertiary,
                             ),
                           ),
-                        ]),
-                      if (poverty && !out)
-                        Text(l10n.toepenPovertyBadge,
-                            style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
-                                color: isWinner ? AppTheme.ink : scheme.tertiary)),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            if (!out && !isWinner && _effective > 0)
-              Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: Semantics(
-                  button: true,
-                  selected: folded != null,
-                  label: folded == null ? l10n.toepenFold : l10n.toepenFolded(folded),
-                  excludeSemantics: true,
-                  child: SizedBox(
-                    width: 60,
-                    height: kTouchTarget,
-                    child: Material(
-                      color: folded != null ? scheme.secondary : scheme.surfaceContainerHigh,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: scheme.outline),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () => _toggleFold(p),
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                l10n.toepenFold,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: folded != null ? scheme.onSecondary : scheme.onSurface,
+              if (!out && !isWinner && _effective > 0)
+                Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: Semantics(
+                    button: true,
+                    selected: folded != null,
+                    label: folded == null
+                        ? l10n.toepenFold
+                        : l10n.toepenFolded(folded),
+                    excludeSemantics: true,
+                    child: SizedBox(
+                      width: 60,
+                      height: kTouchTarget,
+                      child: Material(
+                        color: folded != null
+                            ? scheme.secondary
+                            : scheme.surfaceContainerHigh,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(color: scheme.outline),
+                        ),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () => _toggleFold(p),
+                          child: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  l10n.toepenFold,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: folded != null
+                                        ? scheme.onSecondary
+                                        : scheme.onSurface,
+                                  ),
                                 ),
-                              ),
-                              if (folded != null)
-                                Text('$folded',
-                                    style: TextStyle(fontSize: 12, color: scheme.onSecondary)),
-                            ],
+                                if (folded != null)
+                                  Text(
+                                    '$folded',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: scheme.onSecondary,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ]),
+            ],
+          ),
         ),
       ),
     );
@@ -281,82 +329,96 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  ctx.editing ? l10n.editRound(number) : l10n.roundTitle(number),
-                  style: TextStyle(fontSize: 13, color: scheme.onSurfaceVariant),
-                ),
-                Text(l10n.toepenStake(ToepenRules.stakeFor(_effective)),
-                    style: text.headlineSmall),
-              ],
-            ),
-          ),
-          Semantics(
-            button: true,
-            label: l10n.toepenLessKnock,
-            excludeSemantics: true,
-            child: SizedBox(
-              width: kTouchTarget,
-              height: kTouchTarget,
-              child: FilledButton.tonal(
-                style: FilledButton.styleFrom(
-                    padding: EdgeInsets.zero, minimumSize: const Size(kTouchTarget, kTouchTarget)),
-                onPressed: knocks > 0 ? () => _knock(-1) : null,
-                child: const Icon(Icons.remove),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.toepenStake(ToepenRules.stakeFor(_effective)),
+                    style: text.headlineSmall,
+                  ),
+                ],
               ),
             ),
-          ),
-          const SizedBox(width: kTouchGap),
-          SizedBox(
-            height: kTouchTarget,
-            child: FilledButton.icon(
-              onPressed: () => _knock(1),
-              icon: const Icon(Icons.add),
-              label: Text(l10n.toepenKnock),
+            Semantics(
+              button: true,
+              label: l10n.toepenLessKnock,
+              excludeSemantics: true,
+              child: SizedBox(
+                width: kTouchTarget,
+                height: kTouchTarget,
+                child: FilledButton.tonal(
+                  style: FilledButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(kTouchTarget, kTouchTarget),
+                  ),
+                  onPressed: knocks > 0 ? () => _knock(-1) : null,
+                  child: const Icon(Icons.remove),
+                ),
+              ),
             ),
-          ),
-          if (ctx.editing)
-            IconButton(
-              tooltip: l10n.cancel,
-              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-              onPressed: ctx.onCancel,
-              icon: const Icon(Icons.close),
+            const SizedBox(width: kTouchGap),
+            SizedBox(
+              height: kTouchTarget,
+              child: FilledButton.icon(
+                onPressed: () => _knock(1),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.toepenKnock),
+              ),
             ),
-        ]),
+            if (ctx.editing)
+              IconButton(
+                tooltip: l10n.cancel,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                onPressed: ctx.onCancel,
+                icon: const Icon(Icons.close),
+              ),
+          ],
+        ),
         const SizedBox(height: kTouchGap),
-        LayoutBuilder(builder: (context, constraints) {
-          final width = (constraints.maxWidth - kTouchGap) / 2;
-          return Wrap(
-            spacing: kTouchGap,
-            runSpacing: kTouchGap,
-            children: [for (final p in ids) _tile(l10n, p, width)],
-          );
-        }),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final width = (constraints.maxWidth - kTouchGap) / 2;
+            return Wrap(
+              spacing: kTouchGap,
+              runSpacing: kTouchGap,
+              children: [for (final p in ids) _tile(l10n, p, width)],
+            );
+          },
+        ),
         const SizedBox(height: kTouchGap),
-        Row(children: [
-          Expanded(
-            child: Text(
-              winner == null
-                  ? l10n.toepenTapWinner
-                  : (situation.poverty.isNotEmpty ? l10n.toepenPovertyKnock : ''),
-              style: TextStyle(
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                winner == null
+                    ? l10n.toepenTapWinner
+                    : (situation.poverty.isNotEmpty
+                          ? l10n.toepenPovertyKnock
+                          : ''),
+                style: TextStyle(
                   fontSize: 13,
-                  color: winner == null ? scheme.onSurfaceVariant : scheme.tertiary),
+                  color: winner == null
+                      ? scheme.onSurfaceVariant
+                      : scheme.tertiary,
+                ),
+              ),
             ),
-          ),
-          SizedBox(
-            width: 148,
-            height: kTouchTarget,
-            child: FilledButton(
-              onPressed: _canConfirm ? _confirm : null,
-              child: FittedBox(fit: BoxFit.scaleDown, child: Text(l10n.saveRound)),
+            SizedBox(
+              width: 148,
+              height: kTouchTarget,
+              child: FilledButton(
+                onPressed: _canConfirm ? _confirm : null,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(l10n.saveRound),
+                ),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }

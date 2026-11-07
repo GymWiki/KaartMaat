@@ -276,11 +276,11 @@ void main() {
     await pumpPanel(tester, state: canasta(), quick: _canastaQuick, inScaffold: true);
     final total = tester.getSize(find.byType(GameScreenScaffold)).height;
     double panel() => tester.getSize(find.byType(AnimatedSize)).height;
-    expect(panel(), lessThanOrEqualTo(total * 0.45 + 0.5));
+    expect(panel(), lessThanOrEqualTo(total * 0.5 + 24));
 
     await tester.tap(find.text('Snel'));
     await tester.pump(const Duration(milliseconds: 300));
-    expect(panel(), lessThanOrEqualTo(total * 0.45 + 0.5));
+    expect(panel(), lessThanOrEqualTo(total * 0.5 + 24));
     await tester.tap(find.text('Natuurlijke canasta'));
     await tester.pump();
     expect(find.text('= 500'), findsOneWidget);

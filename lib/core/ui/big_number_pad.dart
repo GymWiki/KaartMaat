@@ -75,6 +75,7 @@ class BigNumberPad extends StatelessWidget {
                               : () => onKey(_rows[r][c]),
                           style: FilledButton.styleFrom(
                             minimumSize: Size(0, keyHeight),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                             padding: EdgeInsets.zero,
                             textStyle: const TextStyle(fontSize: 24),
                           ),

@@ -57,8 +57,11 @@ class _RoundTableState extends State<RoundTable> {
         if (MediaQuery.disableAnimationsOf(context)) {
           _controller.jumpTo(target);
         } else {
-          _controller.animateTo(target,
-              duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
+          _controller.animateTo(
+            target,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+          );
         }
       });
     }
@@ -72,28 +75,33 @@ class _RoundTableState extends State<RoundTable> {
     final ids = view.config.participants;
     final totals = {for (final s in view.standings) s.participant: s};
     final rounds = view.state.rounds;
-    final ghost = widget.currentRound != null &&
+    final ghost =
+        widget.currentRound != null &&
         !rounds.any((r) => r.number == widget.currentRound);
 
-    Widget numberCell(String text, {bool bold = false, Color? color, double size = 18}) =>
-        Expanded(
-          child: Center(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                text,
-                maxLines: 1,
-                style: TextStyle(
-                  fontFamily: bold ? AppTheme.numeralFont : null,
-                  fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
-                  fontSize: size,
-                  color: color ?? scheme.onSurface,
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                ),
-              ),
+    Widget numberCell(
+      String text, {
+      bool bold = false,
+      Color? color,
+      double size = 18,
+    }) => Expanded(
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            style: TextStyle(
+              fontFamily: bold ? AppTheme.numeralFont : null,
+              fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
+              fontSize: size,
+              color: color ?? scheme.onSurface,
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
-        );
+        ),
+      ),
+    );
 
     Widget rowFrame({
       required Widget child,
@@ -101,24 +109,23 @@ class _RoundTableState extends State<RoundTable> {
       BoxBorder? border,
       VoidCallback? onTap,
       String? semantics,
-    }) =>
-        Semantics(
-          button: onTap != null,
-          label: semantics,
-          excludeSemantics: semantics != null,
-          child: Material(
-            color: color ?? Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
-              child: Container(
-                constraints: const BoxConstraints(minHeight: 52),
-                decoration: BoxDecoration(border: border),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: child,
-              ),
-            ),
+    }) => Semantics(
+      button: onTap != null,
+      label: semantics,
+      excludeSemantics: semantics != null,
+      child: Material(
+        color: color ?? Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 52),
+            decoration: BoxDecoration(border: border),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: child,
           ),
-        );
+        ),
+      ),
+    );
 
     Widget roundRow(int? index, int number) {
       final stored = index != null;
@@ -131,8 +138,8 @@ class _RoundTableState extends State<RoundTable> {
         color: editing
             ? scheme.primaryContainer
             : current
-                ? scheme.primary.withValues(alpha: 0.14)
-                : null,
+            ? scheme.primary.withValues(alpha: 0.14)
+            : null,
         border: Border(
           left: BorderSide(
             color: current || editing ? scheme.primary : Colors.transparent,
@@ -149,63 +156,94 @@ class _RoundTableState extends State<RoundTable> {
           if (stored && complete)
             for (final p in ids) '${view.nameOf(p)} ${scores![p]}',
         ].join(', '),
-        child: Row(children: [
-          SizedBox(
-            width: 40,
-            child: Text('$number',
+        child: Row(
+          children: [
+            SizedBox(
+              width: 40,
+              child: Text(
+                '$number',
                 style: TextStyle(
-                    fontWeight: current || editing ? FontWeight.w800 : FontWeight.w500,
-                    color: scheme.onSurfaceVariant)),
-          ),
-          for (final p in ids)
-            () {
-              final highlight = stored &&
-                  complete &&
-                  (widget.cellHighlight?.call(index, p) ?? false);
-              final detail = stored ? widget.cellDetail?.call(index, p) : null;
-              return Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  decoration: BoxDecoration(
-                    color: highlight ? scheme.secondary.withValues(alpha: 0.18) : null,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      if (highlight)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 3),
-                          child: Icon(Icons.check, size: 14, color: scheme.secondary),
+                  fontWeight: current || editing
+                      ? FontWeight.w800
+                      : FontWeight.w500,
+                  color: scheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            for (final p in ids)
+              () {
+                final highlight =
+                    stored &&
+                    complete &&
+                    (widget.cellHighlight?.call(index, p) ?? false);
+                final detail = stored
+                    ? widget.cellDetail?.call(index, p)
+                    : null;
+                return Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 2,
+                      vertical: 4,
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      color: highlight
+                          ? scheme.secondary.withValues(alpha: 0.18)
+                          : null,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (highlight)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 3),
+                                child: Icon(
+                                  Icons.check,
+                                  size: 14,
+                                  color: scheme.secondary,
+                                ),
+                              ),
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  stored && complete ? '${scores![p]}' : '–',
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.numeralFont,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 20,
+                                    color: stored && complete && scores![p]! < 0
+                                        ? scheme.error
+                                        : scheme.onSurface,
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      Flexible(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            stored && complete ? '${scores![p]}' : '–',
+                        if (detail != null)
+                          Text(
+                            detail,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: AppTheme.numeralFont,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                              color: stored && complete && scores![p]! < 0
-                                  ? scheme.error
-                                  : scheme.onSurface,
-                              fontFeatures: const [FontFeature.tabularFigures()],
+                              fontSize: 11,
+                              color: scheme.onSurfaceVariant,
                             ),
                           ),
-                        ),
-                      ),
-                    ]),
-                    if (detail != null)
-                      Text(detail,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 11, color: scheme.onSurfaceVariant)),
-                  ]),
-                ),
-              );
-            }(),
-        ]),
+                      ],
+                    ),
+                  ),
+                );
+              }(),
+          ],
+        ),
       );
     }
 
@@ -215,10 +253,12 @@ class _RoundTableState extends State<RoundTable> {
         rowFrame(
           color: scheme.surfaceContainer,
           border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
-          child: Row(children: [
-            const SizedBox(width: 40),
-            for (final p in ids) numberCell(view.nameOf(p), size: 13),
-          ]),
+          child: Row(
+            children: [
+              const SizedBox(width: 40),
+              for (final p in ids) numberCell(view.nameOf(p), size: 13),
+            ],
+          ),
         ),
         rowFrame(
           color: scheme.surfaceContainer,
@@ -227,29 +267,39 @@ class _RoundTableState extends State<RoundTable> {
             l10n.total,
             for (final p in ids) '${view.nameOf(p)} ${totals[p]!.total}',
           ].join(', '),
-          child: Row(children: [
-            SizedBox(
-              width: 40,
-              child: Text(l10n.total,
-                  style: TextStyle(fontSize: 11, color: scheme.onSurfaceVariant)),
-            ),
-            for (final p in ids)
-              numberCell(
-                '${totals[p]!.total}',
-                bold: true,
-                size: 28,
-                color: view.roundComplete.any((done) => done) && totals[p]!.rank == 1
-                    ? scheme.tertiary
-                    : scheme.onSurface,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 40,
+                child: Text(
+                  l10n.total,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
               ),
-          ]),
+              for (final p in ids)
+                numberCell(
+                  '${totals[p]!.total}',
+                  bold: true,
+                  size: 28,
+                  color:
+                      view.roundComplete.any((done) => done) &&
+                          totals[p]!.rank == 1
+                      ? scheme.tertiary
+                      : scheme.onSurface,
+                ),
+            ],
+          ),
         ),
         Expanded(
           child: ListView(
             controller: _controller,
             padding: const EdgeInsets.only(bottom: 8),
             children: [
-              for (var i = 0; i < rounds.length; i++) roundRow(i, rounds[i].number),
+              for (var i = 0; i < rounds.length; i++)
+                roundRow(i, rounds[i].number),
               if (ghost) roundRow(null, widget.currentRound!),
             ],
           ),

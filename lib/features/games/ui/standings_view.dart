@@ -24,13 +24,15 @@ class StandingsView extends StatelessWidget {
         for (final s in view.standings)
           ListTile(
             leading: CornerIndex(
-                rank: s.rank,
-                suit: suitAt(view.config.participants.indexOf(s.participant)),
-                highlight: s.rank == 1,
-              ),
+              rank: s.rank,
+              suit: suitAt(view.config.participants.indexOf(s.participant)),
+              highlight: s.rank == 1,
+            ),
             title: Text(view.nameOf(s.participant), style: text.titleMedium),
-            trailing: Text('${s.total}',
-                style: text.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+            trailing: Text(
+              '${s.total}',
+              style: text.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
           ),
         const Divider(height: 32),
         if (view.state.rounds.isEmpty)
@@ -63,37 +65,46 @@ class _RoundsTable extends StatelessWidget {
     final totals = {for (final s in view.standings) s.participant: s.total};
 
     Widget cell(String text, {bool bold = false}) => Expanded(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(text,
-                maxLines: 1,
-                style: TextStyle(
-                    fontSize: 16, fontWeight: bold ? FontWeight.bold : null)),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          text,
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: bold ? FontWeight.bold : null,
           ),
-        );
+        ),
+      ),
+    );
 
-    Widget row(String first, List<String> cells,
-            {bool bold = false, VoidCallback? onTap}) =>
-        InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(children: [
-              SizedBox(
-                width: 44,
-                child: Text(first,
-                    style: TextStyle(fontWeight: bold ? FontWeight.bold : null)),
+    Widget row(
+      String first,
+      List<String> cells, {
+      bool bold = false,
+      VoidCallback? onTap,
+    }) => InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 44,
+              child: Text(
+                first,
+                style: TextStyle(fontWeight: bold ? FontWeight.bold : null),
               ),
-              for (final c in cells) cell(c, bold: bold),
-            ]),
-          ),
-        );
+            ),
+            for (final c in cells) cell(c, bold: bold),
+          ],
+        ),
+      ),
+    );
 
     return Column(
       children: [
-        row('#', [
-          for (final p in ids) view.nameOf(p),
-        ], bold: true),
+        row('#', [for (final p in ids) view.nameOf(p)], bold: true),
         const Divider(height: 1),
         for (var i = 0; i < view.state.rounds.length; i++)
           row(
@@ -107,7 +118,9 @@ class _RoundsTable extends StatelessWidget {
                 : () => onTapRound!(view.state.rounds[i].number),
           ),
         const Divider(height: 1),
-        row(context.l10n.total, [for (final p in ids) '${totals[p]}'], bold: true),
+        row(context.l10n.total, [
+          for (final p in ids) '${totals[p]}',
+        ], bold: true),
       ],
     );
   }

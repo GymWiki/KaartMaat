@@ -44,7 +44,8 @@ class PanelContext {
     Entries entries, {
     required bool complete,
     Map<String, Object?>? undoDraft,
-  }) onSave;
+  })
+  onSave;
 
   /// Leaves editing mode without saving.
   final VoidCallback onCancel;

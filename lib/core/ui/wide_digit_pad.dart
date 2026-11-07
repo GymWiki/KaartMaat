@@ -61,6 +61,7 @@ class WideDigitPad extends StatelessWidget {
                           onPressed: () => onKey(rows[r][c]),
                           style: FilledButton.styleFrom(
                             minimumSize: Size(0, keyHeight),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                             padding: EdgeInsets.zero,
                             textStyle: const TextStyle(fontSize: 22),
                           ),

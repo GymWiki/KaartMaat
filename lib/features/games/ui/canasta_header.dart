@@ -17,11 +17,19 @@ class CanastaHeader extends StatelessWidget {
       color: Theme.of(context).colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(l10n.canastaMeldTitle, style: Theme.of(context).textTheme.titleSmall),
-          for (final p in view.config.participants)
-            Text('${view.nameOf(p)}: ${CanastaRules.initialMeldMinimum(totals[p]!)}'),
-        ]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.canastaMeldTitle,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            for (final p in view.config.participants)
+              Text(
+                '${view.nameOf(p)}: ${CanastaRules.initialMeldMinimum(totals[p]!)}',
+              ),
+          ],
+        ),
       ),
     );
   }

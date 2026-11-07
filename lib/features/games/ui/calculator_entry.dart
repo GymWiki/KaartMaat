@@ -76,7 +76,10 @@ class _CalculatorEntryState extends ConsumerState<CalculatorEntry> {
   void _submit() {
     _commitTyped();
     widget.onSubmit({
-      for (final p in _ids) p: {'amounts': [..._amounts[p]!]},
+      for (final p in _ids)
+        p: {
+          'amounts': [..._amounts[p]!],
+        },
     });
   }
 
@@ -109,9 +112,13 @@ class _CalculatorEntryState extends ConsumerState<CalculatorEntry> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(_label(_ids[i]), overflow: TextOverflow.ellipsis),
-                        Text('${_sum(_ids[i]) + (i == _focus ? typed : 0)}',
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text(
+                          '${_sum(_ids[i]) + (i == _focus ? typed : 0)}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -129,28 +136,38 @@ class _CalculatorEntryState extends ConsumerState<CalculatorEntry> {
                 style: text.displaySmall?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
-              Wrap(spacing: 6, runSpacing: 6, children: [
-                for (final a in _amounts[_current]!)
-                  Chip(
-                    label: Text(a > 0 ? '+$a' : '$a'),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                if (_typed.isNotEmpty)
-                  Chip(
-                    label: Text(_typed),
-                    backgroundColor: scheme.primaryContainer,
-                    visualDensity: VisualDensity.compact,
-                  ),
-              ]),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  for (final a in _amounts[_current]!)
+                    Chip(
+                      label: Text(a > 0 ? '+$a' : '$a'),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  if (_typed.isNotEmpty)
+                    Chip(
+                      label: Text(_typed),
+                      backgroundColor: scheme.primaryContainer,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                ],
+              ),
               if (widget.quick.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Wrap(spacing: 8, runSpacing: 8, children: [
-                  for (final q in widget.quick)
-                    ActionChip(
-                      label: Text('${q.label(l10n)} ${q.amount > 0 ? '+' : ''}${q.amount}'),
-                      onPressed: () => _add(q.amount),
-                    ),
-                ]),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final q in widget.quick)
+                      ActionChip(
+                        label: Text(
+                          '${q.label(l10n)} ${q.amount > 0 ? '+' : ''}${q.amount}',
+                        ),
+                        onPressed: () => _add(q.amount),
+                      ),
+                  ],
+                ),
               ],
             ],
           ),
@@ -158,49 +175,56 @@ class _CalculatorEntryState extends ConsumerState<CalculatorEntry> {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              BigNumberPad(onKey: (k) {
-                haptic(ref);
-                setState(() => _typed = applyKey(_typed, k));
-              }),
-              Row(children: [
-                SizedBox(
-                  width: 64,
-                  height: 56,
-                  child: OutlinedButton(
-                    onPressed: _undo,
-                    child: Tooltip(
-                      message: l10n.undoLastAmount,
-                      child: const Icon(Icons.undo),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                BigNumberPad(
+                  onKey: (k) {
+                    haptic(ref);
+                    setState(() => _typed = applyKey(_typed, k));
+                  },
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 64,
+                      height: 56,
+                      child: OutlinedButton(
+                        onPressed: _undo,
+                        child: Tooltip(
+                          message: l10n.undoLastAmount,
+                          child: const Icon(Icons.undo),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                SizedBox(
-                  width: 72,
-                  height: 56,
-                  child: FilledButton.tonal(
-                    onPressed: typed == 0
-                        ? null
-                        : () {
-                            haptic(ref);
-                            setState(_commitTyped);
-                          },
-                    child: const Icon(Icons.add),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: SizedBox(
-                    height: 56,
-                    child: FilledButton(
-                      onPressed: _submit,
-                      child: Text(l10n.saveRound),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 72,
+                      height: 56,
+                      child: FilledButton.tonal(
+                        onPressed: typed == 0
+                            ? null
+                            : () {
+                                haptic(ref);
+                                setState(_commitTyped);
+                              },
+                        child: const Icon(Icons.add),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: SizedBox(
+                        height: 56,
+                        child: FilledButton(
+                          onPressed: _submit,
+                          child: Text(l10n.saveRound),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ]),
-            ]),
+              ],
+            ),
           ),
         ),
       ],

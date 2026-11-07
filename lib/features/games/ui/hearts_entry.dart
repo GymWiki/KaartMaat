@@ -31,7 +31,9 @@ class _HeartsEntryState extends ConsumerState<HeartsEntry> {
   late final GameConfig _config = widget.view.config;
   late final int _total = _config.intSetting(HeartsRules.totalPointsKey);
   late final int _queen = _config.intSetting(HeartsRules.queenPointsKey);
-  late final bool _moonEnabled = _config.boolSetting(HeartsRules.moonEnabledKey);
+  late final bool _moonEnabled = _config.boolSetting(
+    HeartsRules.moonEnabledKey,
+  );
 
   late final Map<String, int> _points = {
     for (final p in _config.participants)
@@ -48,9 +50,9 @@ class _HeartsEntryState extends ConsumerState<HeartsEntry> {
   }
 
   Entries _entries() => {
-        for (final p in _config.participants)
-          p: {'points': _points[p], 'moon': p == _moon},
-      };
+    for (final p in _config.participants)
+      p: {'points': _points[p], 'moon': p == _moon},
+  };
 
   void _add(String p, int delta) {
     haptic(ref);
@@ -81,7 +83,10 @@ class _HeartsEntryState extends ConsumerState<HeartsEntry> {
     final text = Theme.of(context).textTheme;
     final scheme = Theme.of(context).colorScheme;
     final entries = _entries();
-    final issue = _rules.validateRound(_config, RoundData(number: 1, entries: entries));
+    final issue = _rules.validateRound(
+      _config,
+      RoundData(number: 1, entries: entries),
+    );
     final handedOut = _points.values.fold(0, (a, b) => a + b);
 
     return Column(
@@ -98,33 +103,50 @@ class _HeartsEntryState extends ConsumerState<HeartsEntry> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(children: [
-                          Expanded(
-                            child: Text(widget.view.nameOf(p),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.view.nameOf(p),
                                 style: text.titleMedium,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          Text('${_points[p]}',
-                              style: text.headlineMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold)),
-                        ]),
-                        const SizedBox(height: 8),
-                        Wrap(spacing: 8, runSpacing: 8, children: [
-                          _btn('−1', () => _add(p, -1)),
-                          _btn('+1', () => _add(p, 1)),
-                          _btn(l10n.heartsQueen(_queen), () => _add(p, _queen)),
-                          if (_moonEnabled)
-                            FilledButton.tonal(
-                              style: FilledButton.styleFrom(
-                                  minimumSize: const Size(64, 48),
-                                  backgroundColor:
-                                      _moon == p ? scheme.tertiary : null,
-                                  foregroundColor:
-                                      _moon == p ? scheme.onTertiary : null),
-                              onPressed: () => _toggleMoon(p),
-                              child: Text(l10n.heartsMoon),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                        ]),
+                            Text(
+                              '${_points[p]}',
+                              style: text.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            _btn('−1', () => _add(p, -1)),
+                            _btn('+1', () => _add(p, 1)),
+                            _btn(
+                              l10n.heartsQueen(_queen),
+                              () => _add(p, _queen),
+                            ),
+                            if (_moonEnabled)
+                              FilledButton.tonal(
+                                style: FilledButton.styleFrom(
+                                  minimumSize: const Size(64, 48),
+                                  backgroundColor: _moon == p
+                                      ? scheme.tertiary
+                                      : null,
+                                  foregroundColor: _moon == p
+                                      ? scheme.onTertiary
+                                      : null,
+                                ),
+                                onPressed: () => _toggleMoon(p),
+                                child: Text(l10n.heartsMoon),
+                              ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -135,23 +157,29 @@ class _HeartsEntryState extends ConsumerState<HeartsEntry> {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Text(
-                _moon != null
-                    ? l10n.heartsMoonShot
-                    : l10n.heartsHandedOut(handedOut, _total),
-                style: text.titleMedium?.copyWith(
-                    color: issue != null && _moon == null ? scheme.error : null),
-              ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: issue == null ? () => widget.onSubmit(entries) : null,
-                  child: Text(l10n.saveRound),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  _moon != null
+                      ? l10n.heartsMoonShot
+                      : l10n.heartsHandedOut(handedOut, _total),
+                  style: text.titleMedium?.copyWith(
+                    color: issue != null && _moon == null ? scheme.error : null,
+                  ),
                 ),
-              ),
-            ]),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: issue == null
+                        ? () => widget.onSubmit(entries)
+                        : null,
+                    child: Text(l10n.saveRound),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -159,8 +187,8 @@ class _HeartsEntryState extends ConsumerState<HeartsEntry> {
   }
 
   Widget _btn(String label, VoidCallback onTap) => FilledButton.tonal(
-        style: FilledButton.styleFrom(minimumSize: const Size(64, 48)),
-        onPressed: onTap,
-        child: Text(label, style: const TextStyle(fontSize: 18)),
-      );
+    style: FilledButton.styleFrom(minimumSize: const Size(64, 48)),
+    onPressed: onTap,
+    child: Text(label, style: const TextStyle(fontSize: 18)),
+  );
 }

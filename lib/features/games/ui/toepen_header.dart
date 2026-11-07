@@ -12,21 +12,25 @@ class ToepenHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final sit =
-        const ToepenRules().situation(view.config, view.state.rounds);
+    final sit = const ToepenRules().situation(view.config, view.state.rounds);
     if (sit.poverty.isEmpty && sit.out.isEmpty) return const SizedBox.shrink();
     final scheme = Theme.of(context).colorScheme;
     return Card(
       color: scheme.tertiaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (sit.poverty.isNotEmpty)
-            Text(l10n.toepenInPoverty(sit.poverty.map(view.nameOf).join(', ')),
-                style: Theme.of(context).textTheme.titleMedium),
-          if (sit.out.isNotEmpty)
-            Text(l10n.toepenOut(sit.out.map(view.nameOf).join(', '))),
-        ]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (sit.poverty.isNotEmpty)
+              Text(
+                l10n.toepenInPoverty(sit.poverty.map(view.nameOf).join(', ')),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            if (sit.out.isNotEmpty)
+              Text(l10n.toepenOut(sit.out.map(view.nameOf).join(', '))),
+          ],
+        ),
       ),
     );
   }

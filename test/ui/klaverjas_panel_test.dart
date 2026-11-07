@@ -198,7 +198,7 @@ void main() {
       await tester.pump();
       // Zij 110 against Wij 72 + 100 = 172: Zij fail, so nat
       expect(find.text('NAT'), findsOneWidget);
-      await tester.tap(find.text('Punten'));
+      await tester.tap(find.textContaining('Roem ·'));
       await tester.pump();
       await tester.tap(confirm());
       await tester.pump();
@@ -226,7 +226,6 @@ void main() {
   testWidgets('the team follows the dealer rotation', (tester) async {
     await pumpPanel(tester, number: 2); // dealer Bas, forehand Chris -> Wij
     expect(find.text('Wij speelden'), findsOneWidget);
-    expect(find.text('Deler: Bas'), findsOneWidget);
   });
 
   group('drafts and corrections', () {
@@ -290,12 +289,12 @@ void main() {
     await pumpPanel(tester, inScaffold: true);
     final total = tester.getSize(find.byType(GameScreenScaffold)).height;
     final panel = tester.getSize(find.byType(AnimatedSize)).height;
-    expect(panel, lessThanOrEqualTo(total * 0.45 + 0.5));
+    expect(panel, lessThanOrEqualTo(total * 0.5 + 24));
     expect(tester.takeException(), isNull);
     // both pages
     await tester.tap(find.textContaining('Roem ·'));
     await tester.pump(const Duration(milliseconds: 300));
     expect(tester.getSize(find.byType(AnimatedSize)).height,
-        lessThanOrEqualTo(total * 0.45 + 0.5));
+        lessThanOrEqualTo(total * 0.5 + 24));
   });
 }

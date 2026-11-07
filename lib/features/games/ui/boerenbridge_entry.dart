@@ -34,8 +34,7 @@ class _BoerenbridgeEntryState extends ConsumerState<BoerenbridgeEntry> {
   late final dealer = rules.dealer(config, widget.number);
 
   late final Map<String, int?> bids = {
-    for (final p in config.participants)
-      p: widget.existing?[p]?['bid'] as int?,
+    for (final p in config.participants) p: widget.existing?[p]?['bid'] as int?,
   };
   late final Map<String, int?> tricks = {
     for (final p in config.participants)
@@ -46,12 +45,12 @@ class _BoerenbridgeEntryState extends ConsumerState<BoerenbridgeEntry> {
   late bool tricksStep = bids.values.every((b) => b != null);
 
   Entries _entries({required bool withTricks}) => {
-        for (final p in config.participants)
-          p: {
-            if (bids[p] != null) 'bid': bids[p],
-            if (withTricks && tricks[p] != null) 'tricks': tricks[p],
-          },
-      };
+    for (final p in config.participants)
+      p: {
+        if (bids[p] != null) 'bid': bids[p],
+        if (withTricks && tricks[p] != null) 'tricks': tricks[p],
+      },
+  };
 
   int get _bidSum => bids.values.fold(0, (a, b) => a + (b ?? 0));
   int get _trickSum => tricks.values.fold(0, (a, b) => a + (b ?? 0));
@@ -63,23 +62,29 @@ class _BoerenbridgeEntryState extends ConsumerState<BoerenbridgeEntry> {
     if (!tricksStep) {
       if (!_allBids) return (null, false);
       final issue = rules.validateRound(
-          config, RoundData(number: widget.number, entries: _entries(withTricks: false)));
+        config,
+        RoundData(number: widget.number, entries: _entries(withTricks: false)),
+      );
       if (issue == RoundIssue.dealerBid) {
         final others = _bidSum - (bids[dealer] ?? 0);
         return (
           l10n.dealerWarning(
-              rules.forbiddenDealerBid(config, widget.number, others) ?? 0, cards),
-          false
+            rules.forbiddenDealerBid(config, widget.number, others) ?? 0,
+            cards,
+          ),
+          false,
         );
       }
       return (null, issue == null);
     }
     if (!_allBids || !_allTricks) return (null, false);
     final issue = rules.validateRound(
-        config, RoundData(number: widget.number, entries: _entries(withTricks: true)));
+      config,
+      RoundData(number: widget.number, entries: _entries(withTricks: true)),
+    );
     return (
       issue == RoundIssue.tricksMismatch ? l10n.tricksWarning(cards) : null,
-      issue == null
+      issue == null,
     );
   }
 
@@ -107,30 +112,37 @@ class _BoerenbridgeEntryState extends ConsumerState<BoerenbridgeEntry> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-          child: Column(children: [
-            Row(children: [
-              Expanded(
-                child: Text(
-                  '${l10n.roundOf(widget.number, rules.totalRounds(config))} · ${l10n.cardsCount(cards)}',
-                  style: text.titleMedium,
-                ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${l10n.roundOf(widget.number, rules.totalRounds(config))} · ${l10n.cardsCount(cards)}',
+                      style: text.titleMedium,
+                    ),
+                  ),
+                  Text(
+                    l10n.dealerLabel(widget.view.nameOf(dealer)),
+                    style: text.titleMedium,
+                  ),
+                ],
               ),
-              Text(l10n.dealerLabel(widget.view.nameOf(dealer)),
-                  style: text.titleMedium),
-            ]),
-            const SizedBox(height: 12),
-            SegmentedButton<bool>(
-              segments: [
-                ButtonSegment(value: false, label: Text(l10n.bidsStep)),
-                ButtonSegment(
+              const SizedBox(height: 12),
+              SegmentedButton<bool>(
+                segments: [
+                  ButtonSegment(value: false, label: Text(l10n.bidsStep)),
+                  ButtonSegment(
                     value: true,
                     label: Text(l10n.tricksStep),
-                    enabled: _allBids),
-              ],
-              selected: {tricksStep},
-              onSelectionChanged: (s) => setState(() => tricksStep = s.first),
-            ),
-          ]),
+                    enabled: _allBids,
+                  ),
+                ],
+                selected: {tricksStep},
+                onSelectionChanged: (s) => setState(() => tricksStep = s.first),
+              ),
+            ],
+          ),
         ),
         Expanded(
           child: ListView(
@@ -143,20 +155,25 @@ class _BoerenbridgeEntryState extends ConsumerState<BoerenbridgeEntry> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(children: [
-                          Text(widget.view.nameOf(p), style: text.titleMedium),
-                          if (p == dealer) ...[
-                            const SizedBox(width: 8),
-                            Chip(
-                              label: Text(l10n.dealerTag),
-                              visualDensity: VisualDensity.compact,
+                        Row(
+                          children: [
+                            Text(
+                              widget.view.nameOf(p),
+                              style: text.titleMedium,
                             ),
+                            if (p == dealer) ...[
+                              const SizedBox(width: 8),
+                              Chip(
+                                label: Text(l10n.dealerTag),
+                                visualDensity: VisualDensity.compact,
+                              ),
+                            ],
+                            if (tricksStep) ...[
+                              const Spacer(),
+                              Text('${l10n.bidsStep}: ${bids[p]}'),
+                            ],
                           ],
-                          if (tricksStep) ...[
-                            const Spacer(),
-                            Text('${l10n.bidsStep}: ${bids[p]}'),
-                          ],
-                        ]),
+                        ),
                         const SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
@@ -164,9 +181,13 @@ class _BoerenbridgeEntryState extends ConsumerState<BoerenbridgeEntry> {
                           children: [
                             for (var i = 0; i <= cards; i++)
                               ChoiceChip(
-                                label: Text('$i',
-                                    style: const TextStyle(
-                                        fontSize: 20, fontWeight: FontWeight.bold)),
+                                label: Text(
+                                  '$i',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 selected: values[p] == i,
                                 showCheckmark: false,
                                 onSelected: (_) {
@@ -199,9 +220,13 @@ class _BoerenbridgeEntryState extends ConsumerState<BoerenbridgeEntry> {
                 if (warning != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
-                    child: Text(warning,
-                        style: TextStyle(
-                            color: scheme.error, fontWeight: FontWeight.w600)),
+                    child: Text(
+                      warning,
+                      style: TextStyle(
+                        color: scheme.error,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 const SizedBox(height: 8),
                 FilledButton(

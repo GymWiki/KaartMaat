@@ -26,13 +26,13 @@ void main() {
       expect(tester.getSize(find.byKey(_panelKey)).height, 200);
     });
 
-    testWidgets('a tall panel is capped at 45% and the top keeps 55%', (tester) async {
+    testWidgets('a tall panel is capped at 50% and the top keeps 50%', (tester) async {
       usePhoneScreen(tester);
       await pumpApp(tester, _scaffold(panelHeight: 900));
       final total = tester.getSize(find.byType(GameScreenScaffold)).height;
       final topHeight = tester.getSize(find.byKey(_topKey)).height;
 
-      expect(topHeight, greaterThanOrEqualTo(total * 0.55 - 1));
+      expect(topHeight, greaterThanOrEqualTo(total * 0.5 - 1));
       // the panel itself scrolls, nothing overflows
       expect(tester.takeException(), isNull);
       expect(find.descendant(
@@ -50,7 +50,7 @@ void main() {
       final total = tester.getSize(find.byType(GameScreenScaffold)).height;
       expect(total, lessThan(914 * 0.75)); // body shrank
       final topHeight = tester.getSize(find.byKey(_topKey)).height;
-      expect(topHeight, greaterThanOrEqualTo(total * 0.55 - 1));
+      expect(topHeight, greaterThanOrEqualTo(total * 0.5 - 1));
       expect(tester.takeException(), isNull);
     });
 

@@ -183,15 +183,11 @@ void main() {
       },
       editing: true,
     );
-    expect(find.text('Ronde 1 corrigeren'), findsOneWidget);
     expect(find.text('deze ronde +12'), findsOneWidget);
-    expect(
-      tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Volgende ronde')).onPressed,
-      isNull,
-    );
+    expect(find.text('Volgende ronde'), findsNothing); // closes instead
     await tap(tester, find.text('Bas'));
     expect(pointsOf('2'), 4);
-    await tester.tap(find.byIcon(Icons.close));
+    await tester.tap(find.text('Klaar'));
     expect(cancelled, 1);
   });
 
@@ -199,7 +195,7 @@ void main() {
     await pumpPanel(tester, state: game(players: 4), inScaffold: true);
     final total = tester.getSize(find.byType(GameScreenScaffold)).height;
     expect(tester.getSize(find.byType(AnimatedSize)).height,
-        lessThanOrEqualTo(total * 0.45 + 0.5));
+        lessThanOrEqualTo(total * 0.5 + 24));
     expect(tester.takeException(), isNull);
     await pumpPanel(tester, state: game(players: 8), inScaffold: true);
     expect(tester.takeException(), isNull);

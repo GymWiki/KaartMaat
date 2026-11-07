@@ -50,20 +50,21 @@ class _RikkenEntryState extends ConsumerState<RikkenEntry> {
     }
   }
 
-  RikContract? get _def => _contract == null ? null : RikkenRules.contractOf(_contract!);
+  RikContract? get _def =>
+      _contract == null ? null : RikkenRules.contractOf(_contract!);
 
   Entries _entries() => {
-        for (final p in _config.participants)
-          p: {
-            'role': p == _bidder
-                ? 'bidder'
-                : p == _partner
-                    ? 'partner'
-                    : 'opp',
-            'contract': _contract,
-            'tricks': _tricks,
-          },
-      };
+    for (final p in _config.participants)
+      p: {
+        'role': p == _bidder
+            ? 'bidder'
+            : p == _partner
+            ? 'partner'
+            : 'opp',
+        'contract': _contract,
+        'tricks': _tricks,
+      },
+  };
 
   void _pick(VoidCallback change) {
     haptic(ref);
@@ -85,21 +86,24 @@ class _RikkenEntryState extends ConsumerState<RikkenEntry> {
     final hint = _bidder == null
         ? l10n.rikChooseBidder
         : _contract == null
-            ? l10n.rikChooseContract
-            : (needsPartner && _partner == null)
-                ? l10n.rikChoosePartner
-                : _tricks == null
-                    ? l10n.rikChooseTricks
-                    : null;
+        ? l10n.rikChooseContract
+        : (needsPartner && _partner == null)
+        ? l10n.rikChoosePartner
+        : _tricks == null
+        ? l10n.rikChooseTricks
+        : null;
 
     Widget section(String title, Widget child) => Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(title, style: text.titleMedium),
-            const SizedBox(height: 8),
-            child,
-          ]),
-        );
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: text.titleMedium),
+          const SizedBox(height: 8),
+          child,
+        ],
+      ),
+    );
 
     return Column(
       children: [
@@ -109,60 +113,80 @@ class _RikkenEntryState extends ConsumerState<RikkenEntry> {
             children: [
               section(
                 l10n.rikBidder,
-                Wrap(spacing: 8, runSpacing: 8, children: [
-                  for (final p in ids)
-                    ChoiceChip(
-                      label: Text(widget.view.nameOf(p)),
-                      selected: _bidder == p,
-                      onSelected: (_) => _pick(() {
-                        _bidder = p;
-                        if (_partner == p) _partner = null;
-                      }),
-                    ),
-                ]),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final p in ids)
+                      ChoiceChip(
+                        label: Text(widget.view.nameOf(p)),
+                        selected: _bidder == p,
+                        onSelected: (_) => _pick(() {
+                          _bidder = p;
+                          if (_partner == p) _partner = null;
+                        }),
+                      ),
+                  ],
+                ),
               ),
               section(
                 l10n.rikContract,
-                Wrap(spacing: 8, runSpacing: 8, children: [
-                  for (final c in rikContracts)
-                    ChoiceChip(
-                      label: Text(rikContractName(l10n, c.id)),
-                      selected: _contract == c.id,
-                      onSelected: (_) => _pick(() {
-                        _contract = c.id;
-                        if (!c.partner) _partner = null;
-                        // Preselect the tricks the contract needs.
-                        _tricks ??= c.target;
-                      }),
-                    ),
-                ]),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final c in rikContracts)
+                      ChoiceChip(
+                        label: Text(rikContractName(l10n, c.id)),
+                        selected: _contract == c.id,
+                        onSelected: (_) => _pick(() {
+                          _contract = c.id;
+                          if (!c.partner) _partner = null;
+                          // Preselect the tricks the contract needs.
+                          _tricks ??= c.target;
+                        }),
+                      ),
+                  ],
+                ),
               ),
               if (needsPartner)
                 section(
                   l10n.rikPartner,
-                  Wrap(spacing: 8, runSpacing: 8, children: [
-                    for (final p in ids)
-                      if (p != _bidder)
-                        ChoiceChip(
-                          label: Text(widget.view.nameOf(p)),
-                          selected: _partner == p,
-                          onSelected: (_) => _pick(() => _partner = p),
-                        ),
-                  ]),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final p in ids)
+                        if (p != _bidder)
+                          ChoiceChip(
+                            label: Text(widget.view.nameOf(p)),
+                            selected: _partner == p,
+                            onSelected: (_) => _pick(() => _partner = p),
+                          ),
+                    ],
+                  ),
                 ),
               section(
                 l10n.rikTricks,
-                Wrap(spacing: 8, runSpacing: 8, children: [
-                  for (var i = 0; i <= 13; i++)
-                    ChoiceChip(
-                      label: Text('$i',
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (var i = 0; i <= 13; i++)
+                      ChoiceChip(
+                        label: Text(
+                          '$i',
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      showCheckmark: false,
-                      selected: _tricks == i,
-                      onSelected: (_) => _pick(() => _tricks = i),
-                    ),
-                ]),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        showCheckmark: false,
+                        selected: _tricks == i,
+                        onSelected: (_) => _pick(() => _tricks = i),
+                      ),
+                  ],
+                ),
               ),
               if (issue == null)
                 Card(
@@ -175,19 +199,22 @@ class _RikkenEntryState extends ConsumerState<RikkenEntry> {
                         Text(
                           outcome.success ? l10n.rikMade : l10n.rikFailed,
                           style: text.titleMedium?.copyWith(
-                              color: outcome.success ? null : scheme.error),
+                            color: outcome.success ? null : scheme.error,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         for (final p in ids)
-                          Row(children: [
-                            Expanded(child: Text(widget.view.nameOf(p))),
-                            Text(
-                              outcome.points[p]! > 0
-                                  ? '+${outcome.points[p]}'
-                                  : '${outcome.points[p]}',
-                              style: text.titleMedium,
-                            ),
-                          ]),
+                          Row(
+                            children: [
+                              Expanded(child: Text(widget.view.nameOf(p))),
+                              Text(
+                                outcome.points[p]! > 0
+                                    ? '+${outcome.points[p]}'
+                                    : '${outcome.points[p]}',
+                                style: text.titleMedium,
+                              ),
+                            ],
+                          ),
                         const Divider(),
                         Text(l10n.zeroSum(outcome.sum), style: text.bodySmall),
                       ],
@@ -200,20 +227,25 @@ class _RikkenEntryState extends ConsumerState<RikkenEntry> {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              if (hint != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(hint, style: TextStyle(color: scheme.error)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (hint != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(hint, style: TextStyle(color: scheme.error)),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: issue == null
+                        ? () => widget.onSubmit(entries)
+                        : null,
+                    child: Text(l10n.saveRound),
+                  ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: issue == null ? () => widget.onSubmit(entries) : null,
-                  child: Text(l10n.saveRound),
-                ),
-              ),
-            ]),
+              ],
+            ),
           ),
         ),
       ],

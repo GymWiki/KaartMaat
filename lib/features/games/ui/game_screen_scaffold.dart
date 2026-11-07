@@ -13,7 +13,7 @@ class GameScreenScaffold extends StatefulWidget {
     super.key,
     required this.top,
     this.panel,
-    this.maxPanelFraction = 0.45,
+    this.maxPanelFraction = 0.5,
     this.panelInset,
   });
 
@@ -70,45 +70,55 @@ class _GameScreenScaffoldState extends State<GameScreenScaffold> {
 
     return _PanelInset(
       notifier: _inset,
-      child: LayoutBuilder(builder: (context, constraints) {
-        final maxPanel = constraints.maxHeight * widget.maxPanelFraction;
-        return Column(
-          children: [
-            Expanded(child: widget.top),
-            if (widget.panel != null)
-              AnimatedSize(
-                duration: animate ? const Duration(milliseconds: 180) : Duration.zero,
-                alignment: Alignment.bottomCenter,
-                child: Material(
-                  key: _panelKey,
-                  color: scheme.surfaceContainerHigh,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                    side: BorderSide(color: scheme.outlineVariant),
-                  ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: maxPanel),
-                    child: SafeArea(
-                      top: false,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                          child: widget.panel,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // The cap is for the content: the gesture bar comes on top of it.
+          final maxPanel = constraints.maxHeight * widget.maxPanelFraction +
+              MediaQuery.paddingOf(context).bottom;
+          return Column(
+            children: [
+              Expanded(child: widget.top),
+              if (widget.panel != null)
+                AnimatedSize(
+                  duration: animate
+                      ? const Duration(milliseconds: 180)
+                      : Duration.zero,
+                  alignment: Alignment.bottomCenter,
+                  child: Material(
+                    key: _panelKey,
+                    color: scheme.surfaceContainerHigh,
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(24),
+                      ),
+                      side: BorderSide(color: scheme.outlineVariant),
+                    ),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: maxPanel),
+                      child: SafeArea(
+                        top: false,
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+                            child: widget.panel,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
-        );
-      }),
+            ],
+          );
+        },
+      ),
     );
   }
 }
 
 class _PanelInset extends InheritedNotifier<ValueNotifier<double>> {
-  const _PanelInset({required ValueNotifier<double> notifier, required super.child})
-      : super(notifier: notifier);
+  const _PanelInset({
+    required ValueNotifier<double> notifier,
+    required super.child,
+  }) : super(notifier: notifier);
 }

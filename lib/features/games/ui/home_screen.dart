@@ -66,23 +66,30 @@ class _ResumeCard extends ConsumerWidget {
           onTap: () => context.push('/game/$gameId'),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 16, 20, 16),
-            child: Row(children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(l10n.resumeGame,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(color: scheme.onPrimary)),
-                    Text(l10n.resumeSubtitle(name, state.rounds.length),
-                        style: TextStyle(color: scheme.onPrimary.withValues(alpha: 0.8))),
-                  ],
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.resumeGame,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: scheme.onPrimary,
+                        ),
+                      ),
+                      Text(
+                        l10n.resumeSubtitle(name, state.rounds.length),
+                        style: TextStyle(
+                          color: scheme.onPrimary.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Icon(Icons.play_circle_fill, size: 40, color: scheme.onPrimary),
-            ]),
+                Icon(Icons.play_circle_fill, size: 40, color: scheme.onPrimary),
+              ],
+            ),
           ),
         ),
       ),
@@ -115,17 +122,25 @@ class _GameCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(children: [
-                SuitPip(suit, size: 24),
-                const Spacer(),
-                Icon(Icons.person_outline,
-                    size: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
-                const SizedBox(width: 2),
-                Text(players,
+              Row(
+                children: [
+                  SuitPip(suit, size: 24),
+                  const Spacer(),
+                  Icon(
+                    Icons.person_outline,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 2),
+                  Text(
+                    players,
                     style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant)),
-              ]),
+                      fontSize: 13,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
               const Spacer(),
               FittedBox(
                 fit: BoxFit.scaleDown,
@@ -135,13 +150,17 @@ class _GameCard extends StatelessWidget {
               const SizedBox(height: 2),
               SizedBox(
                 height: 34,
-                child: Text(def.description(l10n),
+                child: Text(
+                  def.description(l10n),
                   style: TextStyle(
-                      fontSize: 12.5,
-                      height: 1.25,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    fontSize: 12.5,
+                    height: 1.25,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis),),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
         ),

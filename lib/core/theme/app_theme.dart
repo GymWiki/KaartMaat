@@ -155,8 +155,6 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: scheme.primary,
-          foregroundColor: scheme.onPrimary,
           minimumSize: const Size(64, 60),
           shape: stadium,
           textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),

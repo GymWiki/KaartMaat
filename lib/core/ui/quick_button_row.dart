@@ -21,6 +21,7 @@ class QuickButtonRow extends StatelessWidget {
     this.disabled = const {},
     this.labelOf,
     this.buttonSize = kTouchTarget,
+    this.gap = kTouchGap,
   });
 
   final List<int> values;
@@ -30,9 +31,12 @@ class QuickButtonRow extends StatelessWidget {
   final String Function(int value)? labelOf;
   final double buttonSize;
 
+  /// Space between buttons.
+  final double gap;
+
   /// Buttons per row for a given width. Public for tests.
-  static int perRow(double width, double buttonSize) =>
-      math.max(1, ((width + kTouchGap) / (buttonSize + kTouchGap)).floor());
+  static int perRow(double width, double buttonSize, [double gap = kTouchGap]) =>
+      math.max(1, ((width + gap) / (buttonSize + gap)).floor());
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +44,11 @@ class QuickButtonRow extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return LayoutBuilder(builder: (context, constraints) {
-      final per = perRow(constraints.maxWidth, buttonSize);
-      final width = (constraints.maxWidth - kTouchGap * (per - 1)) / per;
+      final per = perRow(constraints.maxWidth, buttonSize, gap);
+      final width = (constraints.maxWidth - gap * (per - 1)) / per;
       return Wrap(
-        spacing: kTouchGap,
-        runSpacing: kTouchGap,
+        spacing: gap,
+        runSpacing: gap,
         children: [
           for (final v in values)
             Builder(builder: (context) {

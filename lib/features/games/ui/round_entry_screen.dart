@@ -10,15 +10,19 @@ import '../games_registry.dart';
 import '../rules/game_rules.dart';
 
 String issueText(AppLocalizations l10n, RoundIssue issue) => switch (issue) {
-      RoundIssue.missingEntry || RoundIssue.invalidValue => l10n.invalidEntry,
-      RoundIssue.outOfRange => l10n.issueOutOfRange,
-      RoundIssue.dealerBid => l10n.issueDealerBid,
-      RoundIssue.tricksMismatch => l10n.issueTricksMismatch,
-    };
+  RoundIssue.missingEntry || RoundIssue.invalidValue => l10n.invalidEntry,
+  RoundIssue.outOfRange => l10n.issueOutOfRange,
+  RoundIssue.dealerBid => l10n.issueDealerBid,
+  RoundIssue.tricksMismatch => l10n.issueTricksMismatch,
+};
 
 /// New round when [number] is past the last round, otherwise a correction.
 class RoundEntryScreen extends ConsumerWidget {
-  const RoundEntryScreen({super.key, required this.gameId, required this.number});
+  const RoundEntryScreen({
+    super.key,
+    required this.gameId,
+    required this.number,
+  });
 
   final int gameId;
   final int number;
@@ -33,8 +37,10 @@ class RoundEntryScreen extends ConsumerWidget {
     final l10n = context.l10n;
 
     Future<void> submit(Entries entries) async {
-      final issue = view.rules
-          .validateRound(view.config, RoundData(number: number, entries: entries));
+      final issue = view.rules.validateRound(
+        view.config,
+        RoundData(number: number, entries: entries),
+      );
       if (issue != null) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
@@ -53,10 +59,13 @@ class RoundEntryScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(existing != null ? l10n.editRound(number) : l10n.enterRound(number)),
+        title: Text(
+          existing != null ? l10n.editRound(number) : l10n.enterRound(number),
+        ),
       ),
-      body: definitionFor(state.type)
-          .entryBuilder(view, number, existing?.entries, submit),
+      body: definitionFor(
+        state.type,
+      ).entryBuilder(view, number, existing?.entries, submit),
     );
   }
 }
