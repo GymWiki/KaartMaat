@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../core/l10n/l10n.dart';
 import 'data/game_state.dart';
+import 'rules/boerenbridge_rules.dart';
 import 'rules/custom_rules.dart';
 import 'rules/game_rules.dart';
+import 'ui/boerenbridge_entry.dart';
+import 'ui/boerenbridge_header.dart';
 import 'ui/points_entry.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
@@ -23,6 +26,8 @@ class GameDefinition {
     required this.name,
     required this.description,
     required this.entryBuilder,
+    this.headerBuilder,
+    this.primaryLabel,
   });
 
   final GameRules rules;
@@ -31,9 +36,32 @@ class GameDefinition {
   final String Function(AppLocalizations l10n) name;
   final String Function(AppLocalizations l10n) description;
   final RoundEntryBuilder entryBuilder;
+
+  /// Optional block above the scoreboard (round, dealer, ...).
+  final Widget Function(GameView view)? headerBuilder;
+
+  /// Label of the big bottom button. Defaults to "Ronde N invoeren".
+  final String Function(AppLocalizations l10n, GameView view)? primaryLabel;
 }
 
 final Map<String, GameDefinition> gameDefinitions = {
+  BoerenbridgeRules.typeId: GameDefinition(
+    rules: const BoerenbridgeRules(),
+    isFree: true,
+    icon: Icons.style,
+    name: (l) => l.gameBoerenbridge,
+    description: (l) => l.gameBoerenbridgeDesc,
+    entryBuilder: (view, number, existing, onSubmit) => BoerenbridgeEntry(
+      view: view,
+      number: number,
+      existing: existing,
+      onSubmit: onSubmit,
+    ),
+    headerBuilder: (view) => BoerenbridgeHeader(view: view),
+    primaryLabel: (l, view) => view.openRound != null
+        ? l.enterTricks(view.nextRoundNumber)
+        : l.enterBids(view.nextRoundNumber),
+  ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
     isFree: true,
@@ -50,7 +78,6 @@ GameDefinition definitionFor(String type) =>
 
 /// Planned games, shown as disabled tiles until their phase is built.
 final List<(IconData, String Function(AppLocalizations))> comingSoonGames = [
-  (Icons.style, (l) => l.gameBoerenbridge),
   (Icons.groups, (l) => l.gameKlaverjassen),
   (Icons.casino, (l) => l.gameYatzy),
   (Icons.filter_5, (l) => l.gameToepen),

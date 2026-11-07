@@ -46,7 +46,13 @@ class Standing {
 }
 
 /// Why a round cannot be saved. The UI maps these to Dutch text.
-enum RoundIssue { missingEntry, invalidValue }
+enum RoundIssue {
+  missingEntry,
+  invalidValue,
+  outOfRange,
+  dealerBid,
+  tricksMismatch,
+}
 
 enum SettingKind { boolean, integer }
 
@@ -87,6 +93,12 @@ abstract class GameRules {
   Map<String, int> scoreRound(GameConfig config, RoundData round);
 
   bool higherIsBetter(GameConfig config) => true;
+
+  /// False for a stored round that still waits for input (e.g. tricks).
+  bool isRoundComplete(GameConfig config, RoundData round) => true;
+
+  /// Fixed number of rounds, or null when the game is open-ended.
+  int? plannedRounds(GameConfig config) => null;
 
   /// True when the game's own end condition is met (e.g. target score).
   bool isFinished(GameConfig config, List<RoundData> rounds) => false;

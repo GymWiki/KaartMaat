@@ -43,6 +43,9 @@ class GameView {
       : rules = rulesFor(state.type),
         config = state.config {
     standings = rules.standings(config, state.rounds);
+    roundComplete = [
+      for (final r in state.rounds) rules.isRoundComplete(config, r),
+    ];
     roundScores = [for (final r in state.rounds) rules.scoreRound(config, r)];
     final running = {for (final p in config.participants) p: 0};
     cumulative = [
@@ -63,7 +66,28 @@ class GameView {
   /// Running total per participant after each round.
   late final List<Map<String, int>> cumulative;
 
-  bool get targetReached => rules.isFinished(config, state.rounds);
+  /// Per round: false while it still waits for input (e.g. tricks).
+  late final List<bool> roundComplete;
+
+  /// The stored round that is not complete yet, if any.
+  RoundData? get openRound {
+    for (var i = 0; i < state.rounds.length; i++) {
+      if (!roundComplete[i]) return state.rounds[i];
+    }
+    return null;
+  }
+
+  /// The round the primary button works on: the open one, else a new one.
+  int get nextRoundNumber => openRound?.number ?? state.rounds.length + 1;
+
+  /// False once a fixed-length game has all its rounds.
+  bool get canAddRound {
+    final planned = rules.plannedRounds(config);
+    return planned == null || nextRoundNumber <= planned;
+  }
+
+  /// The game's own end condition is met (target score, all rounds played).
+  bool get isOver => rules.isFinished(config, state.rounds);
 
   List<String> get winners => rules.winners(config, state.rounds);
 

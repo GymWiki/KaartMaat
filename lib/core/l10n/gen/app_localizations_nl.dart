@@ -192,9 +192,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get targetReached => 'Doelscore bereikt';
-
-  @override
   String get deleteGame => 'Spel verwijderen';
 
   @override
@@ -325,4 +322,105 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get seatOrderHint => 'Volgorde van selecteren is de zitvolgorde';
+
+  @override
+  String get gameOver => 'Spel afgelopen';
+
+  @override
+  String get gameBoerenbridgeDesc => 'Bieden en slagen, van 1 tot N kaarten';
+
+  @override
+  String roundOf(int number, int total) {
+    return 'Ronde $number van $total';
+  }
+
+  @override
+  String cardsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kaarten',
+      one: '1 kaart',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dealerLabel(String name) {
+    return 'Deler: $name';
+  }
+
+  @override
+  String get dealerTag => 'deler';
+
+  @override
+  String get bidsStep => 'Biedingen';
+
+  @override
+  String get tricksStep => 'Slagen';
+
+  @override
+  String get bidsSoFar => 'Geboden';
+
+  @override
+  String enterBids(int number) {
+    return 'Ronde $number: biedingen invoeren';
+  }
+
+  @override
+  String enterTricks(int number) {
+    return 'Ronde $number: slagen invoeren';
+  }
+
+  @override
+  String get saveBids => 'Biedingen opslaan';
+
+  @override
+  String get saveTricks => 'Ronde afronden';
+
+  @override
+  String bidsTotal(int bids, int cards) {
+    return 'Totaal geboden: $bids van $cards';
+  }
+
+  @override
+  String tricksTotal(int tricks, int cards) {
+    return 'Totaal slagen: $tricks van $cards';
+  }
+
+  @override
+  String dealerWarning(int bid, int cards) {
+    return 'De deler mag niet $bid bieden: het totaal zou gelijk zijn aan het aantal slagen ($cards).';
+  }
+
+  @override
+  String tricksWarning(int cards) {
+    return 'Het totaal aantal slagen moet $cards zijn.';
+  }
+
+  @override
+  String get issueDealerBid =>
+      'De deler mag niet zo bieden dat het totaal gelijk is aan het aantal slagen';
+
+  @override
+  String get issueTricksMismatch =>
+      'Het totaal aantal slagen moet gelijk zijn aan het aantal kaarten';
+
+  @override
+  String get issueOutOfRange => 'Waarde buiten het toegestane bereik';
+
+  @override
+  String get settingDealerRestriction => 'Beperking voor de deler';
+
+  @override
+  String get settingExactBase => 'Punten bij exact goed (basis)';
+
+  @override
+  String get settingExactPerTrick => 'Extra punten per slag bij exact goed';
+
+  @override
+  String get settingWrongPerTrick => 'Strafpunten per slag verschil';
+
+  @override
+  String get settingMaxCards => 'Max. aantal kaarten (0 = automatisch)';
 }

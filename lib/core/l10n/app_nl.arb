@@ -126,7 +126,6 @@
       }
     }
   },
-  "targetReached": "Doelscore bereikt",
   "deleteGame": "Spel verwijderen",
   "deleteGameConfirm": "Dit spel en alle rondes definitief verwijderen?",
   "cancel": "Annuleren",
@@ -210,5 +209,105 @@
     }
   },
   "lockedGame": "Vergrendeld",
-  "seatOrderHint": "Volgorde van selecteren is de zitvolgorde"
+  "seatOrderHint": "Volgorde van selecteren is de zitvolgorde",
+  "gameOver": "Spel afgelopen",
+  "gameBoerenbridgeDesc": "Bieden en slagen, van 1 tot N kaarten",
+  "roundOf": "Ronde {number} van {total}",
+  "@roundOf": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsCount": "{count, plural, =1{1 kaart} other{{count} kaarten}}",
+  "@cardsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dealerLabel": "Deler: {name}",
+  "@dealerLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dealerTag": "deler",
+  "bidsStep": "Biedingen",
+  "tricksStep": "Slagen",
+  "bidsSoFar": "Geboden",
+  "enterBids": "Ronde {number}: biedingen invoeren",
+  "@enterBids": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "enterTricks": "Ronde {number}: slagen invoeren",
+  "@enterTricks": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "saveBids": "Biedingen opslaan",
+  "saveTricks": "Ronde afronden",
+  "bidsTotal": "Totaal geboden: {bids} van {cards}",
+  "@bidsTotal": {
+    "placeholders": {
+      "bids": {
+        "type": "int"
+      },
+      "cards": {
+        "type": "int"
+      }
+    }
+  },
+  "tricksTotal": "Totaal slagen: {tricks} van {cards}",
+  "@tricksTotal": {
+    "placeholders": {
+      "tricks": {
+        "type": "int"
+      },
+      "cards": {
+        "type": "int"
+      }
+    }
+  },
+  "dealerWarning": "De deler mag niet {bid} bieden: het totaal zou gelijk zijn aan het aantal slagen ({cards}).",
+  "@dealerWarning": {
+    "placeholders": {
+      "bid": {
+        "type": "int"
+      },
+      "cards": {
+        "type": "int"
+      }
+    }
+  },
+  "tricksWarning": "Het totaal aantal slagen moet {cards} zijn.",
+  "@tricksWarning": {
+    "placeholders": {
+      "cards": {
+        "type": "int"
+      }
+    }
+  },
+  "issueDealerBid": "De deler mag niet zo bieden dat het totaal gelijk is aan het aantal slagen",
+  "issueTricksMismatch": "Het totaal aantal slagen moet gelijk zijn aan het aantal kaarten",
+  "issueOutOfRange": "Waarde buiten het toegestane bereik",
+  "settingDealerRestriction": "Beperking voor de deler",
+  "settingExactBase": "Punten bij exact goed (basis)",
+  "settingExactPerTrick": "Extra punten per slag bij exact goed",
+  "settingWrongPerTrick": "Strafpunten per slag verschil",
+  "settingMaxCards": "Max. aantal kaarten (0 = automatisch)"
 }

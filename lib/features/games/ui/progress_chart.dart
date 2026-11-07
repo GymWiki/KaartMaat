@@ -31,7 +31,11 @@ class ProgressChart extends StatelessWidget {
             painter: _ChartPainter(
               series: [
                 for (final p in ids)
-                  [0, for (final c in view.cumulative) c[p]!],
+                  [
+                    0,
+                    for (var i = 0; i < view.cumulative.length; i++)
+                      if (view.roundComplete[i]) view.cumulative[i][p]!,
+                  ],
               ],
               axisColor: cs.outline,
               textColor: cs.onSurface,

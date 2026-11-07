@@ -11,6 +11,9 @@ import '../rules/game_rules.dart';
 
 String issueText(AppLocalizations l10n, RoundIssue issue) => switch (issue) {
       RoundIssue.missingEntry || RoundIssue.invalidValue => l10n.invalidEntry,
+      RoundIssue.outOfRange => l10n.issueOutOfRange,
+      RoundIssue.dealerBid => l10n.issueDealerBid,
+      RoundIssue.tricksMismatch => l10n.issueTricksMismatch,
     };
 
 /// New round when [number] is past the last round, otherwise a correction.

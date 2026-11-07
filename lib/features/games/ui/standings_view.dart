@@ -93,7 +93,10 @@ class _RoundsTable extends StatelessWidget {
         for (var i = 0; i < view.state.rounds.length; i++)
           row(
             '${view.state.rounds[i].number}',
-            [for (final p in ids) '${view.roundScores[i][p]}'],
+            [
+              for (final p in ids)
+                view.roundComplete[i] ? '${view.roundScores[i][p]}' : '–',
+            ],
             onTap: onTapRound == null
                 ? null
                 : () => onTapRound!(view.state.rounds[i].number),

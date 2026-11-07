@@ -394,12 +394,6 @@ abstract class AppLocalizations {
   /// **'Winnaar: {names}'**
   String winnerLabel(String names);
 
-  /// No description provided for @targetReached.
-  ///
-  /// In nl, this message translates to:
-  /// **'Doelscore bereikt'**
-  String get targetReached;
-
   /// No description provided for @deleteGame.
   ///
   /// In nl, this message translates to:
@@ -639,6 +633,156 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Volgorde van selecteren is de zitvolgorde'**
   String get seatOrderHint;
+
+  /// No description provided for @gameOver.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spel afgelopen'**
+  String get gameOver;
+
+  /// No description provided for @gameBoerenbridgeDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bieden en slagen, van 1 tot N kaarten'**
+  String get gameBoerenbridgeDesc;
+
+  /// No description provided for @roundOf.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ronde {number} van {total}'**
+  String roundOf(int number, int total);
+
+  /// No description provided for @cardsCount.
+  ///
+  /// In nl, this message translates to:
+  /// **'{count, plural, =1{1 kaart} other{{count} kaarten}}'**
+  String cardsCount(int count);
+
+  /// No description provided for @dealerLabel.
+  ///
+  /// In nl, this message translates to:
+  /// **'Deler: {name}'**
+  String dealerLabel(String name);
+
+  /// No description provided for @dealerTag.
+  ///
+  /// In nl, this message translates to:
+  /// **'deler'**
+  String get dealerTag;
+
+  /// No description provided for @bidsStep.
+  ///
+  /// In nl, this message translates to:
+  /// **'Biedingen'**
+  String get bidsStep;
+
+  /// No description provided for @tricksStep.
+  ///
+  /// In nl, this message translates to:
+  /// **'Slagen'**
+  String get tricksStep;
+
+  /// No description provided for @bidsSoFar.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geboden'**
+  String get bidsSoFar;
+
+  /// No description provided for @enterBids.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ronde {number}: biedingen invoeren'**
+  String enterBids(int number);
+
+  /// No description provided for @enterTricks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ronde {number}: slagen invoeren'**
+  String enterTricks(int number);
+
+  /// No description provided for @saveBids.
+  ///
+  /// In nl, this message translates to:
+  /// **'Biedingen opslaan'**
+  String get saveBids;
+
+  /// No description provided for @saveTricks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ronde afronden'**
+  String get saveTricks;
+
+  /// No description provided for @bidsTotal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Totaal geboden: {bids} van {cards}'**
+  String bidsTotal(int bids, int cards);
+
+  /// No description provided for @tricksTotal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Totaal slagen: {tricks} van {cards}'**
+  String tricksTotal(int tricks, int cards);
+
+  /// No description provided for @dealerWarning.
+  ///
+  /// In nl, this message translates to:
+  /// **'De deler mag niet {bid} bieden: het totaal zou gelijk zijn aan het aantal slagen ({cards}).'**
+  String dealerWarning(int bid, int cards);
+
+  /// No description provided for @tricksWarning.
+  ///
+  /// In nl, this message translates to:
+  /// **'Het totaal aantal slagen moet {cards} zijn.'**
+  String tricksWarning(int cards);
+
+  /// No description provided for @issueDealerBid.
+  ///
+  /// In nl, this message translates to:
+  /// **'De deler mag niet zo bieden dat het totaal gelijk is aan het aantal slagen'**
+  String get issueDealerBid;
+
+  /// No description provided for @issueTricksMismatch.
+  ///
+  /// In nl, this message translates to:
+  /// **'Het totaal aantal slagen moet gelijk zijn aan het aantal kaarten'**
+  String get issueTricksMismatch;
+
+  /// No description provided for @issueOutOfRange.
+  ///
+  /// In nl, this message translates to:
+  /// **'Waarde buiten het toegestane bereik'**
+  String get issueOutOfRange;
+
+  /// No description provided for @settingDealerRestriction.
+  ///
+  /// In nl, this message translates to:
+  /// **'Beperking voor de deler'**
+  String get settingDealerRestriction;
+
+  /// No description provided for @settingExactBase.
+  ///
+  /// In nl, this message translates to:
+  /// **'Punten bij exact goed (basis)'**
+  String get settingExactBase;
+
+  /// No description provided for @settingExactPerTrick.
+  ///
+  /// In nl, this message translates to:
+  /// **'Extra punten per slag bij exact goed'**
+  String get settingExactPerTrick;
+
+  /// No description provided for @settingWrongPerTrick.
+  ///
+  /// In nl, this message translates to:
+  /// **'Strafpunten per slag verschil'**
+  String get settingWrongPerTrick;
+
+  /// No description provided for @settingMaxCards.
+  ///
+  /// In nl, this message translates to:
+  /// **'Max. aantal kaarten (0 = automatisch)'**
+  String get settingMaxCards;
 }
 
 class _AppLocalizationsDelegate

@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
+import '../../games/rules/boerenbridge_rules.dart';
 import '../../games/rules/custom_rules.dart';
 import '../../games/rules/game_rules.dart';
 
 String settingLabel(AppLocalizations l10n, String key) => switch (key) {
       CustomRules.targetScoreKey => l10n.settingTargetScore,
       CustomRules.lowestWinsKey => l10n.settingLowestWins,
+      BoerenbridgeRules.dealerRestrictionKey => l10n.settingDealerRestriction,
+      BoerenbridgeRules.exactBaseKey => l10n.settingExactBase,
+      BoerenbridgeRules.exactPerTrickKey => l10n.settingExactPerTrick,
+      BoerenbridgeRules.wrongPerTrickKey => l10n.settingWrongPerTrick,
+      BoerenbridgeRules.maxCardsKey => l10n.settingMaxCards,
       _ => key,
     };
 

@@ -80,7 +80,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     final view = GameView(state);
     final def = definitionFor(state.type);
-    final next = state.rounds.length + 1;
+    final next = view.nextRoundNumber;
 
     return DefaultTabController(
       length: 2,
@@ -114,6 +114,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           children: [
             _ScoreTab(
               view: view,
+              header: def.headerBuilder?.call(view),
+              primaryLabel:
+                  def.primaryLabel?.call(l10n, view) ?? l10n.enterRound(next),
               onFinish: () => _finish(state),
               onNewRound: () => context.push('/game/${state.id}/round/$next'),
             ),
@@ -131,11 +134,15 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 class _ScoreTab extends StatelessWidget {
   const _ScoreTab({
     required this.view,
+    required this.header,
+    required this.primaryLabel,
     required this.onFinish,
     required this.onNewRound,
   });
 
   final GameView view;
+  final Widget? header;
+  final String primaryLabel;
   final VoidCallback onFinish;
   final VoidCallback onNewRound;
 
@@ -152,12 +159,13 @@ class _ScoreTab extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              if (view.targetReached)
+              ?header,
+              if (view.isOver && header == null)
                 Card(
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                   child: ListTile(
                     leading: const Icon(Icons.flag),
-                    title: Text(l10n.targetReached),
+                    title: Text(l10n.gameOver),
                     trailing: TextButton(
                         onPressed: onFinish, child: Text(l10n.finishGame)),
                   ),
@@ -198,10 +206,15 @@ class _ScoreTab extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: SizedBox(
               width: double.infinity,
-              child: FilledButton(
-                onPressed: onNewRound,
-                child: Text(l10n.enterRound(view.state.rounds.length + 1)),
-              ),
+              child: view.canAddRound
+                  ? FilledButton(
+                      onPressed: onNewRound,
+                      child: Text(primaryLabel),
+                    )
+                  : FilledButton(
+                      onPressed: onFinish,
+                      child: Text(l10n.finishGame),
+                    ),
             ),
           ),
         ),
