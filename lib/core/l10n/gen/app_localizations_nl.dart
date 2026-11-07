@@ -922,4 +922,40 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get heartsQueenMissing => 'Wie heeft de Schoppen Vrouw?';
+
+  @override
+  String toepenStake(int points) {
+    return 'Inzet: $points';
+  }
+
+  @override
+  String get toepenKnock => 'Kloppen';
+
+  @override
+  String get toepenLessKnock => 'Eén klop minder';
+
+  @override
+  String get toepenFold => 'Past';
+
+  @override
+  String toepenFolded(int number) {
+    return 'Past bij klop $number';
+  }
+
+  @override
+  String get toepenWinnerTile => 'wint';
+
+  @override
+  String get toepenTapWinner => 'Tik op de winnaar van de ronde';
+
+  @override
+  String get toepenWonShort => 'wint';
+
+  @override
+  String toepenFoldShort(int number) {
+    return 'past $number';
+  }
+
+  @override
+  String get toepenPovertyBadge => 'armoe';
 }

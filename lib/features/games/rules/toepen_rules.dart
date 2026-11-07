@@ -86,6 +86,37 @@ class ToepenRules extends GameRules {
     return ToepenSituation(totals: totals, out: out, poverty: poverty);
   }
 
+  // ---- Helpers for the input panel -------------------------------------
+
+  /// What a player who plays on and loses gets: the knocks plus one.
+  static int stakeFor(int effectiveKnocks) => effectiveKnocks + 1;
+
+  /// The round entries for the panel's state. Folds only count for players
+  /// who are still in, are not the winner, and fall within the knocks so far
+  /// (the automatic poverty knock counts as knock 1).
+  Entries buildEntries(
+    GameConfig config,
+    ToepenSituation situation, {
+    required String? winner,
+    required int knocks,
+    required Map<String, int?> fold,
+  }) {
+    final effective = knocks + (situation.poverty.isEmpty ? 0 : 1);
+    return {
+      for (final p in config.participants)
+        p: {
+          'winner': p == winner,
+          'knocks': knocks,
+          if (p != winner &&
+              !situation.out.contains(p) &&
+              fold[p] != null &&
+              fold[p]! >= 1 &&
+              fold[p]! <= effective)
+            'foldAt': fold[p],
+        },
+    };
+  }
+
   /// Knocks for the round, including the automatic poverty knock.
   int effectiveKnocks(RoundData round, bool poverty) {
     final k = _knocks(round);

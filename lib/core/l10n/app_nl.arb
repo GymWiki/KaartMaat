@@ -614,5 +614,36 @@
   "rikShortOpenMisereTalk": "Open misère + praat",
   "heartsQueenShort": "SV",
   "heartsTooMany": "Er zijn niet zoveel harten",
-  "heartsQueenMissing": "Wie heeft de Schoppen Vrouw?"
+  "heartsQueenMissing": "Wie heeft de Schoppen Vrouw?",
+  "toepenStake": "Inzet: {points}",
+  "@toepenStake": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "toepenKnock": "Kloppen",
+  "toepenLessKnock": "Eén klop minder",
+  "toepenFold": "Past",
+  "toepenFolded": "Past bij klop {number}",
+  "@toepenFolded": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "toepenWinnerTile": "wint",
+  "toepenTapWinner": "Tik op de winnaar van de ronde",
+  "toepenWonShort": "wint",
+  "toepenFoldShort": "past {number}",
+  "@toepenFoldShort": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "toepenPovertyBadge": "armoe"
 }

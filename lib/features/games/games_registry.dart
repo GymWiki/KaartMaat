@@ -28,6 +28,7 @@ import 'ui/rikken_labels.dart';
 import 'ui/rikken_panel.dart';
 import 'ui/toepen_entry.dart';
 import 'ui/toepen_header.dart';
+import 'ui/toepen_panel.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
 /// entries; the screen validates them with the game's rules.
@@ -180,6 +181,13 @@ final Map<String, GameDefinition> gameDefinitions = {
       onSubmit: onSubmit,
     ),
     headerBuilder: (view) => ToepenHeader(view: view),
+    panelBuilder: (ctx) => ToepenPanel(ctx: ctx),
+    cellDetail: (l, view, i, p) {
+      final entry = view.state.rounds[i].entries[p];
+      if (entry?['winner'] == true) return l.toepenWonShort;
+      final fold = entry?['foldAt'];
+      return fold is int ? l.toepenFoldShort(fold) : null;
+    },
   ),
   JokerenRules.typeId: GameDefinition(
     rules: const JokerenRules(),

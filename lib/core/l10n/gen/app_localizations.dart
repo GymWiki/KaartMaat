@@ -1694,6 +1694,66 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Wie heeft de Schoppen Vrouw?'**
   String get heartsQueenMissing;
+
+  /// No description provided for @toepenStake.
+  ///
+  /// In nl, this message translates to:
+  /// **'Inzet: {points}'**
+  String toepenStake(int points);
+
+  /// No description provided for @toepenKnock.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kloppen'**
+  String get toepenKnock;
+
+  /// No description provided for @toepenLessKnock.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eén klop minder'**
+  String get toepenLessKnock;
+
+  /// No description provided for @toepenFold.
+  ///
+  /// In nl, this message translates to:
+  /// **'Past'**
+  String get toepenFold;
+
+  /// No description provided for @toepenFolded.
+  ///
+  /// In nl, this message translates to:
+  /// **'Past bij klop {number}'**
+  String toepenFolded(int number);
+
+  /// No description provided for @toepenWinnerTile.
+  ///
+  /// In nl, this message translates to:
+  /// **'wint'**
+  String get toepenWinnerTile;
+
+  /// No description provided for @toepenTapWinner.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tik op de winnaar van de ronde'**
+  String get toepenTapWinner;
+
+  /// No description provided for @toepenWonShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'wint'**
+  String get toepenWonShort;
+
+  /// No description provided for @toepenFoldShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'past {number}'**
+  String toepenFoldShort(int number);
+
+  /// No description provided for @toepenPovertyBadge.
+  ///
+  /// In nl, this message translates to:
+  /// **'armoe'**
+  String get toepenPovertyBadge;
 }
 
 class _AppLocalizationsDelegate
