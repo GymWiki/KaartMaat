@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+import '../../core/l10n/l10n.dart';
+import '../games/data/game_repository.dart';
+import '../games/data/game_state.dart';
+import '../games/games_registry.dart';
+import '../purchase/entitlements.dart';
+import '../purchase/unlock_sheet.dart';
+
+class HistoryScreen extends ConsumerWidget {
+  const HistoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final all = ref.watch(finishedGamesProvider).value ?? const <GameState>[];
+    final limit = ref.watch(entitlementsProvider).historyLimit;
+    final games = limit == null ? all : all.take(limit).toList();
+    final limited = limit != null && all.length > limit;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.historyTitle)),
+      body: all.isEmpty
+          ? Center(child: Text(l10n.historyEmpty))
+          : ListView(
+              children: [
+                if (limited)
+                  Card(
+                    margin: const EdgeInsets.all(16),
+                    child: ListTile(
+                      leading: const Icon(Icons.lock),
+                      title: Text(l10n.historyLimited(limit)),
+                      onTap: () => showUnlockSheet(context, ref),
+                    ),
+                  ),
+                for (final g in games) _GameTile(state: g),
+              ],
+            ),
+    );
+  }
+}
+
+class _GameTile extends StatelessWidget {
+  const _GameTile({required this.state});
+  final GameState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final view = GameView(state);
+    final date = DateFormat('d MMM yyyy', 'nl').format(state.finishedAt!);
+    final winners = view.winners.map(view.nameOf).join(', ');
+    return ListTile(
+      leading: Icon(definitionFor(state.type).icon),
+      title: Text(definitionFor(state.type).name(l10n)),
+      subtitle: Text('$date · ${l10n.winnerLabel(winners)}'),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => context.push('/finished/${state.id}'),
+    );
+  }
+}

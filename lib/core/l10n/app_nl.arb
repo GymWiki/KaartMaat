@@ -1,0 +1,214 @@
+{
+  "@@locale": "nl",
+  "appTitle": "Kaartmaat",
+  "navGames": "Spellen",
+  "navPlayers": "Spelers",
+  "navHistory": "Historie",
+  "navStats": "Statistieken",
+  "navSettings": "Instellingen",
+  "gameCustom": "Eigen spel",
+  "gameCustomDesc": "Eigen puntentelling, optioneel met doelscore",
+  "gameBoerenbridge": "Boerenbridge",
+  "gameKlaverjassen": "Klaverjassen",
+  "gameYatzy": "Yatzy",
+  "gameToepen": "Toepen",
+  "gameRikken": "Rikken",
+  "gameHartenjagen": "Hartenjagen",
+  "comingSoon": "Binnenkort",
+  "resumeGame": "Hervat spel",
+  "resumeSubtitle": "{game} · {count, plural, =0{nog geen rondes} =1{1 ronde} other{{count} rondes}}",
+  "@resumeSubtitle": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roundsCount": "{count, plural, =1{1 ronde} other{{count} rondes}}",
+  "@roundsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playersTitle": "Spelers",
+  "addPlayer": "Speler toevoegen",
+  "playerName": "Naam",
+  "renamePlayer": "Naam wijzigen",
+  "deletePlayerConfirm": "{name} verwijderen? Eerdere spellen blijven bewaard.",
+  "@deletePlayerConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nameExists": "Deze naam bestaat al",
+  "nameEmpty": "Vul een naam in",
+  "noPlayers": "Nog geen spelers. Voeg ze toe om te beginnen.",
+  "newGame": "Nieuw spel",
+  "choosePlayers": "Kies spelers",
+  "playersSelected": "{count} geselecteerd",
+  "@playersSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "needPlayers": "Kies {min} tot {max} spelers",
+  "@needPlayers": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "startGame": "Start spel",
+  "newPlayer": "Nieuwe speler",
+  "rulesSection": "Spelregels",
+  "settingTargetScore": "Doelscore (0 = geen)",
+  "settingLowestWins": "Laagste score wint",
+  "tabGame": "Spel",
+  "tabStanding": "Stand",
+  "roundTitle": "Ronde {number}",
+  "@roundTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "enterRound": "Ronde {number} invoeren",
+  "@enterRound": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editRound": "Ronde {number} corrigeren",
+  "@editRound": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "total": "Totaal",
+  "points": "Punten",
+  "saveRound": "Opslaan",
+  "undoLast": "Laatste ronde ongedaan maken",
+  "undoConfirm": "Ronde {number} verwijderen?",
+  "@undoConfirm": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "invalidEntry": "Vul bij elke speler een geheel getal in",
+  "finishGame": "Spel afronden",
+  "finishConfirm": "Het spel afronden en bewaren in de historie?",
+  "gameFinished": "Spel afgerond",
+  "winnerLabel": "Winnaar: {names}",
+  "@winnerLabel": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "targetReached": "Doelscore bereikt",
+  "deleteGame": "Spel verwijderen",
+  "deleteGameConfirm": "Dit spel en alle rondes definitief verwijderen?",
+  "cancel": "Annuleren",
+  "confirm": "Bevestigen",
+  "delete": "Verwijderen",
+  "save": "Opslaan",
+  "tapRoundHint": "Tik op een ronde om te corrigeren",
+  "noRoundsYet": "Nog geen rondes",
+  "progressTitle": "Verloop",
+  "historyTitle": "Historie",
+  "historyEmpty": "Nog geen afgeronde spellen",
+  "historyLimited": "Gratis: laatste {count} spellen. Ontgrendel voor de volledige historie.",
+  "@historyLimited": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statsTitle": "Statistieken",
+  "statsPlayed": "Gespeeld",
+  "statsWins": "Gewonnen",
+  "statsWinPct": "Winst",
+  "statsEmpty": "Nog geen afgeronde spellen",
+  "statsLocked": "Statistieken zitten in Alles ontgrendelen.",
+  "settingsTitle": "Instellingen",
+  "theme": "Thema",
+  "themeSystem": "Systeem",
+  "themeLight": "Licht",
+  "themeDark": "Donker",
+  "haptics": "Trillen bij invoer",
+  "resetData": "Alle gegevens wissen",
+  "resetConfirm": "Alle spelers, spellen en instellingen definitief wissen?",
+  "resetDone": "Alle gegevens zijn gewist",
+  "debugUnlock": "Debug: alles ontgrendeld",
+  "unlockTitle": "Alles ontgrendelen",
+  "unlockBody": "Eenmalig {price}: alle spellen, volledige historie, statistieken en delen.",
+  "@unlockBody": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "unlockBuy": "Ontgrendelen voor {price}",
+  "@unlockBuy": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "restorePurchases": "Aankopen herstellen",
+  "restoreNone": "Geen eerdere aankoop gevonden",
+  "unlockedDone": "Alles is ontgrendeld",
+  "copyResult": "Resultaat kopiëren",
+  "copied": "Resultaat gekopieerd",
+  "shareHeader": "{game} – {date}",
+  "@shareHeader": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "shareTotalLine": "{rank}. {name}: {score}",
+  "@shareTotalLine": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "lockedGame": "Vergrendeld",
+  "seatOrderHint": "Volgorde van selecteren is de zitvolgorde"
+}
