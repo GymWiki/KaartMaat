@@ -1473,6 +1473,48 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Uitslag bijgehouden met de Kaartmaat App'**
   String get shareWatermark;
+
+  /// No description provided for @padBackspace.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wis laatste cijfer'**
+  String get padBackspace;
+
+  /// No description provided for @padSign.
+  ///
+  /// In nl, this message translates to:
+  /// **'Plus of min'**
+  String get padSign;
+
+  /// No description provided for @notAllowed.
+  ///
+  /// In nl, this message translates to:
+  /// **'niet toegestaan'**
+  String get notAllowed;
+
+  /// No description provided for @undoAction.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ongedaan maken'**
+  String get undoAction;
+
+  /// No description provided for @entered.
+  ///
+  /// In nl, this message translates to:
+  /// **'ingevuld'**
+  String get entered;
+
+  /// No description provided for @editing.
+  ///
+  /// In nl, this message translates to:
+  /// **'wordt bewerkt'**
+  String get editing;
+
+  /// No description provided for @roundSaved.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ronde {number} opgeslagen'**
+  String roundSaved(int number);
 }
 
 class _AppLocalizationsDelegate

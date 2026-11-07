@@ -21,6 +21,15 @@ class SettingsRepository {
       .into(db.appSettings)
       .insertOnConflictUpdate(AppSettingsCompanion.insert(key: key, value: value));
 
+  Future<String?> get(String key) async {
+    final row = await (db.select(db.appSettings)..where((s) => s.key.equals(key)))
+        .getSingleOrNull();
+    return row?.value;
+  }
+
+  Future<void> remove(String key) =>
+      (db.delete(db.appSettings)..where((s) => s.key.equals(key))).go();
+
   /// Stores the default rule options for [type], used for new games.
   Future<void> setRuleOption(
     GameRules rules,

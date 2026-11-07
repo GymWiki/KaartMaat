@@ -791,4 +791,27 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get shareWatermark => 'Uitslag bijgehouden met de Kaartmaat App';
+
+  @override
+  String get padBackspace => 'Wis laatste cijfer';
+
+  @override
+  String get padSign => 'Plus of min';
+
+  @override
+  String get notAllowed => 'niet toegestaan';
+
+  @override
+  String get undoAction => 'Ongedaan maken';
+
+  @override
+  String get entered => 'ingevuld';
+
+  @override
+  String get editing => 'wordt bewerkt';
+
+  @override
+  String roundSaved(int number) {
+    return 'Ronde $number opgeslagen';
+  }
 }

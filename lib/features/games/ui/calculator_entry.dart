@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
-import '../../../core/ui/number_pad.dart';
+import '../../../core/ui/big_number_pad.dart';
 import '../../settings/data/settings_repository.dart';
 import '../data/game_state.dart';
 import '../rules/amounts_rules.dart';
@@ -159,7 +159,7 @@ class _CalculatorEntryState extends ConsumerState<CalculatorEntry> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              NumberPad(onKey: (k) {
+              BigNumberPad(onKey: (k) {
                 haptic(ref);
                 setState(() => _typed = applyKey(_typed, k));
               }),

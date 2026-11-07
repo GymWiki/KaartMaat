@@ -503,5 +503,19 @@
   },
   "shareResult": "Uitslag delen",
   "shareImage": "Deel als afbeelding",
-  "shareWatermark": "Uitslag bijgehouden met de Kaartmaat App"
+  "shareWatermark": "Uitslag bijgehouden met de Kaartmaat App",
+  "padBackspace": "Wis laatste cijfer",
+  "padSign": "Plus of min",
+  "notAllowed": "niet toegestaan",
+  "undoAction": "Ongedaan maken",
+  "entered": "ingevuld",
+  "editing": "wordt bewerkt",
+  "roundSaved": "Ronde {number} opgeslagen",
+  "@roundSaved": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  }
 }

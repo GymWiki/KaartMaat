@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kaartmaat/core/ui/number_pad.dart';
+import 'package:kaartmaat/core/ui/big_number_pad.dart';
 
 void main() {
   String type(List<String> keys) =>

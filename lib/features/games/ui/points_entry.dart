@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
-import '../../../core/ui/number_pad.dart';
+import '../../../core/ui/big_number_pad.dart';
 import '../../settings/data/settings_repository.dart';
 import '../data/game_state.dart';
 import '../rules/custom_rules.dart';
@@ -123,7 +123,7 @@ class _PointsEntryState extends ConsumerState<PointsEntry> {
                       ),
                     ),
                 ]),
-                NumberPad(onKey: _key),
+                BigNumberPad(onKey: _key),
                 const SizedBox(height: 4),
                 SizedBox(
                   width: double.infinity,

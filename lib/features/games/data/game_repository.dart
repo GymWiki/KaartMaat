@@ -145,6 +145,8 @@ class GameRepository {
           .write(GamesCompanion(finishedAt: Value(DateTime.now())));
 
   Future<void> deleteGame(int gameId) => db.transaction(() async {
+        await (db.delete(db.appSettings)..where((s) => s.key.equals('draft.$gameId')))
+            .go();
         await (db.delete(db.rounds)..where((r) => r.gameId.equals(gameId))).go();
         await (db.delete(db.gamePlayers)..where((p) => p.gameId.equals(gameId)))
             .go();

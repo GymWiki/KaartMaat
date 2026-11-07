@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
-import '../../../core/ui/number_pad.dart';
+import '../../../core/ui/big_number_pad.dart';
 import '../../settings/data/settings_repository.dart';
 import '../data/game_state.dart';
 import '../rules/game_rules.dart';
@@ -179,7 +179,7 @@ class _KlaverjasEntryState extends ConsumerState<KlaverjasEntry> {
                   style: text.titleMedium,
                 ),
                 const SizedBox(height: 8),
-                NumberPad(onKey: _key, allowNegative: false),
+                BigNumberPad(onKey: _key, allowNegative: false),
               ],
               const SizedBox(height: 8),
               Text(l10n.roemTitle, style: text.titleMedium),
