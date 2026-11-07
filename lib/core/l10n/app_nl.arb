@@ -137,20 +137,11 @@
   "progressTitle": "Verloop",
   "historyTitle": "Historie",
   "historyEmpty": "Nog geen afgeronde spellen",
-  "historyLimited": "Gratis: laatste {count} spellen. Ontgrendel voor de volledige historie.",
-  "@historyLimited": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "statsTitle": "Statistieken",
   "statsPlayed": "Gespeeld",
   "statsWins": "Gewonnen",
   "statsWinPct": "Winst",
   "statsEmpty": "Nog geen afgeronde spellen",
-  "statsLocked": "Statistieken zitten in Alles ontgrendelen.",
   "settingsTitle": "Instellingen",
   "theme": "Thema",
   "themeSystem": "Systeem",
@@ -160,27 +151,6 @@
   "resetData": "Alle gegevens wissen",
   "resetConfirm": "Alle spelers, spellen en instellingen definitief wissen?",
   "resetDone": "Alle gegevens zijn gewist",
-  "debugUnlock": "Debug: alles ontgrendeld",
-  "unlockTitle": "Alles ontgrendelen",
-  "unlockBody": "Eenmalig {price}: alle spellen, volledige historie, statistieken en delen.",
-  "@unlockBody": {
-    "placeholders": {
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "unlockBuy": "Ontgrendelen voor {price}",
-  "@unlockBuy": {
-    "placeholders": {
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "restorePurchases": "Aankopen herstellen",
-  "restoreNone": "Geen eerdere aankoop gevonden",
-  "unlockedDone": "Alles is ontgrendeld",
   "copyResult": "Resultaat kopiëren",
   "copied": "Resultaat gekopieerd",
   "shareHeader": "{game} – {date}",
@@ -208,7 +178,6 @@
       }
     }
   },
-  "lockedGame": "Vergrendeld",
   "seatOrderHint": "Volgorde van selecteren is de zitvolgorde",
   "gameOver": "Spel afgelopen",
   "gameBoerenbridgeDesc": "Bieden en slagen, van 1 tot N kaarten",
@@ -309,5 +278,7 @@
   "settingExactBase": "Punten bij exact goed (basis)",
   "settingExactPerTrick": "Extra punten per slag bij exact goed",
   "settingWrongPerTrick": "Strafpunten per slag verschil",
-  "settingMaxCards": "Max. aantal kaarten (0 = automatisch)"
+  "settingMaxCards": "Max. aantal kaarten (0 = automatisch)",
+  "next": "Volgende",
+  "themeOled": "OLED-zwart"
 }

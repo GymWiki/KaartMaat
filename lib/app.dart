@@ -12,11 +12,16 @@ class KaartmaatApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final choice = ref.watch(prefsProvider).themeChoice;
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      themeMode: ref.watch(prefsProvider).themeMode,
+      darkTheme: choice == ThemeChoice.oled ? AppTheme.oled() : AppTheme.dark(),
+      themeMode: switch (choice) {
+        ThemeChoice.system => ThemeMode.system,
+        ThemeChoice.light => ThemeMode.light,
+        ThemeChoice.dark || ThemeChoice.oled => ThemeMode.dark,
+      },
       routerConfig: appRouter,
       locale: const Locale('nl'),
       supportedLocales: AppLocalizations.supportedLocales,

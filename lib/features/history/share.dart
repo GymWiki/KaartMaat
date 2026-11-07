@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 import '../../core/l10n/l10n.dart';
 import '../games/data/game_state.dart';
 import '../games/games_registry.dart';
-import '../purchase/entitlements.dart';
-import '../purchase/unlock_sheet.dart';
 
 String buildShareText(AppLocalizations l10n, GameView view) {
   final date = DateFormat('d MMM yyyy', 'nl')
@@ -22,9 +20,6 @@ String buildShareText(AppLocalizations l10n, GameView view) {
 
 /// Copies the result as text (a native share sheet needs share_plus).
 Future<void> copyResult(BuildContext context, WidgetRef ref, GameView view) async {
-  if (!ref.read(entitlementsProvider).canShare) {
-    return showUnlockSheet(context, ref);
-  }
   final l10n = context.l10n;
   await Clipboard.setData(ClipboardData(text: buildShareText(l10n, view)));
   if (context.mounted) {

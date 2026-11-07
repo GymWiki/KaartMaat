@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
-import '../../purchase/entitlements.dart';
-import '../../purchase/unlock_sheet.dart';
 import '../data/game_repository.dart';
 import '../games_registry.dart';
 
@@ -15,7 +13,6 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final lastId = ref.watch(lastUnfinishedIdProvider).value;
-    final ent = ref.watch(entitlementsProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.appTitle)),
@@ -37,10 +34,7 @@ class HomeScreen extends ConsumerWidget {
                   icon: e.value.icon,
                   title: e.value.name(l10n),
                   subtitle: e.value.description(l10n),
-                  locked: !ent.canPlay(isFreeGame: e.value.isFree),
-                  onTap: () => ent.canPlay(isFreeGame: e.value.isFree)
-                      ? context.push('/new/${e.key}')
-                      : showUnlockSheet(context, ref),
+                  onTap: () => context.push('/new/${e.key}'),
                 ),
               for (final g in comingSoonGames)
                 _Tile(icon: g.$1, title: g.$2(l10n), subtitle: l10n.comingSoon),
@@ -81,14 +75,12 @@ class _Tile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    this.locked = false,
     this.onTap,
   });
 
   final IconData icon;
   final String title;
   final String subtitle;
-  final bool locked;
   final VoidCallback? onTap;
 
   @override
@@ -105,11 +97,7 @@ class _Tile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(children: [
-                  Icon(icon, size: 32, color: cs.primary),
-                  const Spacer(),
-                  if (locked) const Icon(Icons.lock, size: 20),
-                ]),
+                Icon(icon, size: 32, color: cs.primary),
                 const Spacer(),
                 Text(title,
                     style: Theme.of(context).textTheme.titleMedium,

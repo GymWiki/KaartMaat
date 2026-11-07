@@ -7,8 +7,6 @@ import '../../core/l10n/l10n.dart';
 import '../games/data/game_repository.dart';
 import '../games/data/game_state.dart';
 import '../games/games_registry.dart';
-import '../purchase/entitlements.dart';
-import '../purchase/unlock_sheet.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
@@ -16,29 +14,13 @@ class HistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final all = ref.watch(finishedGamesProvider).value ?? const <GameState>[];
-    final limit = ref.watch(entitlementsProvider).historyLimit;
-    final games = limit == null ? all : all.take(limit).toList();
-    final limited = limit != null && all.length > limit;
+    final games = ref.watch(finishedGamesProvider).value ?? const <GameState>[];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.historyTitle)),
-      body: all.isEmpty
+      body: games.isEmpty
           ? Center(child: Text(l10n.historyEmpty))
-          : ListView(
-              children: [
-                if (limited)
-                  Card(
-                    margin: const EdgeInsets.all(16),
-                    child: ListTile(
-                      leading: const Icon(Icons.lock),
-                      title: Text(l10n.historyLimited(limit)),
-                      onTap: () => showUnlockSheet(context, ref),
-                    ),
-                  ),
-                for (final g in games) _GameTile(state: g),
-              ],
-            ),
+          : ListView(children: [for (final g in games) _GameTile(state: g)]),
     );
   }
 }

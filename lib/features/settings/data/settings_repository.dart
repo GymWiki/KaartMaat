@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,16 +30,17 @@ class SettingsRepository {
       set('rules.${rules.type}', jsonEncode({...current, key: value}));
 }
 
+enum ThemeChoice { system, light, dark, oled }
+
 /// Typed view over the raw key/value settings.
 class AppPrefs {
   const AppPrefs(this._values);
   final Map<String, String> _values;
 
-  ThemeMode get themeMode => switch (_values['theme']) {
-        'light' => ThemeMode.light,
-        'dark' => ThemeMode.dark,
-        _ => ThemeMode.system,
-      };
+  ThemeChoice get themeChoice => ThemeChoice.values.firstWhere(
+        (c) => c.name == _values['theme'],
+        orElse: () => ThemeChoice.system,
+      );
 
   bool get haptics => _values['haptics'] != '0';
 

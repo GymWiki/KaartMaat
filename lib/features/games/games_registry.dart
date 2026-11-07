@@ -21,7 +21,6 @@ typedef RoundEntryBuilder = Widget Function(
 class GameDefinition {
   const GameDefinition({
     required this.rules,
-    required this.isFree,
     required this.icon,
     required this.name,
     required this.description,
@@ -31,7 +30,6 @@ class GameDefinition {
   });
 
   final GameRules rules;
-  final bool isFree;
   final IconData icon;
   final String Function(AppLocalizations l10n) name;
   final String Function(AppLocalizations l10n) description;
@@ -42,12 +40,15 @@ class GameDefinition {
 
   /// Label of the big bottom button. Defaults to "Ronde N invoeren".
   final String Function(AppLocalizations l10n, GameView view)? primaryLabel;
+
+  String get id => rules.type;
+  int get minPlayers => rules.minPlayers;
+  int get maxPlayers => rules.maxPlayers;
 }
 
 final Map<String, GameDefinition> gameDefinitions = {
   BoerenbridgeRules.typeId: GameDefinition(
     rules: const BoerenbridgeRules(),
-    isFree: true,
     icon: Icons.style,
     name: (l) => l.gameBoerenbridge,
     description: (l) => l.gameBoerenbridgeDesc,
@@ -64,7 +65,6 @@ final Map<String, GameDefinition> gameDefinitions = {
   ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
-    isFree: true,
     icon: Icons.edit_note,
     name: (l) => l.gameCustom,
     description: (l) => l.gameCustomDesc,

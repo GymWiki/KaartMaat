@@ -226,11 +226,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get historyEmpty => 'Nog geen afgeronde spellen';
 
   @override
-  String historyLimited(int count) {
-    return 'Gratis: laatste $count spellen. Ontgrendel voor de volledige historie.';
-  }
-
-  @override
   String get statsTitle => 'Statistieken';
 
   @override
@@ -244,9 +239,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get statsEmpty => 'Nog geen afgeronde spellen';
-
-  @override
-  String get statsLocked => 'Statistieken zitten in Alles ontgrendelen.';
 
   @override
   String get settingsTitle => 'Instellingen';
@@ -277,31 +269,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get resetDone => 'Alle gegevens zijn gewist';
 
   @override
-  String get debugUnlock => 'Debug: alles ontgrendeld';
-
-  @override
-  String get unlockTitle => 'Alles ontgrendelen';
-
-  @override
-  String unlockBody(String price) {
-    return 'Eenmalig $price: alle spellen, volledige historie, statistieken en delen.';
-  }
-
-  @override
-  String unlockBuy(String price) {
-    return 'Ontgrendelen voor $price';
-  }
-
-  @override
-  String get restorePurchases => 'Aankopen herstellen';
-
-  @override
-  String get restoreNone => 'Geen eerdere aankoop gevonden';
-
-  @override
-  String get unlockedDone => 'Alles is ontgrendeld';
-
-  @override
   String get copyResult => 'Resultaat kopiëren';
 
   @override
@@ -316,9 +283,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String shareTotalLine(int rank, String name, int score) {
     return '$rank. $name: $score';
   }
-
-  @override
-  String get lockedGame => 'Vergrendeld';
 
   @override
   String get seatOrderHint => 'Volgorde van selecteren is de zitvolgorde';
@@ -423,4 +387,10 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settingMaxCards => 'Max. aantal kaarten (0 = automatisch)';
+
+  @override
+  String get next => 'Volgende';
+
+  @override
+  String get themeOled => 'OLED-zwart';
 }

@@ -88,11 +88,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         appBar: AppBar(
           title: Text(def.name(l10n)),
           actions: [
-            IconButton(
-              tooltip: l10n.undoLast,
-              icon: const Icon(Icons.undo),
-              onPressed: state.rounds.isEmpty ? null : () => _undo(state),
-            ),
             PopupMenuButton<String>(
               onSelected: (v) => switch (v) {
                 'copy' => copyResult(context, ref, view),
@@ -118,6 +113,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               primaryLabel:
                   def.primaryLabel?.call(l10n, view) ?? l10n.enterRound(next),
               onFinish: () => _finish(state),
+              onUndo: state.rounds.isEmpty ? null : () => _undo(state),
               onNewRound: () => context.push('/game/${state.id}/round/$next'),
             ),
             StandingsView(
@@ -137,6 +133,7 @@ class _ScoreTab extends StatelessWidget {
     required this.header,
     required this.primaryLabel,
     required this.onFinish,
+    required this.onUndo,
     required this.onNewRound,
   });
 
@@ -144,6 +141,7 @@ class _ScoreTab extends StatelessWidget {
   final Widget? header;
   final String primaryLabel;
   final VoidCallback onFinish;
+  final VoidCallback? onUndo;
   final VoidCallback onNewRound;
 
   @override
@@ -204,18 +202,31 @@ class _ScoreTab extends StatelessWidget {
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              child: view.canAddRound
-                  ? FilledButton(
-                      onPressed: onNewRound,
-                      child: Text(primaryLabel),
-                    )
-                  : FilledButton(
-                      onPressed: onFinish,
-                      child: Text(l10n.finishGame),
-                    ),
-            ),
+            child: Row(children: [
+              SizedBox(
+                width: 64,
+                height: 60,
+                child: OutlinedButton(
+                  onPressed: onUndo,
+                  child: Tooltip(
+                    message: l10n.undoLast,
+                    child: const Icon(Icons.undo),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: view.canAddRound
+                    ? FilledButton(
+                        onPressed: onNewRound,
+                        child: Text(primaryLabel),
+                      )
+                    : FilledButton(
+                        onPressed: onFinish,
+                        child: Text(l10n.finishGame),
+                      ),
+              ),
+            ]),
           ),
         ),
       ],

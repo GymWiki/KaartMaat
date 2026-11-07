@@ -460,12 +460,6 @@ abstract class AppLocalizations {
   /// **'Nog geen afgeronde spellen'**
   String get historyEmpty;
 
-  /// No description provided for @historyLimited.
-  ///
-  /// In nl, this message translates to:
-  /// **'Gratis: laatste {count} spellen. Ontgrendel voor de volledige historie.'**
-  String historyLimited(int count);
-
   /// No description provided for @statsTitle.
   ///
   /// In nl, this message translates to:
@@ -495,12 +489,6 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Nog geen afgeronde spellen'**
   String get statsEmpty;
-
-  /// No description provided for @statsLocked.
-  ///
-  /// In nl, this message translates to:
-  /// **'Statistieken zitten in Alles ontgrendelen.'**
-  String get statsLocked;
 
   /// No description provided for @settingsTitle.
   ///
@@ -556,48 +544,6 @@ abstract class AppLocalizations {
   /// **'Alle gegevens zijn gewist'**
   String get resetDone;
 
-  /// No description provided for @debugUnlock.
-  ///
-  /// In nl, this message translates to:
-  /// **'Debug: alles ontgrendeld'**
-  String get debugUnlock;
-
-  /// No description provided for @unlockTitle.
-  ///
-  /// In nl, this message translates to:
-  /// **'Alles ontgrendelen'**
-  String get unlockTitle;
-
-  /// No description provided for @unlockBody.
-  ///
-  /// In nl, this message translates to:
-  /// **'Eenmalig {price}: alle spellen, volledige historie, statistieken en delen.'**
-  String unlockBody(String price);
-
-  /// No description provided for @unlockBuy.
-  ///
-  /// In nl, this message translates to:
-  /// **'Ontgrendelen voor {price}'**
-  String unlockBuy(String price);
-
-  /// No description provided for @restorePurchases.
-  ///
-  /// In nl, this message translates to:
-  /// **'Aankopen herstellen'**
-  String get restorePurchases;
-
-  /// No description provided for @restoreNone.
-  ///
-  /// In nl, this message translates to:
-  /// **'Geen eerdere aankoop gevonden'**
-  String get restoreNone;
-
-  /// No description provided for @unlockedDone.
-  ///
-  /// In nl, this message translates to:
-  /// **'Alles is ontgrendeld'**
-  String get unlockedDone;
-
   /// No description provided for @copyResult.
   ///
   /// In nl, this message translates to:
@@ -621,12 +567,6 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'{rank}. {name}: {score}'**
   String shareTotalLine(int rank, String name, int score);
-
-  /// No description provided for @lockedGame.
-  ///
-  /// In nl, this message translates to:
-  /// **'Vergrendeld'**
-  String get lockedGame;
 
   /// No description provided for @seatOrderHint.
   ///
@@ -783,6 +723,18 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Max. aantal kaarten (0 = automatisch)'**
   String get settingMaxCards;
+
+  /// No description provided for @next.
+  ///
+  /// In nl, this message translates to:
+  /// **'Volgende'**
+  String get next;
+
+  /// No description provided for @themeOled.
+  ///
+  /// In nl, this message translates to:
+  /// **'OLED-zwart'**
+  String get themeOled;
 }
 
 class _AppLocalizationsDelegate

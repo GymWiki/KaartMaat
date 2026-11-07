@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/ui/number_pad.dart';
+import '../../settings/data/settings_repository.dart';
 import '../data/game_state.dart';
 import '../rules/game_rules.dart';
 
-/// Generic entry: one signed whole number per participant.
-class PointsEntry extends StatefulWidget {
+/// Generic entry: one signed whole number per participant, typed on the
+/// custom keypad. The big bottom button moves to the next player, and saves
+/// on the last one.
+class PointsEntry extends ConsumerStatefulWidget {
   const PointsEntry({
     super.key,
     required this.view,
@@ -18,29 +23,28 @@ class PointsEntry extends StatefulWidget {
   final void Function(Entries entries) onSubmit;
 
   @override
-  State<PointsEntry> createState() => _PointsEntryState();
+  ConsumerState<PointsEntry> createState() => _PointsEntryState();
 }
 
-class _PointsEntryState extends State<PointsEntry> {
-  late final Map<String, TextEditingController> _controllers = {
-    for (final p in widget.view.config.participants)
-      p: TextEditingController(
-        text: widget.existing?[p]?['points']?.toString() ?? '',
-      ),
+class _PointsEntryState extends ConsumerState<PointsEntry> {
+  late final List<String> _ids = widget.view.config.participants;
+  late final Map<String, String> _text = {
+    for (final p in _ids) p: widget.existing?[p]?['points']?.toString() ?? '',
   };
+  int _focus = 0;
 
-  @override
-  void dispose() {
-    for (final c in _controllers.values) {
-      c.dispose();
-    }
-    super.dispose();
+  bool get _last => _focus == _ids.length - 1;
+
+  void _key(String key) {
+    haptic(ref);
+    final p = _ids[_focus];
+    setState(() => _text[p] = applyKey(_text[p]!, key));
   }
 
   void _submit() {
     final entries = <String, Entry>{};
-    for (final e in _controllers.entries) {
-      final v = int.tryParse(e.value.text.trim());
+    for (final e in _text.entries) {
+      final v = int.tryParse(e.value);
       if (v != null) entries[e.key] = {'points': v};
     }
     widget.onSubmit(entries);
@@ -48,28 +52,37 @@ class _PointsEntryState extends State<PointsEntry> {
 
   @override
   Widget build(BuildContext context) {
-    final ids = widget.view.config.participants;
+    final l10n = context.l10n;
+    final scheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Expanded(
           child: ListView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             children: [
-              for (var i = 0; i < ids.length; i++)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: TextField(
-                    controller: _controllers[ids[i]],
-                    autofocus: i == 0,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(signed: true),
-                    textInputAction:
-                        i == ids.length - 1 ? TextInputAction.done : TextInputAction.next,
-                    onSubmitted: (_) => i == ids.length - 1 ? _submit() : null,
-                    style: const TextStyle(fontSize: 24),
-                    decoration: InputDecoration(
-                      labelText: widget.view.nameOf(ids[i]),
-                      hintText: context.l10n.points,
+              for (var i = 0; i < _ids.length; i++)
+                Card(
+                  color: i == _focus ? scheme.primaryContainer : null,
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () => setState(() => _focus = i),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      child: Row(children: [
+                        Expanded(
+                          child: Text(widget.view.nameOf(_ids[i]),
+                              style: Theme.of(context).textTheme.titleMedium,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                        Text(
+                          _text[_ids[i]]!.isEmpty ? '–' : _text[_ids[i]]!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ]),
                     ),
                   ),
                 ),
@@ -78,10 +91,22 @@ class _PointsEntryState extends State<PointsEntry> {
         ),
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: FilledButton(
-              onPressed: _submit,
-              child: Text(context.l10n.saveRound),
+            padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                NumberPad(onKey: _key),
+                const SizedBox(height: 4),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: _last
+                        ? _submit
+                        : () => setState(() => _focus++),
+                    child: Text(_last ? l10n.saveRound : l10n.next),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

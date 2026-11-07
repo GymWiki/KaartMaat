@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,8 +5,6 @@ import '../../../core/db/providers.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../games/games_registry.dart';
-import '../../purchase/entitlements.dart';
-import '../../purchase/purchase_service.dart';
 import '../data/settings_repository.dart';
 import 'settings_editor.dart';
 
@@ -19,7 +16,12 @@ class SettingsScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final prefs = ref.watch(prefsProvider);
     final repo = ref.read(settingsRepositoryProvider);
-    final service = ref.read(purchaseServiceProvider);
+    final themeLabels = {
+      ThemeChoice.system: l10n.themeSystem,
+      ThemeChoice.light: l10n.themeLight,
+      ThemeChoice.dark: l10n.themeDark,
+      ThemeChoice.oled: l10n.themeOled,
+    };
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
@@ -30,14 +32,17 @@ class SettingsScreen extends ConsumerWidget {
             title: Text(l10n.theme),
             subtitle: Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: SegmentedButton<ThemeMode>(
-                segments: [
-                  ButtonSegment(value: ThemeMode.system, label: Text(l10n.themeSystem)),
-                  ButtonSegment(value: ThemeMode.light, label: Text(l10n.themeLight)),
-                  ButtonSegment(value: ThemeMode.dark, label: Text(l10n.themeDark)),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final c in ThemeChoice.values)
+                    ChoiceChip(
+                      label: Text(themeLabels[c]!),
+                      selected: prefs.themeChoice == c,
+                      onSelected: (_) => repo.set('theme', c.name),
+                    ),
                 ],
-                selected: {prefs.themeMode},
-                onSelectionChanged: (s) => repo.set('theme', s.first.name),
               ),
             ),
           ),
@@ -62,12 +67,6 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           const Divider(),
-          if (kDebugMode && service is FakePurchaseService)
-            SwitchListTile(
-              title: Text(l10n.debugUnlock),
-              value: ref.watch(entitlementsProvider).isUnlocked,
-              onChanged: service.setUnlocked,
-            ),
           ListTile(
             leading: const Icon(Icons.delete_forever),
             title: Text(l10n.resetData),
