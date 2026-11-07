@@ -133,13 +133,13 @@ abstract class AppLocalizations {
   /// No description provided for @gameCustom.
   ///
   /// In nl, this message translates to:
-  /// **'Eigen spel'**
+  /// **'Algemene teller'**
   String get gameCustom;
 
   /// No description provided for @gameCustomDesc.
   ///
   /// In nl, this message translates to:
-  /// **'Eigen puntentelling, optioneel met doelscore'**
+  /// **'Pesten, Ezelen en meer: plus en min met eigen stap'**
   String get gameCustomDesc;
 
   /// No description provided for @gameBoerenbridge.
@@ -735,6 +735,12 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'OLED-zwart'**
   String get themeOled;
+
+  /// No description provided for @settingStep.
+  ///
+  /// In nl, this message translates to:
+  /// **'Stap van de plus- en min-knoppen'**
+  String get settingStep;
 }
 
 class _AppLocalizationsDelegate

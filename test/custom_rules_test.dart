@@ -40,6 +40,24 @@ void main() {
     expect(rules.isFinished(cfg(), [round(1, 999, 0, 0)]), false);
   });
 
+  test('step defaults to 1 and does not change scoring', () {
+    expect(rules.defaultSettings['step'], 1);
+    final withStep = GameConfig(
+      type: 'custom',
+      participants: const ['1', '2', '3'],
+      settings: const {'step': 25},
+    );
+    expect(rules.totals(withStep, [round(1, 10, -5, 0)]),
+        {'1': 10, '2': -5, '3': 0});
+  });
+
+  test('lowestWins with a target ends when someone reaches it', () {
+    final c = cfg(target: 30, lowest: true);
+    expect(rules.isFinished(c, [round(1, 29, 2, 5)]), false);
+    expect(rules.isFinished(c, [round(1, 29, 2, 5), round(2, 1, 0, 0)]), true);
+    expect(rules.winners(c, [round(1, 29, 2, 5), round(2, 1, 0, 0)]), ['2']);
+  });
+
   test('validation', () {
     expect(rules.validateRound(cfg(), round(1, 1, 2, 3)), isNull);
     expect(

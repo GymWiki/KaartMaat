@@ -6,8 +6,8 @@
   "navHistory": "Historie",
   "navStats": "Statistieken",
   "navSettings": "Instellingen",
-  "gameCustom": "Eigen spel",
-  "gameCustomDesc": "Eigen puntentelling, optioneel met doelscore",
+  "gameCustom": "Algemene teller",
+  "gameCustomDesc": "Pesten, Ezelen en meer: plus en min met eigen stap",
   "gameBoerenbridge": "Boerenbridge",
   "gameKlaverjassen": "Klaverjassen",
   "gameYatzy": "Yatzy",
@@ -280,5 +280,6 @@
   "settingWrongPerTrick": "Strafpunten per slag verschil",
   "settingMaxCards": "Max. aantal kaarten (0 = automatisch)",
   "next": "Volgende",
-  "themeOled": "OLED-zwart"
+  "themeOled": "OLED-zwart",
+  "settingStep": "Stap van de plus- en min-knoppen"
 }

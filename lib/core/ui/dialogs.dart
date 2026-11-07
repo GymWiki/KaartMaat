@@ -48,7 +48,7 @@ Future<int?> intDialog(
         content: TextField(
           controller: controller,
           autofocus: true,
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.numberWithOptions(signed: min < 0),
           onSubmitted: (_) => submit(),
         ),
         actions: [

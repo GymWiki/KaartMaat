@@ -9,6 +9,7 @@ import '../../games/rules/game_rules.dart';
 String settingLabel(AppLocalizations l10n, String key) => switch (key) {
       CustomRules.targetScoreKey => l10n.settingTargetScore,
       CustomRules.lowestWinsKey => l10n.settingLowestWins,
+      CustomRules.stepKey => l10n.settingStep,
       BoerenbridgeRules.dealerRestrictionKey => l10n.settingDealerRestriction,
       BoerenbridgeRules.exactBaseKey => l10n.settingExactBase,
       BoerenbridgeRules.exactPerTrickKey => l10n.settingExactPerTrick,

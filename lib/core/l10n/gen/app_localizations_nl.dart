@@ -27,10 +27,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get navSettings => 'Instellingen';
 
   @override
-  String get gameCustom => 'Eigen spel';
+  String get gameCustom => 'Algemene teller';
 
   @override
-  String get gameCustomDesc => 'Eigen puntentelling, optioneel met doelscore';
+  String get gameCustomDesc =>
+      'Pesten, Ezelen en meer: plus en min met eigen stap';
 
   @override
   String get gameBoerenbridge => 'Boerenbridge';
@@ -393,4 +394,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get themeOled => 'OLED-zwart';
+
+  @override
+  String get settingStep => 'Stap van de plus- en min-knoppen';
 }

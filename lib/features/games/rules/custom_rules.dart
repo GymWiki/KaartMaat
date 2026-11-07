@@ -8,6 +8,9 @@ class CustomRules extends GameRules {
   static const targetScoreKey = 'targetScore';
   static const lowestWinsKey = 'lowestWins';
 
+  /// Amount the plus/minus buttons add per tap (entry UI only).
+  static const stepKey = 'step';
+
   @override
   String get type => typeId;
 
@@ -19,6 +22,13 @@ class CustomRules extends GameRules {
 
   @override
   List<SettingSpec> get settingSpecs => const [
+        SettingSpec(
+          key: stepKey,
+          kind: SettingKind.integer,
+          defaultValue: 1,
+          min: 1,
+          max: 1000,
+        ),
         SettingSpec(
           key: targetScoreKey,
           kind: SettingKind.integer,

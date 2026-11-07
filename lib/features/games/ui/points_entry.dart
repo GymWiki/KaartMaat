@@ -5,6 +5,7 @@ import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/number_pad.dart';
 import '../../settings/data/settings_repository.dart';
 import '../data/game_state.dart';
+import '../rules/custom_rules.dart';
 import '../rules/game_rules.dart';
 
 /// Generic entry: one signed whole number per participant, typed on the
@@ -34,6 +35,18 @@ class _PointsEntryState extends ConsumerState<PointsEntry> {
   int _focus = 0;
 
   bool get _last => _focus == _ids.length - 1;
+
+  late final int _step = () {
+    final s = widget.view.config.intSetting(CustomRules.stepKey);
+    return s < 1 ? 1 : s;
+  }();
+
+  void _adjust(int sign) {
+    haptic(ref);
+    final p = _ids[_focus];
+    final current = int.tryParse(_text[p]!) ?? 0;
+    setState(() => _text[p] = '${current + sign * _step}');
+  }
 
   void _key(String key) {
     haptic(ref);
@@ -95,6 +108,21 @@ class _PointsEntryState extends ConsumerState<PointsEntry> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Row(children: [
+                  for (final sign in [-1, 1])
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+                        child: SizedBox(
+                          height: 56,
+                          child: FilledButton(
+                            onPressed: () => _adjust(sign),
+                            child: Text(sign < 0 ? '−$_step' : '+$_step'),
+                          ),
+                        ),
+                      ),
+                    ),
+                ]),
                 NumberPad(onKey: _key),
                 const SizedBox(height: 4),
                 SizedBox(
