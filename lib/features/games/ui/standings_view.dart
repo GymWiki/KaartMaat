@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/ui/suits.dart';
 import '../data/game_state.dart';
 import 'progress_chart.dart';
 
@@ -22,7 +23,11 @@ class StandingsView extends StatelessWidget {
       children: [
         for (final s in view.standings)
           ListTile(
-            leading: CircleAvatar(child: Text('${s.rank}')),
+            leading: CornerIndex(
+                rank: s.rank,
+                suit: suitAt(view.config.participants.indexOf(s.participant)),
+                highlight: s.rank == 1,
+              ),
             title: Text(view.nameOf(s.participant), style: text.titleMedium),
             trailing: Text('${s.total}',
                 style: text.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),

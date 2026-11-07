@@ -169,8 +169,3 @@ final Map<String, GameDefinition> gameDefinitions = {
 
 GameDefinition definitionFor(String type) =>
     gameDefinitions[type] ?? (throw ArgumentError('Unknown game type: $type'));
-
-/// Planned games, shown as disabled tiles until their phase is built.
-final List<(IconData, String Function(AppLocalizations))> comingSoonGames = [
-  (Icons.casino, (l) => l.gameYatzy),
-];

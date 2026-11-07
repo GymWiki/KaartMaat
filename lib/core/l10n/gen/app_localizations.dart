@@ -139,7 +139,7 @@ abstract class AppLocalizations {
   /// No description provided for @gameCustomDesc.
   ///
   /// In nl, this message translates to:
-  /// **'Pesten, Ezelen en meer: plus en min met eigen stap'**
+  /// **'Pesten, Ezelen en andere spellen'**
   String get gameCustomDesc;
 
   /// No description provided for @gameBoerenbridge.
@@ -153,12 +153,6 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Klaverjassen'**
   String get gameKlaverjassen;
-
-  /// No description provided for @gameYatzy.
-  ///
-  /// In nl, this message translates to:
-  /// **'Yatzy'**
-  String get gameYatzy;
 
   /// No description provided for @gameToepen.
   ///

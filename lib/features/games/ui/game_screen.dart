@@ -5,6 +5,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
+import '../../../core/ui/suits.dart';
 import '../../history/share.dart';
 import '../../settings/data/settings_repository.dart';
 import '../data/game_repository.dart';
@@ -147,7 +148,6 @@ class _ScoreTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final text = Theme.of(context).textTheme;
     final last = view.roundScores.isEmpty ? null : view.roundScores.last;
     final totals = {for (final s in view.standings) s.participant: s};
 
@@ -168,33 +168,15 @@ class _ScoreTab extends StatelessWidget {
                         onPressed: onFinish, child: Text(l10n.finishGame)),
                   ),
                 ),
-              for (final p in view.config.participants)
-                Card(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                    child: Row(children: [
-                      CircleAvatar(child: Text('${totals[p]!.rank}')),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(view.nameOf(p),
-                            style: text.titleLarge,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis),
-                      ),
-                      if (last != null)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: Text(
-                            last[p]! > 0 ? '+${last[p]}' : '${last[p]}',
-                            style: text.titleMedium,
-                          ),
-                        ),
-                      Text('${totals[p]!.total}',
-                          style: text.displaySmall
-                              ?.copyWith(fontWeight: FontWeight.bold)),
-                    ]),
-                  ),
+              for (var i = 0; i < view.config.participants.length; i++)
+                _ScoreCard(
+                  name: view.nameOf(view.config.participants[i]),
+                  rank: totals[view.config.participants[i]]!.rank,
+                  total: totals[view.config.participants[i]]!.total,
+                  delta: last?[view.config.participants[i]],
+                  suit: suitAt(i),
+                  leading: view.state.rounds.isNotEmpty &&
+                      totals[view.config.participants[i]]!.rank == 1,
                 ),
             ],
           ),
@@ -230,6 +212,65 @@ class _ScoreTab extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// One participant as a playing card: rank and suit in the corner, the total
+/// as the biggest thing on it. The leader gets a brass outline.
+class _ScoreCard extends StatelessWidget {
+  const _ScoreCard({
+    required this.name,
+    required this.rank,
+    required this.total,
+    required this.delta,
+    required this.suit,
+    required this.leading,
+  });
+
+  final String name;
+  final int rank;
+  final int total;
+
+  /// Points from the last round; null before the first round.
+  final int? delta;
+  final Suit suit;
+  final bool leading;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: leading ? scheme.primary : scheme.outlineVariant,
+          width: leading ? 2.5 : 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 20, 12),
+        child: Row(children: [
+          CornerIndex(rank: rank, suit: suit, highlight: leading),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(name,
+                style: text.titleMedium?.copyWith(fontWeight: FontWeight.w600, fontSize: 18),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis),
+          ),
+          if (delta != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 14),
+              child: Text(
+                delta! > 0 ? '+$delta' : '$delta',
+                style: text.headlineSmall?.copyWith(color: scheme.onSurfaceVariant),
+              ),
+            ),
+          Text('$total', style: text.displaySmall),
+        ]),
+      ),
     );
   }
 }

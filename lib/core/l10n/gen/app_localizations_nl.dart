@@ -30,17 +30,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameCustom => 'Algemene teller';
 
   @override
-  String get gameCustomDesc =>
-      'Pesten, Ezelen en meer: plus en min met eigen stap';
+  String get gameCustomDesc => 'Pesten, Ezelen en andere spellen';
 
   @override
   String get gameBoerenbridge => 'Boerenbridge';
 
   @override
   String get gameKlaverjassen => 'Klaverjassen';
-
-  @override
-  String get gameYatzy => 'Yatzy';
 
   @override
   String get gameToepen => 'Toepen';

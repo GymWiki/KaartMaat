@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/ui/suits.dart';
 import '../data/game_repository.dart';
 import '../games_registry.dart';
 
@@ -13,14 +14,14 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final lastId = ref.watch(lastUnfinishedIdProvider).value;
+    final games = gameDefinitions.values.toList();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.appTitle)),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
         children: [
           if (lastId != null) _ResumeCard(gameId: lastId),
-          const SizedBox(height: 8),
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
@@ -29,15 +30,12 @@ class HomeScreen extends ConsumerWidget {
             crossAxisSpacing: 12,
             childAspectRatio: 1.15,
             children: [
-              for (final e in gameDefinitions.entries)
-                _Tile(
-                  icon: e.value.icon,
-                  title: e.value.name(l10n),
-                  subtitle: e.value.description(l10n),
-                  onTap: () => context.push('/new/${e.key}'),
+              for (var i = 0; i < games.length; i++)
+                _GameCard(
+                  def: games[i],
+                  suit: suitAt(i),
+                  onTap: () => context.push('/new/${games[i].id}'),
                 ),
-              for (final g in comingSoonGames)
-                _Tile(icon: g.$1, title: g.$2(l10n), subtitle: l10n.comingSoon),
             ],
           ),
         ],
@@ -46,6 +44,7 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
+/// The unfinished game, in the accent color so it is the first thing to tap.
 class _ResumeCard extends ConsumerWidget {
   const _ResumeCard({required this.gameId});
   final int gameId;
@@ -53,62 +52,97 @@ class _ResumeCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final scheme = Theme.of(context).colorScheme;
     final state = ref.watch(gameStateProvider(gameId)).value;
     if (state == null) return const SizedBox.shrink();
     final name = definitionFor(state.type).name(l10n);
-    return Card(
-      color: Theme.of(context).colorScheme.primaryContainer,
-      child: ListTile(
-        leading: const Icon(Icons.play_arrow, size: 32),
-        title: Text(l10n.resumeGame,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        subtitle: Text(l10n.resumeSubtitle(name, state.rounds.length)),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () => context.push('/game/$gameId'),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Material(
+        color: scheme.primary,
+        shape: const StadiumBorder(),
+        child: InkWell(
+          customBorder: const StadiumBorder(),
+          onTap: () => context.push('/game/$gameId'),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 16, 20, 16),
+            child: Row(children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.resumeGame,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(color: scheme.onPrimary)),
+                    Text(l10n.resumeSubtitle(name, state.rounds.length),
+                        style: TextStyle(color: scheme.onPrimary.withValues(alpha: 0.8))),
+                  ],
+                ),
+              ),
+              Icon(Icons.play_circle_fill, size: 40, color: scheme.onPrimary),
+            ]),
+          ),
+        ),
       ),
     );
   }
 }
 
-class _Tile extends StatelessWidget {
-  const _Tile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.onTap,
-  });
+/// A game as a playing card: suit in the corner, name at the bottom.
+class _GameCard extends StatelessWidget {
+  const _GameCard({required this.def, required this.suit, required this.onTap});
 
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback? onTap;
+  final GameDefinition def;
+  final Suit suit;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Opacity(
-      opacity: onTap == null ? 0.5 : 1,
-      child: Card(
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(icon, size: 32, color: cs.primary),
+    final l10n = context.l10n;
+    final text = Theme.of(context).textTheme;
+    final players = def.minPlayers == def.maxPlayers
+        ? '${def.minPlayers}'
+        : '${def.minPlayers}–${def.maxPlayers}';
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                SuitPip(suit, size: 24),
                 const Spacer(),
-                Text(title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-                Text(subtitle,
-                    style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis),
-              ],
-            ),
+                Icon(Icons.person_outline,
+                    size: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                const SizedBox(width: 2),
+                Text(players,
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant)),
+              ]),
+              const Spacer(),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(def.name(l10n), style: text.titleLarge),
+              ),
+              const SizedBox(height: 2),
+              SizedBox(
+                height: 34,
+                child: Text(def.description(l10n),
+                  style: TextStyle(
+                      fontSize: 12.5,
+                      height: 1.25,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis),),
+            ],
           ),
         ),
       ),
