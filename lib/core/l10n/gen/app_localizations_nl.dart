@@ -612,37 +612,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameToepenDesc => 'Punten tikken, op pelt en uitvallen';
 
   @override
-  String get toepenWinner => 'Winnaar van de ronde';
-
-  @override
-  String get toepenKnocks => 'Aantal keer geklopt';
-
-  @override
-  String get toepenStay => 'Gaat mee';
-
-  @override
-  String toepenFoldAt(int number) {
-    return 'Past bij klop $number';
-  }
-
-  @override
-  String get toepenPovertyKnock => 'De armoede-klop telt mee als klop 1';
-
-  @override
-  String toepenInPoverty(String names) {
-    return 'Op pelt: $names';
-  }
-
-  @override
-  String toepenOut(String names) {
-    return 'Uit: $names';
-  }
-
-  @override
   String get toepenOutBadge => 'uit';
-
-  @override
-  String get toepenChooseWinner => 'Kies de winnaar van de ronde';
 
   @override
   String get settingLimit => 'Uitvalgrens (strafpunten)';
@@ -922,39 +892,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get heartsQueenMissing => 'Wie heeft de Schoppen Vrouw?';
-
-  @override
-  String toepenStake(int points) {
-    return 'Inzet: $points';
-  }
-
-  @override
-  String get toepenKnock => 'Kloppen';
-
-  @override
-  String get toepenLessKnock => 'Eén klop minder';
-
-  @override
-  String get toepenFold => 'Past';
-
-  @override
-  String toepenFolded(int number) {
-    return 'Past bij klop $number';
-  }
-
-  @override
-  String get toepenWinnerTile => 'wint';
-
-  @override
-  String get toepenTapWinner => 'Tik op de winnaar van de ronde';
-
-  @override
-  String get toepenWonShort => 'wint';
-
-  @override
-  String toepenFoldShort(int number) {
-    return 'past $number';
-  }
 
   @override
   String get toepenPovertyBadge => 'op pelt';

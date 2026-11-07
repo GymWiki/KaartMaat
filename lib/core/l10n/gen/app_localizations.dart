@@ -1138,59 +1138,11 @@ abstract class AppLocalizations {
   /// **'Punten tikken, op pelt en uitvallen'**
   String get gameToepenDesc;
 
-  /// No description provided for @toepenWinner.
-  ///
-  /// In nl, this message translates to:
-  /// **'Winnaar van de ronde'**
-  String get toepenWinner;
-
-  /// No description provided for @toepenKnocks.
-  ///
-  /// In nl, this message translates to:
-  /// **'Aantal keer geklopt'**
-  String get toepenKnocks;
-
-  /// No description provided for @toepenStay.
-  ///
-  /// In nl, this message translates to:
-  /// **'Gaat mee'**
-  String get toepenStay;
-
-  /// No description provided for @toepenFoldAt.
-  ///
-  /// In nl, this message translates to:
-  /// **'Past bij klop {number}'**
-  String toepenFoldAt(int number);
-
-  /// No description provided for @toepenPovertyKnock.
-  ///
-  /// In nl, this message translates to:
-  /// **'De armoede-klop telt mee als klop 1'**
-  String get toepenPovertyKnock;
-
-  /// No description provided for @toepenInPoverty.
-  ///
-  /// In nl, this message translates to:
-  /// **'Op pelt: {names}'**
-  String toepenInPoverty(String names);
-
-  /// No description provided for @toepenOut.
-  ///
-  /// In nl, this message translates to:
-  /// **'Uit: {names}'**
-  String toepenOut(String names);
-
   /// No description provided for @toepenOutBadge.
   ///
   /// In nl, this message translates to:
   /// **'uit'**
   String get toepenOutBadge;
-
-  /// No description provided for @toepenChooseWinner.
-  ///
-  /// In nl, this message translates to:
-  /// **'Kies de winnaar van de ronde'**
-  String get toepenChooseWinner;
 
   /// No description provided for @settingLimit.
   ///
@@ -1694,60 +1646,6 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Wie heeft de Schoppen Vrouw?'**
   String get heartsQueenMissing;
-
-  /// No description provided for @toepenStake.
-  ///
-  /// In nl, this message translates to:
-  /// **'Inzet: {points}'**
-  String toepenStake(int points);
-
-  /// No description provided for @toepenKnock.
-  ///
-  /// In nl, this message translates to:
-  /// **'Kloppen'**
-  String get toepenKnock;
-
-  /// No description provided for @toepenLessKnock.
-  ///
-  /// In nl, this message translates to:
-  /// **'Eén klop minder'**
-  String get toepenLessKnock;
-
-  /// No description provided for @toepenFold.
-  ///
-  /// In nl, this message translates to:
-  /// **'Past'**
-  String get toepenFold;
-
-  /// No description provided for @toepenFolded.
-  ///
-  /// In nl, this message translates to:
-  /// **'Past bij klop {number}'**
-  String toepenFolded(int number);
-
-  /// No description provided for @toepenWinnerTile.
-  ///
-  /// In nl, this message translates to:
-  /// **'wint'**
-  String get toepenWinnerTile;
-
-  /// No description provided for @toepenTapWinner.
-  ///
-  /// In nl, this message translates to:
-  /// **'Tik op de winnaar van de ronde'**
-  String get toepenTapWinner;
-
-  /// No description provided for @toepenWonShort.
-  ///
-  /// In nl, this message translates to:
-  /// **'wint'**
-  String get toepenWonShort;
-
-  /// No description provided for @toepenFoldShort.
-  ///
-  /// In nl, this message translates to:
-  /// **'past {number}'**
-  String toepenFoldShort(int number);
 
   /// No description provided for @toepenPovertyBadge.
   ///
