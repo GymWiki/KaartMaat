@@ -15,6 +15,7 @@ class PanelContext {
     required this.initialDraft,
     required this.onSave,
     required this.onCancel,
+    this.onNewRound,
   });
 
   final GameView view;
@@ -47,4 +48,8 @@ class PanelContext {
 
   /// Leaves editing mode without saving.
   final VoidCallback onCancel;
+
+  /// For games that count live (the panel edits the latest round on every
+  /// tap): starts a new round with [entries]. Null for other games.
+  final Future<void> Function(Entries entries)? onNewRound;
 }

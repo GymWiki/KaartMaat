@@ -651,5 +651,40 @@
   "calcTapeEmpty": "Nog geen bedragen",
   "saveRoundShort": "Ronde opslaan",
   "pageDigits": "Cijfers",
-  "pageQuick": "Snel"
+  "pageQuick": "Snel",
+  "nextRound": "Volgende ronde",
+  "counterCustom": "Eigen",
+  "counterCustomStep": "Eigen stap",
+  "counterStepSemantics": "Stap {number}",
+  "counterPlus": "Plus {number}",
+  "counterMinus": "Min {number}",
+  "counterThisRound": "deze ronde {value}",
+  "@counterStepSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@counterPlus": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@counterMinus": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "@counterThisRound": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }

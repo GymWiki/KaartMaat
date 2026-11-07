@@ -976,4 +976,33 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get pageQuick => 'Snel';
+
+  @override
+  String get nextRound => 'Volgende ronde';
+
+  @override
+  String get counterCustom => 'Eigen';
+
+  @override
+  String get counterCustomStep => 'Eigen stap';
+
+  @override
+  String counterStepSemantics(int number) {
+    return 'Stap $number';
+  }
+
+  @override
+  String counterPlus(int number) {
+    return 'Plus $number';
+  }
+
+  @override
+  String counterMinus(int number) {
+    return 'Min $number';
+  }
+
+  @override
+  String counterThisRound(String value) {
+    return 'deze ronde $value';
+  }
 }

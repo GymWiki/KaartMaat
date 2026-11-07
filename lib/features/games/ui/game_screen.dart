@@ -235,7 +235,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   Widget _panelScreen(GameState state, GameView view, GameDefinition def) {
     final l10n = context.l10n;
     final editing = _editingRound != null;
-    final number = _editingRound ?? view.nextRoundNumber;
+    // Live counting games keep working on the latest round.
+    final liveNumber =
+        def.liveRound && state.rounds.isNotEmpty ? state.rounds.last.number : view.nextRoundNumber;
+    final number = _editingRound ?? liveNumber;
     final existing =
         state.rounds.where((r) => r.number == number).firstOrNull?.entries;
 
@@ -263,6 +266,17 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           onSave: (entries, {required complete, undoDraft}) =>
               _savePanelRound(number, entries, complete: complete, undoDraft: undoDraft),
           onCancel: _stopEditing,
+          onNewRound: def.liveRound
+              ? (entries) async {
+                  await _repo.addRound(widget.gameId, entries);
+                  if (!mounted) return;
+                  setState(() {
+                    _editingRound = null;
+                    _draft = null;
+                    _generation++;
+                  });
+                }
+              : null,
         )),
       );
     }
@@ -300,9 +314,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         panelInset: _panelInset,
         top: RoundTable(
           view: view,
-          currentRound: view.canAddRound ? view.nextRoundNumber : null,
+          currentRound: view.canAddRound ? liveNumber : null,
           editingRound: _editingRound,
-          onTapRound: (n) => n == view.nextRoundNumber && view.canAddRound
+          onTapRound: (n) => n == liveNumber && view.canAddRound
               ? _stopEditing()
               : _startEditing(n),
           cellDetail: def.cellDetail == null

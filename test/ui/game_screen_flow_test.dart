@@ -10,6 +10,8 @@ import 'package:kaartmaat/features/games/data/game_repository.dart';
 import 'package:kaartmaat/features/games/data/game_state.dart';
 import 'package:kaartmaat/features/games/rules/boerenbridge_rules.dart';
 import 'package:kaartmaat/features/games/rules/game_rules.dart';
+import 'package:kaartmaat/features/games/rules/custom_rules.dart';
+import 'package:kaartmaat/features/games/ui/counter_panel.dart';
 import 'package:kaartmaat/features/games/ui/game_screen.dart';
 import 'package:kaartmaat/features/settings/data/settings_repository.dart';
 
@@ -82,6 +84,20 @@ GameState newGame({List<RoundData> rounds = const []}) => GameState(
         PlayerRef(id: 3, name: 'Chris'),
       ],
       rounds: rounds,
+    );
+
+GameState countingGame() => GameState(
+      id: 1,
+      type: 'custom',
+      createdAt: DateTime(2026, 5, 1),
+      finishedAt: null,
+      settings: const CustomRules().defaultSettings,
+      players: const [
+        PlayerRef(id: 1, name: 'Anna'),
+        PlayerRef(id: 2, name: 'Bas'),
+        PlayerRef(id: 3, name: 'Chris'),
+      ],
+      rounds: const [],
     );
 
 /// The whole Boerenbridge round on ONE screen: bids, tricks, confirm, undo,
@@ -243,5 +259,53 @@ void main() {
     expect(find.text('Bas'), findsWidgets);
     expect(find.byIcon(Icons.check), findsOneWidget);
     await close(tester);
+  });
+
+  testWidgets('counting live: taps are stored at once, next round, correcting an old one',
+      (tester) async {
+    final semantics = tester.ensureSemantics();
+    await openGame(tester, countingGame());
+    Finder tile(String name) => find.descendant(
+        of: find.byType(CounterPanel), matching: find.text(name));
+    int points(int round, String player) =>
+        repo.state.rounds[round - 1].entries[player]!['points'] as int;
+
+    // nothing yet: the first tap creates round 1
+    expect(repo.state.rounds, isEmpty);
+    await tester.tap(tile('Anna'));
+    await tester.pump();
+    await tester.tap(tile('Anna'));
+    await tester.pump();
+    expect(repo.state.rounds.length, 1);
+    expect(points(1, '1'), 2);
+
+    // next round: a new empty round, taps now go there
+    await tester.tap(find.text('Volgende ronde'));
+    await tester.pump();
+    await tester.pump();
+    expect(repo.state.rounds.length, 2);
+    await tester.tap(tile('Bas'));
+    await tester.pump();
+    expect(points(2, '2'), 1);
+    expect(points(1, '2'), 0);
+
+    // tap round 1 in the table: corrected in the same panel, then back
+    await tester.tap(find.bySemanticsLabel(RegExp('^Ronde 1, ')));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Ronde 1 corrigeren'), findsOneWidget);
+    await tester.tap(tile('Anna'));
+    await tester.pump();
+    expect(points(1, '1'), 3);
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Ronde 2'), findsWidgets);
+    await tester.tap(tile('Chris'));
+    await tester.pump();
+    expect(points(2, '3'), 1);
+
+    await close(tester);
+    semantics.dispose();
   });
 }

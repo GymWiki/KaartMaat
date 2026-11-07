@@ -13,6 +13,7 @@ import 'rules/rikken_rules.dart';
 import 'rules/toepen_rules.dart';
 import 'ui/boerenbridge_entry.dart';
 import 'ui/calculator_entry.dart';
+import 'ui/counter_panel.dart';
 import 'ui/calculator_panel.dart';
 import 'ui/canasta_header.dart';
 import 'ui/boerenbridge_header.dart';
@@ -53,6 +54,7 @@ class GameDefinition {
     this.panelBuilder,
     this.cellDetail,
     this.cellHighlight,
+    this.liveRound = false,
   });
 
   final GameRules rules;
@@ -77,6 +79,10 @@ class GameDefinition {
   /// Small second line in a round-table cell (e.g. bid and tricks won).
   final String? Function(AppLocalizations l10n, GameView view, int roundIndex,
       String participant)? cellDetail;
+
+  /// Counting games: the panel edits the latest round on every tap, and
+  /// "next round" starts a new one, instead of confirming a round at a time.
+  final bool liveRound;
 
   /// Marks a round-table cell with a check (e.g. an exact bid).
   final bool Function(GameView view, int roundIndex, String participant)?
@@ -227,6 +233,8 @@ final Map<String, GameDefinition> gameDefinitions = {
     description: (l) => l.gameCustomDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
         PointsEntry(view: view, existing: existing, onSubmit: onSubmit),
+    panelBuilder: (ctx) => CounterPanel(ctx: ctx),
+    liveRound: true,
   ),
 };
 

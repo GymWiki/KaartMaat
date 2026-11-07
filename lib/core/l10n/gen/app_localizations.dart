@@ -1790,6 +1790,48 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Snel'**
   String get pageQuick;
+
+  /// No description provided for @nextRound.
+  ///
+  /// In nl, this message translates to:
+  /// **'Volgende ronde'**
+  String get nextRound;
+
+  /// No description provided for @counterCustom.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eigen'**
+  String get counterCustom;
+
+  /// No description provided for @counterCustomStep.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eigen stap'**
+  String get counterCustomStep;
+
+  /// No description provided for @counterStepSemantics.
+  ///
+  /// In nl, this message translates to:
+  /// **'Stap {number}'**
+  String counterStepSemantics(int number);
+
+  /// No description provided for @counterPlus.
+  ///
+  /// In nl, this message translates to:
+  /// **'Plus {number}'**
+  String counterPlus(int number);
+
+  /// No description provided for @counterMinus.
+  ///
+  /// In nl, this message translates to:
+  /// **'Min {number}'**
+  String counterMinus(int number);
+
+  /// No description provided for @counterThisRound.
+  ///
+  /// In nl, this message translates to:
+  /// **'deze ronde {value}'**
+  String counterThisRound(String value);
 }
 
 class _AppLocalizationsDelegate

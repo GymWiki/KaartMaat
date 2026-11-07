@@ -42,6 +42,17 @@ class CustomRules extends GameRules {
         ),
       ];
 
+  /// An empty round (everybody on 0), the start of a new counting round.
+  static Entries zeroEntries(GameConfig config) => {
+        for (final p in config.participants) p: {'points': 0},
+      };
+
+  /// The step the plus button starts with (never below 1).
+  static int defaultStep(GameConfig config) {
+    final s = config.intSetting(stepKey);
+    return s < 1 ? 1 : s;
+  }
+
   @override
   bool higherIsBetter(GameConfig config) => !config.boolSetting(lowestWinsKey);
 
