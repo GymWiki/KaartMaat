@@ -131,4 +131,35 @@ void main() {
       expect(rules.isFinished(cfg2, [deal(1, 'a'), deal(2, 'b')]), true);
     });
   });
+
+  group('plain points per round', () {
+    RoundData pts(int n, List<int> v) => RoundData(number: n, entries: {
+          for (var i = 0; i < ids.length; i++) ids[i]: {'points': v[i]},
+        });
+
+    test('the tapped points are the score, and they add up', () {
+      final rounds = [pts(1, [1, 0, 2, 0]), pts(2, [0, 3, 1, 0])];
+      expect(rules.roundScores(c, rounds), [
+        {'a': 1, 'b': 0, 'c': 2, 'd': 0},
+        {'a': 0, 'b': 3, 'c': 1, 'd': 0},
+      ]);
+      expect(rules.totals(c, rounds), {'a': 1, 'b': 3, 'c': 3, 'd': 0});
+    });
+
+    test('op pelt at limit - 1, out at the limit', () {
+      final s = rules.situation(c, [pts(1, [9, 10, 4, 0])]);
+      expect(s.poverty, {'a'});
+      expect(s.out, {'b'});
+    });
+
+    test('the game ends when one player is left', () {
+      expect(rules.isFinished(c, [pts(1, [10, 10, 10, 2])]), true);
+      expect(rules.isFinished(c, [pts(1, [10, 10, 3, 2])]), false);
+    });
+
+    test('a round with a missing player is not valid', () {
+      final r = RoundData(number: 1, entries: {'a': {'points': 1}});
+      expect(rules.validateRound(c, r), isNotNull);
+    });
+  });
 }

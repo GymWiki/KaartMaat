@@ -28,8 +28,6 @@ import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
 import 'ui/rikken_labels.dart';
 import 'ui/rikken_panel.dart';
-import 'ui/toepen_entry.dart';
-import 'ui/toepen_header.dart';
 import 'ui/toepen_panel.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
@@ -208,20 +206,10 @@ final Map<String, GameDefinition> gameDefinitions = {
     icon: Icons.filter_5,
     name: (l) => l.gameToepen,
     description: (l) => l.gameToepenDesc,
-    entryBuilder: (view, number, existing, onSubmit) => ToepenEntry(
-      view: view,
-      number: number,
-      existing: existing,
-      onSubmit: onSubmit,
-    ),
-    headerBuilder: (view) => ToepenHeader(view: view),
+    entryBuilder: (view, number, existing, onSubmit) =>
+        PointsEntry(view: view, existing: existing, onSubmit: onSubmit),
     panelBuilder: (ctx) => ToepenPanel(ctx: ctx),
-    cellDetail: (l, view, i, p) {
-      final entry = view.state.rounds[i].entries[p];
-      if (entry?['winner'] == true) return l.toepenWonShort;
-      final fold = entry?['foldAt'];
-      return fold is int ? l.toepenFoldShort(fold) : null;
-    },
+    liveRound: true,
   ),
   JokerenRules.typeId: GameDefinition(
     rules: const JokerenRules(),

@@ -402,7 +402,7 @@
   "settingMoonMode": "Bij de maan",
   "moonOthers": "Anderen krijgen het totaal erbij",
   "moonShooter": "Schutter krijgt het totaal eraf",
-  "gameToepenDesc": "Kloppen, armoede en uitvallen",
+  "gameToepenDesc": "Punten tikken, op pelt en uitvallen",
   "toepenWinner": "Winnaar van de ronde",
   "toepenKnocks": "Aantal keer geklopt",
   "toepenStay": "Gaat mee",
@@ -415,7 +415,7 @@
     }
   },
   "toepenPovertyKnock": "De armoede-klop telt mee als klop 1",
-  "toepenInPoverty": "In de armoe: {names}",
+  "toepenInPoverty": "Op pelt: {names}",
   "@toepenInPoverty": {
     "placeholders": {
       "names": {
@@ -434,7 +434,7 @@
   "toepenOutBadge": "uit",
   "toepenChooseWinner": "Kies de winnaar van de ronde",
   "settingLimit": "Uitvalgrens (strafpunten)",
-  "settingPoverty": "Armoede telt als klop",
+  "settingPoverty": "Markeer 'op pelt' (nog 1 punt tot uit)",
   "settingPlayOn": "Doorspelen tot één speler over is",
   "gameJokeren": "Jokeren",
   "gameCanasta": "Canasta",
@@ -645,7 +645,7 @@
       }
     }
   },
-  "toepenPovertyBadge": "armoe",
+  "toepenPovertyBadge": "op pelt",
   "calcDone": "Klaar",
   "calcAdd": "Bedrag optellen",
   "calcTapeEmpty": "Nog geen bedragen",

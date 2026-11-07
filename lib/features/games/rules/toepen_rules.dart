@@ -20,7 +20,11 @@ class ToepenSituation {
       [for (final p in config.participants) if (!out.contains(p)) p];
 }
 
-/// Toepen scoring (nl.wikipedia and Pagat agree on the core):
+/// Toepen scoring. Current rounds are plain points per player
+/// (`{ 'points': n }`, one tap on a name adds 1); rounds saved by earlier
+/// versions (winner / knocks / fold, below) still score as before.
+///
+/// Legacy scoring (nl.wikipedia and Pagat agree on the core):
 /// - the winner of the round gets 0;
 /// - someone who folds at knock j gets j points;
 /// - everyone else who plays on and loses gets (number of knocks + 1).
@@ -86,36 +90,14 @@ class ToepenRules extends GameRules {
     return ToepenSituation(totals: totals, out: out, poverty: poverty);
   }
 
-  // ---- Helpers for the input panel -------------------------------------
+  /// A new round with nobody having points yet.
+  static Entries zeroEntries(GameConfig config) => {
+        for (final p in config.participants) p: {'points': 0},
+      };
 
-  /// What a player who plays on and loses gets: the knocks plus one.
-  static int stakeFor(int effectiveKnocks) => effectiveKnocks + 1;
+  static bool _isPoints(RoundData round) =>
+      round.entries.values.any((e) => e.containsKey('points'));
 
-  /// The round entries for the panel's state. Folds only count for players
-  /// who are still in, are not the winner, and fall within the knocks so far
-  /// (the automatic poverty knock counts as knock 1).
-  Entries buildEntries(
-    GameConfig config,
-    ToepenSituation situation, {
-    required String? winner,
-    required int knocks,
-    required Map<String, int?> fold,
-  }) {
-    final effective = knocks + (situation.poverty.isEmpty ? 0 : 1);
-    return {
-      for (final p in config.participants)
-        p: {
-          'winner': p == winner,
-          'knocks': knocks,
-          if (p != winner &&
-              !situation.out.contains(p) &&
-              fold[p] != null &&
-              fold[p]! >= 1 &&
-              fold[p]! <= effective)
-            'foldAt': fold[p],
-        },
-    };
-  }
 
   /// Knocks for the round, including the automatic poverty knock.
   int effectiveKnocks(RoundData round, bool poverty) {
@@ -133,6 +115,14 @@ class ToepenRules extends GameRules {
 
   @override
   RoundIssue? validateRound(GameConfig config, RoundData round) {
+    if (_isPoints(round)) {
+      for (final p in config.participants) {
+        final v = round.entries[p]?['points'];
+        if (v == null) return RoundIssue.missingEntry;
+        if (v is! int) return RoundIssue.invalidValue;
+      }
+      return null;
+    }
     var winners = 0;
     final k = _knocks(round);
     if (k < 0 || k > 30) return RoundIssue.outOfRange;
@@ -162,7 +152,13 @@ class ToepenRules extends GameRules {
     final result = <Map<String, int>>[];
     for (final round in rounds) {
       final scores = {for (final p in config.participants) p: 0};
-      if (validateRound(config, round) == null) {
+      if (_isPoints(round)) {
+        if (validateRound(config, round) == null) {
+          for (final p in config.participants) {
+            scores[p] = round.entries[p]!['points'] as int;
+          }
+        }
+      } else if (validateRound(config, round) == null) {
         final out = {
           for (final p in config.participants)
             if (totals[p]! >= limit) p,

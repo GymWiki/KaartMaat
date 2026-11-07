@@ -609,7 +609,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get moonShooter => 'Schutter krijgt het totaal eraf';
 
   @override
-  String get gameToepenDesc => 'Kloppen, armoede en uitvallen';
+  String get gameToepenDesc => 'Punten tikken, op pelt en uitvallen';
 
   @override
   String get toepenWinner => 'Winnaar van de ronde';
@@ -630,7 +630,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String toepenInPoverty(String names) {
-    return 'In de armoe: $names';
+    return 'Op pelt: $names';
   }
 
   @override
@@ -648,7 +648,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get settingLimit => 'Uitvalgrens (strafpunten)';
 
   @override
-  String get settingPoverty => 'Armoede telt als klop';
+  String get settingPoverty => 'Markeer \'op pelt\' (nog 1 punt tot uit)';
 
   @override
   String get settingPlayOn => 'Doorspelen tot één speler over is';
@@ -957,7 +957,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get toepenPovertyBadge => 'armoe';
+  String get toepenPovertyBadge => 'op pelt';
 
   @override
   String get calcDone => 'Klaar';

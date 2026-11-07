@@ -1135,7 +1135,7 @@ abstract class AppLocalizations {
   /// No description provided for @gameToepenDesc.
   ///
   /// In nl, this message translates to:
-  /// **'Kloppen, armoede en uitvallen'**
+  /// **'Punten tikken, op pelt en uitvallen'**
   String get gameToepenDesc;
 
   /// No description provided for @toepenWinner.
@@ -1171,7 +1171,7 @@ abstract class AppLocalizations {
   /// No description provided for @toepenInPoverty.
   ///
   /// In nl, this message translates to:
-  /// **'In de armoe: {names}'**
+  /// **'Op pelt: {names}'**
   String toepenInPoverty(String names);
 
   /// No description provided for @toepenOut.
@@ -1201,7 +1201,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingPoverty.
   ///
   /// In nl, this message translates to:
-  /// **'Armoede telt als klop'**
+  /// **'Markeer \'op pelt\' (nog 1 punt tot uit)'**
   String get settingPoverty;
 
   /// No description provided for @settingPlayOn.
@@ -1752,7 +1752,7 @@ abstract class AppLocalizations {
   /// No description provided for @toepenPovertyBadge.
   ///
   /// In nl, this message translates to:
-  /// **'armoe'**
+  /// **'op pelt'**
   String get toepenPovertyBadge;
 
   /// No description provided for @calcDone.
