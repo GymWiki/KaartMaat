@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import '../../core/l10n/l10n.dart';
 import 'data/game_state.dart';
 import 'rules/boerenbridge_rules.dart';
+import 'rules/canasta_rules.dart';
 import 'rules/custom_rules.dart';
 import 'rules/game_rules.dart';
 import 'rules/hearts_rules.dart';
+import 'rules/jokeren_rules.dart';
 import 'rules/klaverjas_rules.dart';
 import 'rules/rikken_rules.dart';
 import 'rules/toepen_rules.dart';
 import 'ui/boerenbridge_entry.dart';
+import 'ui/calculator_entry.dart';
+import 'ui/canasta_header.dart';
 import 'ui/boerenbridge_header.dart';
 import 'ui/hearts_entry.dart';
 import 'ui/klaverjas_entry.dart';
@@ -115,6 +119,43 @@ final Map<String, GameDefinition> gameDefinitions = {
       onSubmit: onSubmit,
     ),
     headerBuilder: (view) => ToepenHeader(view: view),
+  ),
+  JokerenRules.typeId: GameDefinition(
+    rules: const JokerenRules(),
+    icon: Icons.theater_comedy,
+    name: (l) => l.gameJokeren,
+    description: (l) => l.gameJokerenDesc,
+    entryBuilder: (view, number, existing, onSubmit) => CalculatorEntry(
+      view: view,
+      existing: existing,
+      onSubmit: onSubmit,
+      quick: [
+        QuickAmount((l) => l.quickJoker, view.config.intSetting(JokerenRules.quickJokerKey)),
+        QuickAmount((l) => l.quickAce, view.config.intSetting(JokerenRules.quickAceKey)),
+        QuickAmount((l) => l.quickFace, view.config.intSetting(JokerenRules.quickFaceKey)),
+      ],
+    ),
+  ),
+  CanastaRules.typeId: GameDefinition(
+    rules: const CanastaRules(),
+    icon: Icons.diamond,
+    name: (l) => l.gameCanasta,
+    description: (l) => l.gameCanastaDesc,
+    entryBuilder: (view, number, existing, onSubmit) => CalculatorEntry(
+      view: view,
+      existing: existing,
+      onSubmit: onSubmit,
+      quick: [
+        QuickAmount((l) => l.quickNaturalCanasta, view.config.intSetting(CanastaRules.naturalCanastaKey)),
+        QuickAmount((l) => l.quickMixedCanasta, view.config.intSetting(CanastaRules.mixedCanastaKey)),
+        QuickAmount((l) => l.quickGoOut, view.config.intSetting(CanastaRules.goOutKey)),
+        QuickAmount((l) => l.quickGoOutConcealed, view.config.intSetting(CanastaRules.goOutConcealedKey)),
+        QuickAmount((l) => l.quickRedThree, view.config.intSetting(CanastaRules.redThreeKey)),
+        QuickAmount((l) => l.quickAllRedThrees, view.config.intSetting(CanastaRules.allRedThreesKey)),
+      ],
+    ),
+    headerBuilder: (view) => CanastaHeader(view: view),
+    newGameHint: (l) => l.teamsHint,
   ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),

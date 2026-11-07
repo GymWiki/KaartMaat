@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../games/rules/boerenbridge_rules.dart';
+import '../../games/rules/canasta_rules.dart';
+import '../../games/rules/jokeren_rules.dart';
 import '../../games/rules/custom_rules.dart';
 import '../../games/rules/game_rules.dart';
 import '../../games/rules/hearts_rules.dart';
@@ -44,6 +46,15 @@ String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
       ToepenRules.limitKey => l10n.settingLimit,
       ToepenRules.povertyKey => l10n.settingPoverty,
       ToepenRules.playOnKey => l10n.settingPlayOn,
+      CanastaRules.naturalCanastaKey => l10n.settingNaturalCanasta,
+      CanastaRules.mixedCanastaKey => l10n.settingMixedCanasta,
+      CanastaRules.goOutKey => l10n.settingGoOut,
+      CanastaRules.goOutConcealedKey => l10n.settingGoOutConcealed,
+      CanastaRules.redThreeKey => l10n.settingRedThree,
+      CanastaRules.allRedThreesKey => l10n.settingAllRedThrees,
+      JokerenRules.quickJokerKey => l10n.settingQuickJoker,
+      JokerenRules.quickAceKey => l10n.settingQuickAce,
+      JokerenRules.quickFaceKey => l10n.settingQuickFace,
       RikkenRules.perTrickKey => l10n.settingPerTrick,
       RikkenRules.slamBonusKey => l10n.settingSlamBonus,
       RikkenRules.maatPaysKey => l10n.settingMaatPays,

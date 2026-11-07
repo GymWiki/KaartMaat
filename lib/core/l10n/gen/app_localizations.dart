@@ -1215,6 +1215,150 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Doorspelen tot één speler over is'**
   String get settingPlayOn;
+
+  /// No description provided for @gameJokeren.
+  ///
+  /// In nl, this message translates to:
+  /// **'Jokeren'**
+  String get gameJokeren;
+
+  /// No description provided for @gameCanasta.
+  ///
+  /// In nl, this message translates to:
+  /// **'Canasta'**
+  String get gameCanasta;
+
+  /// No description provided for @gameJokerenDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bedragen optellen per ronde'**
+  String get gameJokerenDesc;
+
+  /// No description provided for @gameCanastaDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Teams, canasta\'s en doelscore'**
+  String get gameCanastaDesc;
+
+  /// No description provided for @undoLastAmount.
+  ///
+  /// In nl, this message translates to:
+  /// **'Laatste bedrag ongedaan maken'**
+  String get undoLastAmount;
+
+  /// No description provided for @canastaMeldTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Minimale eerste meld'**
+  String get canastaMeldTitle;
+
+  /// No description provided for @quickJoker.
+  ///
+  /// In nl, this message translates to:
+  /// **'Joker'**
+  String get quickJoker;
+
+  /// No description provided for @quickAce.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aas'**
+  String get quickAce;
+
+  /// No description provided for @quickFace.
+  ///
+  /// In nl, this message translates to:
+  /// **'Plaatje'**
+  String get quickFace;
+
+  /// No description provided for @quickNaturalCanasta.
+  ///
+  /// In nl, this message translates to:
+  /// **'Natuurlijke canasta'**
+  String get quickNaturalCanasta;
+
+  /// No description provided for @quickMixedCanasta.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gemengde canasta'**
+  String get quickMixedCanasta;
+
+  /// No description provided for @quickGoOut.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitgaan'**
+  String get quickGoOut;
+
+  /// No description provided for @quickGoOutConcealed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dicht uitgaan'**
+  String get quickGoOutConcealed;
+
+  /// No description provided for @quickRedThree.
+  ///
+  /// In nl, this message translates to:
+  /// **'Rode drie'**
+  String get quickRedThree;
+
+  /// No description provided for @quickAllRedThrees.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alle rode drieën'**
+  String get quickAllRedThrees;
+
+  /// No description provided for @settingNaturalCanasta.
+  ///
+  /// In nl, this message translates to:
+  /// **'Natuurlijke canasta'**
+  String get settingNaturalCanasta;
+
+  /// No description provided for @settingMixedCanasta.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gemengde canasta'**
+  String get settingMixedCanasta;
+
+  /// No description provided for @settingGoOut.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitgaan'**
+  String get settingGoOut;
+
+  /// No description provided for @settingGoOutConcealed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dicht uitgaan'**
+  String get settingGoOutConcealed;
+
+  /// No description provided for @settingRedThree.
+  ///
+  /// In nl, this message translates to:
+  /// **'Rode drie'**
+  String get settingRedThree;
+
+  /// No description provided for @settingAllRedThrees.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alle vier rode drieën'**
+  String get settingAllRedThrees;
+
+  /// No description provided for @settingQuickJoker.
+  ///
+  /// In nl, this message translates to:
+  /// **'Snelknop: joker'**
+  String get settingQuickJoker;
+
+  /// No description provided for @settingQuickAce.
+  ///
+  /// In nl, this message translates to:
+  /// **'Snelknop: aas'**
+  String get settingQuickAce;
+
+  /// No description provided for @settingQuickFace.
+  ///
+  /// In nl, this message translates to:
+  /// **'Snelknop: plaatje'**
+  String get settingQuickFace;
 }
 
 class _AppLocalizationsDelegate

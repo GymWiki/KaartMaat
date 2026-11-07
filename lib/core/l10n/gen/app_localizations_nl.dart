@@ -656,4 +656,76 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settingPlayOn => 'Doorspelen tot één speler over is';
+
+  @override
+  String get gameJokeren => 'Jokeren';
+
+  @override
+  String get gameCanasta => 'Canasta';
+
+  @override
+  String get gameJokerenDesc => 'Bedragen optellen per ronde';
+
+  @override
+  String get gameCanastaDesc => 'Teams, canasta\'s en doelscore';
+
+  @override
+  String get undoLastAmount => 'Laatste bedrag ongedaan maken';
+
+  @override
+  String get canastaMeldTitle => 'Minimale eerste meld';
+
+  @override
+  String get quickJoker => 'Joker';
+
+  @override
+  String get quickAce => 'Aas';
+
+  @override
+  String get quickFace => 'Plaatje';
+
+  @override
+  String get quickNaturalCanasta => 'Natuurlijke canasta';
+
+  @override
+  String get quickMixedCanasta => 'Gemengde canasta';
+
+  @override
+  String get quickGoOut => 'Uitgaan';
+
+  @override
+  String get quickGoOutConcealed => 'Dicht uitgaan';
+
+  @override
+  String get quickRedThree => 'Rode drie';
+
+  @override
+  String get quickAllRedThrees => 'Alle rode drieën';
+
+  @override
+  String get settingNaturalCanasta => 'Natuurlijke canasta';
+
+  @override
+  String get settingMixedCanasta => 'Gemengde canasta';
+
+  @override
+  String get settingGoOut => 'Uitgaan';
+
+  @override
+  String get settingGoOutConcealed => 'Dicht uitgaan';
+
+  @override
+  String get settingRedThree => 'Rode drie';
+
+  @override
+  String get settingAllRedThrees => 'Alle vier rode drieën';
+
+  @override
+  String get settingQuickJoker => 'Snelknop: joker';
+
+  @override
+  String get settingQuickAce => 'Snelknop: aas';
+
+  @override
+  String get settingQuickFace => 'Snelknop: plaatje';
 }
