@@ -19,6 +19,7 @@ import '../rules/game_rules.dart';
 import 'game_screen_scaffold.dart';
 import 'panel_context.dart';
 import 'progress_chart.dart';
+import 'round_counter_indicator.dart';
 import 'round_table.dart';
 import 'standings_view.dart';
 
@@ -38,12 +39,10 @@ class _GameScreenState extends ConsumerState<GameScreen>
   );
   final _panelInset = ValueNotifier<double>(0);
 
-  // Undo lives in the round bar (no snackbar that lingers on other screens).
-  static const _undoWindow = Duration(seconds: 6);
+  // Undo of the last save/removal, and the "round added" signal that drives
+  // the round label animation (a notifier: only the label rebuilds).
   Future<void> Function()? _undoAction;
-  Timer? _undoTimer;
-  int _savedTick = 0;
-  String? _savedMessage;
+  final _roundAdded = ValueNotifier<RoundSignal>((tick: 0, message: ''));
 
   Map<String, Object?>? _draft;
   bool _draftLoaded = false;
@@ -76,7 +75,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
     WidgetsBinding.instance.removeObserver(this);
     unawaited(_saver.flush());
     _saver.dispose();
-    _undoTimer?.cancel();
+    _roundAdded.dispose();
     _panelInset.dispose();
     _keepAwake(false);
     super.dispose();
@@ -148,6 +147,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
   void _startEditing(int number) {
     haptic(ref);
+    _undoAction = null;
     unawaited(_saver.discard());
     setState(() {
       _editingRound = number;
@@ -166,46 +166,41 @@ class _GameScreenState extends ConsumerState<GameScreen>
     });
   }
 
-  /// Offers "Ongedaan maken" in the round bar for a few seconds. [flash]
-  /// also plays the green check animation (a round was saved).
-  void _showUndo(
-    String message,
-    Future<void> Function() onUndo, {
-    bool flash = true,
-  }) {
+  /// Remembers how to undo the last change (the undo button is always there).
+  /// [addedMessage] also plays the "+1" confirmation (a new round was confirmed).
+  void _rememberUndo(Future<void> Function() onUndo, {String? addedMessage}) {
     if (!mounted) return;
-    _undoTimer?.cancel();
-    setState(() {
-      _undoAction = onUndo;
-      _savedMessage = message;
-      if (flash) _savedTick++;
-    });
-    _undoTimer = Timer(_undoWindow, () {
-      if (mounted) setState(() => _undoAction = null);
-    });
+    setState(() => _undoAction = onUndo);
+    if (addedMessage != null) {
+      haptic(ref);
+      _roundAdded.value = (
+        tick: _roundAdded.value.tick + 1,
+        message: addedMessage,
+      );
+    }
   }
 
-  void _runUndo() {
+  /// Undo button: brings back what the last save or removal changed. Without
+  /// a remembered action it removes the last round (and can be undone again).
+  Future<void> _runUndo(GameState state) async {
     final action = _undoAction;
-    _undoTimer?.cancel();
-    setState(() => _undoAction = null);
     haptic(ref);
-    if (action != null) unawaited(action());
+    if (action != null) {
+      setState(() => _undoAction = null);
+      await action();
+    } else {
+      await _undoLastRound(state);
+    }
   }
 
-  /// Removes the last round without a dialog; the snackbar can bring it back.
+  /// Removes the last round without a dialog; the undo button brings it back.
   Future<void> _undoLastRound(GameState state) async {
     if (state.rounds.isEmpty) return;
     final last = state.rounds.last;
-    final l10n = context.l10n;
     haptic(ref);
     await _repo.deleteLastRound(state.id);
     if (!mounted) return;
-    _showUndo(
-      l10n.roundDeleted(last.number),
-      () => _repo.addRound(state.id, last.entries),
-      flash: false,
-    );
+    _rememberUndo(() => _repo.addRound(state.id, last.entries));
   }
 
   Future<void> _savePanelRound(
@@ -215,6 +210,9 @@ class _GameScreenState extends ConsumerState<GameScreen>
     Map<String, Object?>? undoDraft,
   }) async {
     final l10n = context.l10n;
+    // Confirming the round being played (also after its bids were stored as
+    // an open round) is new; correcting an earlier round is not.
+    final isNew = _editingRound == null;
     final current = ref.read(gameStateProvider(widget.gameId)).value;
     final previous = current?.rounds
         .where((r) => r.number == number)
@@ -234,7 +232,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
       _generation++;
     });
     if (!mounted) return;
-    _showUndo(l10n.roundSaved(number), () async {
+    _rememberUndo(addedMessage: isNew ? l10n.roundSaved(number) : null, () async {
       if (previous == null) {
         await _repo.deleteLastRound(widget.gameId);
       } else {
@@ -326,6 +324,10 @@ class _GameScreenState extends ConsumerState<GameScreen>
                       _draft = null;
                       _generation++;
                     });
+                    _rememberUndo(
+                      () => _repo.deleteLastRound(widget.gameId),
+                      addedMessage: l10n.roundSaved(number),
+                    );
                   }
                 : null,
           ),
@@ -366,11 +368,12 @@ class _GameScreenState extends ConsumerState<GameScreen>
         panelInset: _panelInset,
         top: Column(
           children: [
-            _StatusBar(
-              tick: _savedTick,
-              savedMessage: _savedMessage,
-              onUndo: _undoAction == null ? null : _runUndo,
-              text:
+            RoundCounterIndicator(
+              roundAdded: _roundAdded,
+              onUndo: state.rounds.isEmpty && _undoAction == null
+                  ? null
+                  : () => _runUndo(state),
+              label:
                   def.statusLine?.call(l10n, view, number, editing) ??
                   (editing ? l10n.editRound(number) : l10n.roundTitle(number)),
             ),
@@ -462,114 +465,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
               onTapRound: (n) => context.push('/game/${state.id}/round/$n'),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Round, dealer and cards for the round that is being entered. When a round
-/// was just saved the text flashes green while a check flies up and fades, and
-/// an "Ongedaan maken" button shows for a few seconds.
-class _StatusBar extends StatefulWidget {
-  const _StatusBar({
-    required this.text,
-    required this.tick,
-    this.savedMessage,
-    this.onUndo,
-  });
-  final String text;
-  final int tick;
-  final String? savedMessage;
-  final VoidCallback? onUndo;
-
-  @override
-  State<_StatusBar> createState() => _StatusBarState();
-}
-
-class _StatusBarState extends State<_StatusBar>
-    with SingleTickerProviderStateMixin {
-  late final _anim = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1100),
-    value: 1,
-  );
-
-  @override
-  void didUpdateWidget(_StatusBar old) {
-    super.didUpdateWidget(old);
-    if (widget.tick != old.tick) _anim.forward(from: 0);
-  }
-
-  @override
-  void dispose() {
-    _anim.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final base = scheme.onSurface;
-    final green = Colors.green.shade400;
-    final style = Theme.of(
-      context,
-    ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800);
-    return Semantics(
-      liveRegion: true,
-      label: widget.tick > 0 ? widget.savedMessage : null,
-      child: Container(
-        width: double.infinity,
-        color: scheme.surfaceContainerLow,
-        padding: const EdgeInsets.fromLTRB(16, 6, 8, 6),
-        constraints: const BoxConstraints(minHeight: 52),
-        child: AnimatedBuilder(
-          animation: _anim,
-          builder: (context, _) {
-            final t = _anim.value;
-            // green first, then back to normal
-            final color = Color.lerp(green, base, Curves.easeIn.transform(t));
-            return Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.centerLeft,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        widget.text,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: style?.copyWith(color: color),
-                      ),
-                    ),
-                    if (widget.onUndo != null)
-                      TextButton.icon(
-                        onPressed: widget.onUndo,
-                        icon: const Icon(Icons.undo, size: 18),
-                        label: Text(context.l10n.undoAction),
-                      ),
-                  ],
-                ),
-                if (t < 1)
-                  Positioned(
-                    right: widget.onUndo != null ? 150 : 16,
-                    child: IgnorePointer(
-                      child: Opacity(
-                        opacity: (1 - t).clamp(0.0, 1.0),
-                        child: Transform.translate(
-                          offset: Offset(0, -40 * Curves.easeOut.transform(t)),
-                          child: Transform.scale(
-                            scale: 1 + 0.5 * t,
-                            child: Icon(Icons.check_circle, color: green, size: 28),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          },
         ),
       ),
     );

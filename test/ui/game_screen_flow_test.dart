@@ -175,16 +175,19 @@ void main() {
     final entries = repo.state.rounds.single.entries;
     expect([for (final p in ['1', '2', '3']) entries[p]!['tricks']], [0, 1, 0]);
     expect(find.byType(SnackBar), findsNothing); // undo lives in the round bar
+    expect(find.text('+1'), findsOneWidget); // new round: confirmation plays
     // the next round is ready: dealer Bas, and the draft is gone
     expect(find.textContaining('Ronde 2 van'), findsOneWidget);
     expect(find.textContaining('Deler: Bas'), findsOneWidget);
     expect(drafts.data, isEmpty);
 
     // undo brings the round back to the tricks step, with the tricks as typed
-    await tester.pump(const Duration(milliseconds: 600)); // snackbar slid in
-    await tester.tap(find.text('Ongedaan maken'));
+    await tester.pump(const Duration(seconds: 2)); // animation done
+    expect(find.text('+1'), findsNothing);
+    await tester.tap(find.byTooltip('Ongedaan maken'));
     await tester.pump();
     await tester.pump();
+    expect(find.text('+1'), findsNothing); // undo: no particle
     expect(repo.state.rounds.single.entries.values.map((e) => e['tricks']),
         everyElement(isNull));
     expect(find.text('Ronde afronden'), findsOneWidget);
@@ -222,6 +225,7 @@ void main() {
     await tester.pump();
     expect(find.textContaining('Deler: Bas'), findsOneWidget); // back on the new round
     expect(repo.state.rounds.single.entries['2'], {'bid': 1, 'tricks': 1}); // untouched
+    expect(find.text('+1'), findsNothing); // editing/closing: no particle
 
     await close(tester);
   });
