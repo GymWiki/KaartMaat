@@ -174,10 +174,7 @@ void main() {
 
     final entries = repo.state.rounds.single.entries;
     expect([for (final p in ['1', '2', '3']) entries[p]!['tricks']], [0, 1, 0]);
-    expect(find.text('Ronde 1 opgeslagen'), findsOneWidget);
-    // the snackbar floats above the new panel instead of covering it
-    expect(tester.getBottomLeft(find.text('Ronde 1 opgeslagen')).dy,
-        lessThanOrEqualTo(tester.getTopLeft(find.byType(AnimatedSize)).dy));
+    expect(find.byType(SnackBar), findsNothing); // undo lives in the round bar
     // the next round is ready: dealer Bas, and the draft is gone
     expect(find.textContaining('Ronde 2 van'), findsOneWidget);
     expect(find.textContaining('Deler: Bas'), findsOneWidget);

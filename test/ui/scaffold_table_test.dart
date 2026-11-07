@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kaartmaat/core/ui/undo_snackbar.dart';
 import 'package:kaartmaat/features/games/data/game_state.dart';
 import 'package:kaartmaat/features/games/ui/game_screen_scaffold.dart';
 import 'package:kaartmaat/features/games/ui/round_table.dart';
@@ -69,43 +68,6 @@ void main() {
       final inset = GameScreenScaffold.panelInsetOf(tester.element(find.byKey(_topKey)));
       expect(inset, greaterThanOrEqualTo(240));
       expect(inset, lessThan(240 + 60)); // plus padding and safe area
-    });
-  });
-
-  group('UndoSnackbar', () {
-    testWidgets('floats above the panel and undoes', (tester) async {
-      usePhoneScreen(tester);
-      var undone = 0;
-      await pumpApp(
-        tester,
-        GameScreenScaffold(
-          top: const SizedBox.expand(),
-          panel: Builder(
-            builder: (context) => FilledButton(
-              onPressed: () => UndoSnackbar.show(
-                context,
-                message: 'Ronde 3 opgeslagen',
-                onUndo: () => undone++,
-                bottomInset: GameScreenScaffold.panelInsetOf(context),
-              ),
-              child: const Text('Opslaan'),
-            ),
-          ),
-        ),
-      );
-      await tester.pump();
-
-      await tester.tap(find.text('Opslaan'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
-
-      expect(find.text('Ronde 3 opgeslagen'), findsOneWidget);
-      final snackBottom = tester.getBottomLeft(find.text('Ronde 3 opgeslagen')).dy;
-      final panelTop = tester.getTopLeft(find.byType(AnimatedSize)).dy;
-      expect(snackBottom, lessThanOrEqualTo(panelTop));
-
-      await tester.tap(find.text('Ongedaan maken'));
-      expect(undone, 1);
     });
   });
 
