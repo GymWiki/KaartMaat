@@ -134,6 +134,21 @@ class KlaverjasRules extends GameRules {
   String dealer(GameConfig config, int roundNumber) =>
       config.players[dealerSeat(config, roundNumber)];
 
+  /// The team of the player left of the dealer. That player may choose trump
+  /// first, so it is the most likely team to have played; the input panel
+  /// preselects it (one tap to change).
+  String forehandTeam(GameConfig config, int roundNumber) {
+    final seat = (dealerSeat(config, roundNumber) + 1) % config.players.length;
+    return seat.isEven ? wij : zij;
+  }
+
+  /// Whether [text] (card points typed so far) can still become a valid value.
+  static bool isValidCardsText(String text) {
+    if (text.isEmpty) return true;
+    final v = int.tryParse(text);
+    return v != null && v >= 0 && v <= totalCardPoints;
+  }
+
   // ---- Scoring ---------------------------------------------------------
 
   int _int(Entry? e, String key) => e?[key] is int ? e![key] as int : 0;

@@ -835,4 +835,45 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get toTricks => 'Naar slagen';
+
+  @override
+  String teamPlayed(String team) {
+    return '$team speelden';
+  }
+
+  @override
+  String get pagePoints => 'Punten';
+
+  @override
+  String get pageRoem => 'Roem';
+
+  @override
+  String cardPointsPair(
+    String playTeam,
+    int playPoints,
+    String otherTeam,
+    int otherPoints,
+  ) {
+    return '$playTeam: $playPoints · $otherTeam: $otherPoints';
+  }
+
+  @override
+  String get natShort => 'NAT';
+
+  @override
+  String get pitShort => 'PIT';
+
+  @override
+  String get padClear => 'Alles wissen';
+
+  @override
+  String roemInTable(int points) {
+    return 'roem $points';
+  }
+
+  @override
+  String get natInTable => 'nat';
+
+  @override
+  String get pitInTable => 'pit';
 }

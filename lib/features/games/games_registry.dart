@@ -20,6 +20,7 @@ import 'ui/panel_context.dart';
 import 'ui/hearts_entry.dart';
 import 'ui/klaverjas_entry.dart';
 import 'ui/klaverjas_header.dart';
+import 'ui/klaverjas_panel.dart';
 import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
 import 'ui/toepen_entry.dart';
@@ -119,6 +120,18 @@ final Map<String, GameDefinition> gameDefinitions = {
         KlaverjasEntry(view: view, existing: existing, onSubmit: onSubmit),
     headerBuilder: (view) => KlaverjasHeader(view: view),
     newGameHint: (l) => l.teamsHint,
+    panelBuilder: (ctx) => KlaverjasPanel(ctx: ctx),
+    cellDetail: (l, view, i, team) {
+      const rules = KlaverjasRules();
+      final round = view.state.rounds[i];
+      final entry = round.entries[team];
+      if (entry == null) return null;
+      final outcome = rules.outcome(view.config, round);
+      if (outcome.playing == team && outcome.nat) return l.natInTable;
+      if (outcome.playing == team && outcome.pit) return l.pitInTable;
+      final roem = rules.roemOf(view.config, entry);
+      return roem > 0 ? l.roemInTable(roem) : null;
+    },
   ),
   RikkenRules.typeId: GameDefinition(
     rules: const RikkenRules(),

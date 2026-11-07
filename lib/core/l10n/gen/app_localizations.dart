@@ -1545,6 +1545,71 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Naar slagen'**
   String get toTricks;
+
+  /// No description provided for @teamPlayed.
+  ///
+  /// In nl, this message translates to:
+  /// **'{team} speelden'**
+  String teamPlayed(String team);
+
+  /// No description provided for @pagePoints.
+  ///
+  /// In nl, this message translates to:
+  /// **'Punten'**
+  String get pagePoints;
+
+  /// No description provided for @pageRoem.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem'**
+  String get pageRoem;
+
+  /// No description provided for @cardPointsPair.
+  ///
+  /// In nl, this message translates to:
+  /// **'{playTeam}: {playPoints} · {otherTeam}: {otherPoints}'**
+  String cardPointsPair(
+    String playTeam,
+    int playPoints,
+    String otherTeam,
+    int otherPoints,
+  );
+
+  /// No description provided for @natShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'NAT'**
+  String get natShort;
+
+  /// No description provided for @pitShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'PIT'**
+  String get pitShort;
+
+  /// No description provided for @padClear.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alles wissen'**
+  String get padClear;
+
+  /// No description provided for @roemInTable.
+  ///
+  /// In nl, this message translates to:
+  /// **'roem {points}'**
+  String roemInTable(int points);
+
+  /// No description provided for @natInTable.
+  ///
+  /// In nl, this message translates to:
+  /// **'nat'**
+  String get natInTable;
+
+  /// No description provided for @pitInTable.
+  ///
+  /// In nl, this message translates to:
+  /// **'pit'**
+  String get pitInTable;
 }
 
 class _AppLocalizationsDelegate

@@ -546,5 +546,45 @@
       }
     }
   },
-  "toTricks": "Naar slagen"
+  "toTricks": "Naar slagen",
+  "teamPlayed": "{team} speelden",
+  "@teamPlayed": {
+    "placeholders": {
+      "team": {
+        "type": "String"
+      }
+    }
+  },
+  "pagePoints": "Punten",
+  "pageRoem": "Roem",
+  "cardPointsPair": "{playTeam}: {playPoints} · {otherTeam}: {otherPoints}",
+  "@cardPointsPair": {
+    "placeholders": {
+      "playTeam": {
+        "type": "String"
+      },
+      "playPoints": {
+        "type": "int"
+      },
+      "otherTeam": {
+        "type": "String"
+      },
+      "otherPoints": {
+        "type": "int"
+      }
+    }
+  },
+  "natShort": "NAT",
+  "pitShort": "PIT",
+  "padClear": "Alles wissen",
+  "roemInTable": "roem {points}",
+  "@roemInTable": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "natInTable": "nat",
+  "pitInTable": "pit"
 }
