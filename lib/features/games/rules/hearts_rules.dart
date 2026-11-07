@@ -82,6 +82,80 @@ class HeartsRules extends GameRules {
     };
   }
 
+  // ---- Helpers for the input panel -------------------------------------
+
+  /// Penalty points that come from hearts (the total minus the queen).
+  int heartsTotal(GameConfig config) =>
+      config.intSetting(totalPointsKey) - config.intSetting(queenPointsKey);
+
+  /// The player whose points are filled in automatically: the last seat.
+  String lastParticipant(GameConfig config) => config.participants.last;
+
+  /// Points for [hearts] hearts, with or without the queen of spades.
+  int pointsFor(GameConfig config, {required int hearts, required bool hasQueen}) =>
+      hearts + (hasQueen ? config.intSetting(queenPointsKey) : 0);
+
+  /// Hearts [player] can still take, given what the others (not counting
+  /// the last seat, who gets the rest) already have.
+  int heartsLeftFor(GameConfig config, String player, Map<String, int?> hearts) {
+    final last = lastParticipant(config);
+    var others = 0;
+    for (final p in config.participants) {
+      if (p == player || p == last) continue;
+      others += hearts[p] ?? 0;
+    }
+    return heartsTotal(config) - others;
+  }
+
+  /// What the last seat gets: the hearts nobody else took, and the queen when
+  /// no other player holds it. Null until everybody else has a value, or when
+  /// the others already took more than there is.
+  ({int hearts, bool hasQueen})? autoLast(
+      GameConfig config, Map<String, int?> hearts, String? queenHolder) {
+    final last = lastParticipant(config);
+    var others = 0;
+    for (final p in config.participants) {
+      if (p == last) continue;
+      final h = hearts[p];
+      if (h == null) return null;
+      others += h;
+    }
+    final left = heartsTotal(config) - others;
+    if (left < 0) return null;
+    final hasQueen = queenHolder == null || queenHolder == last;
+    return (hearts: left, hasQueen: hasQueen);
+  }
+
+  /// The round entries for the panel's state, or null while incomplete.
+  /// [queenHolder] null means the last seat holds the queen.
+  Entries? buildEntries(
+    GameConfig config, {
+    required Map<String, int?> hearts,
+    required String? queenHolder,
+    required String? moon,
+  }) {
+    if (moon != null) {
+      final points = moonPoints(config, moon);
+      return {
+        for (final p in config.participants)
+          p: {'points': points[p], 'moon': p == moon, 'queen': false},
+      };
+    }
+    final last = lastParticipant(config);
+    final rest = autoLast(config, hearts, queenHolder);
+    if (rest == null) return null;
+    return {
+      for (final p in config.participants)
+        p: {
+          'points': p == last
+              ? pointsFor(config, hearts: rest.hearts, hasQueen: rest.hasQueen)
+              : pointsFor(config, hearts: hearts[p]!, hasQueen: queenHolder == p),
+          'moon': false,
+          'queen': p == last ? rest.hasQueen : queenHolder == p,
+        },
+    };
+  }
+
   static String? shooterOf(GameConfig config, RoundData round) {
     for (final p in config.participants) {
       if (round.entries[p]?['moon'] == true) return p;

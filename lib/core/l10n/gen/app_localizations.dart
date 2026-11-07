@@ -1676,6 +1676,24 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Open misère + praat'**
   String get rikShortOpenMisereTalk;
+
+  /// No description provided for @heartsQueenShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'SV'**
+  String get heartsQueenShort;
+
+  /// No description provided for @heartsTooMany.
+  ///
+  /// In nl, this message translates to:
+  /// **'Er zijn niet zoveel harten'**
+  String get heartsTooMany;
+
+  /// No description provided for @heartsQueenMissing.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wie heeft de Schoppen Vrouw?'**
+  String get heartsQueenMissing;
 }
 
 class _AppLocalizationsDelegate

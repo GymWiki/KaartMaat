@@ -18,6 +18,7 @@ import 'ui/boerenbridge_header.dart';
 import 'ui/boerenbridge_panel.dart';
 import 'ui/panel_context.dart';
 import 'ui/hearts_entry.dart';
+import 'ui/hearts_panel.dart';
 import 'ui/klaverjas_entry.dart';
 import 'ui/klaverjas_header.dart';
 import 'ui/klaverjas_panel.dart';
@@ -159,6 +160,13 @@ final Map<String, GameDefinition> gameDefinitions = {
     description: (l) => l.gameHartenjagenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
         HeartsEntry(view: view, existing: existing, onSubmit: onSubmit),
+    panelBuilder: (ctx) => HeartsPanel(ctx: ctx),
+    cellDetail: (l, view, i, p) {
+      final entry = view.state.rounds[i].entries[p];
+      if (entry?['moon'] == true) return l.heartsMoon;
+      if (entry?['queen'] == true) return l.heartsQueenShort;
+      return null;
+    },
   ),
   ToepenRules.typeId: GameDefinition(
     rules: const ToepenRules(),

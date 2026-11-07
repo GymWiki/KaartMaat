@@ -611,5 +611,8 @@
   "rikPartnerShort": "maat",
   "rikShortRik": "Rik",
   "rikShortOpenPiekTalk": "Open piek + praat",
-  "rikShortOpenMisereTalk": "Open misère + praat"
+  "rikShortOpenMisereTalk": "Open misère + praat",
+  "heartsQueenShort": "SV",
+  "heartsTooMany": "Er zijn niet zoveel harten",
+  "heartsQueenMissing": "Wie heeft de Schoppen Vrouw?"
 }

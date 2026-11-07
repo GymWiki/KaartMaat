@@ -913,4 +913,13 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get rikShortOpenMisereTalk => 'Open misère + praat';
+
+  @override
+  String get heartsQueenShort => 'SV';
+
+  @override
+  String get heartsTooMany => 'Er zijn niet zoveel harten';
+
+  @override
+  String get heartsQueenMissing => 'Wie heeft de Schoppen Vrouw?';
 }
