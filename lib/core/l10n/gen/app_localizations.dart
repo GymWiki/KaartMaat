@@ -1610,6 +1610,72 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'pit'**
   String get pitInTable;
+
+  /// No description provided for @rikOvertricks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Overslagen'**
+  String get rikOvertricks;
+
+  /// No description provided for @rikUndertricks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Onderslagen'**
+  String get rikUndertricks;
+
+  /// No description provided for @rikFewer.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eén minder'**
+  String get rikFewer;
+
+  /// No description provided for @rikMore.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eén meer'**
+  String get rikMore;
+
+  /// No description provided for @rikExactNote.
+  ///
+  /// In nl, this message translates to:
+  /// **'Precies {target} slagen nodig'**
+  String rikExactNote(int target);
+
+  /// No description provided for @rikPartnerCrumb.
+  ///
+  /// In nl, this message translates to:
+  /// **'maat {name}'**
+  String rikPartnerCrumb(String name);
+
+  /// No description provided for @rikResultCrumb.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitslag'**
+  String get rikResultCrumb;
+
+  /// No description provided for @rikPartnerShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'maat'**
+  String get rikPartnerShort;
+
+  /// No description provided for @rikShortRik.
+  ///
+  /// In nl, this message translates to:
+  /// **'Rik'**
+  String get rikShortRik;
+
+  /// No description provided for @rikShortOpenPiekTalk.
+  ///
+  /// In nl, this message translates to:
+  /// **'Open piek + praat'**
+  String get rikShortOpenPiekTalk;
+
+  /// No description provided for @rikShortOpenMisereTalk.
+  ///
+  /// In nl, this message translates to:
+  /// **'Open misère + praat'**
+  String get rikShortOpenMisereTalk;
 }
 
 class _AppLocalizationsDelegate

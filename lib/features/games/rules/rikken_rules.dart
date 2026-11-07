@@ -113,6 +113,47 @@ class RikkenRules extends GameRules {
           ),
       ];
 
+  // ---- Helpers for the input panel -------------------------------------
+
+  /// Tricks won by the bidding side for "made / not made" plus the number of
+  /// over- or undertricks [diff]. For piek and misère the number of tricks
+  /// does not change the points, so only the outcome matters.
+  static int tricksFor(RikContract contract, {required bool success, required int diff}) {
+    if (contract.type == RikType.exact) {
+      if (success) return contract.target;
+      return contract.target == 0 ? 1 : contract.target + 1;
+    }
+    final tricks = success ? contract.target + diff : contract.target - diff;
+    return tricks.clamp(0, 13);
+  }
+
+  /// Largest over-/undertrick count that is possible. Undertricks start at 1.
+  static int maxDiff(RikContract contract, {required bool success}) =>
+      contract.type == RikType.exact
+          ? 0
+          : (success ? 13 - contract.target : contract.target);
+
+  static int minDiff({required bool success}) => success ? 0 : 1;
+
+  /// Whether [tricks] makes [contract].
+  static bool madeWith(RikContract contract, int tricks) =>
+      contract.type == RikType.atLeast ? tricks >= contract.target : tricks == contract.target;
+
+  /// Over- or undertricks for [tricks] (0 for piek and misère).
+  static int diffFor(RikContract contract, int tricks) =>
+      contract.type == RikType.atLeast ? (tricks - contract.target).abs() : 0;
+
+  /// The contract of the latest finished round, else a plain rik: the panel
+  /// preselects it, since tables tend to repeat a contract.
+  String defaultContract(GameConfig config, List<RoundData> rounds) {
+    for (final round in rounds.reversed) {
+      final bidder = bidderOf(config, round);
+      final id = bidder == null ? null : round.entries[bidder]?['contract'];
+      if (id is String && contractOf(id) != null) return id;
+    }
+    return 'rik';
+  }
+
   static String? _role(RoundData r, String p) => r.entries[p]?['role'] as String?;
 
   static String? bidderOf(GameConfig config, RoundData round) {

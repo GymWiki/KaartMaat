@@ -23,6 +23,8 @@ import 'ui/klaverjas_header.dart';
 import 'ui/klaverjas_panel.dart';
 import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
+import 'ui/rikken_labels.dart';
+import 'ui/rikken_panel.dart';
 import 'ui/toepen_entry.dart';
 import 'ui/toepen_header.dart';
 
@@ -140,6 +142,15 @@ final Map<String, GameDefinition> gameDefinitions = {
     description: (l) => l.gameRikkenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
         RikkenEntry(view: view, existing: existing, onSubmit: onSubmit),
+    panelBuilder: (ctx) => RikkenPanel(ctx: ctx),
+    cellDetail: (l, view, i, p) {
+      final entry = view.state.rounds[i].entries[p];
+      return switch (entry?['role']) {
+        'bidder' => rikContractShort(l, '${entry?['contract']}'),
+        'partner' => l.rikPartnerShort,
+        _ => null,
+      };
+    },
   ),
   HeartsRules.typeId: GameDefinition(
     rules: const HeartsRules(),

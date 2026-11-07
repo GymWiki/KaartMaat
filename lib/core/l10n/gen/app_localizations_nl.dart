@@ -876,4 +876,41 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get pitInTable => 'pit';
+
+  @override
+  String get rikOvertricks => 'Overslagen';
+
+  @override
+  String get rikUndertricks => 'Onderslagen';
+
+  @override
+  String get rikFewer => 'Eén minder';
+
+  @override
+  String get rikMore => 'Eén meer';
+
+  @override
+  String rikExactNote(int target) {
+    return 'Precies $target slagen nodig';
+  }
+
+  @override
+  String rikPartnerCrumb(String name) {
+    return 'maat $name';
+  }
+
+  @override
+  String get rikResultCrumb => 'Uitslag';
+
+  @override
+  String get rikPartnerShort => 'maat';
+
+  @override
+  String get rikShortRik => 'Rik';
+
+  @override
+  String get rikShortOpenPiekTalk => 'Open piek + praat';
+
+  @override
+  String get rikShortOpenMisereTalk => 'Open misère + praat';
 }

@@ -586,5 +586,30 @@
     }
   },
   "natInTable": "nat",
-  "pitInTable": "pit"
+  "pitInTable": "pit",
+  "rikOvertricks": "Overslagen",
+  "rikUndertricks": "Onderslagen",
+  "rikFewer": "Eén minder",
+  "rikMore": "Eén meer",
+  "rikExactNote": "Precies {target} slagen nodig",
+  "@rikExactNote": {
+    "placeholders": {
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "rikPartnerCrumb": "maat {name}",
+  "@rikPartnerCrumb": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "rikResultCrumb": "Uitslag",
+  "rikPartnerShort": "maat",
+  "rikShortRik": "Rik",
+  "rikShortOpenPiekTalk": "Open piek + praat",
+  "rikShortOpenMisereTalk": "Open misère + praat"
 }

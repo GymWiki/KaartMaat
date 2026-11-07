@@ -17,3 +17,11 @@ String rikContractName(AppLocalizations l, String id) => switch (id) {
       'openMisereTalk' => l.rikOpenMisereTalk,
       _ => id,
     };
+
+/// Short names for buttons and table cells.
+String rikContractShort(AppLocalizations l, String id) => switch (id) {
+      'rik' => l.rikShortRik,
+      'openPiekTalk' => l.rikShortOpenPiekTalk,
+      'openMisereTalk' => l.rikShortOpenMisereTalk,
+      _ => rikContractName(l, id),
+    };
