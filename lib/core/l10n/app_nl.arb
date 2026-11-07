@@ -281,5 +281,52 @@
   "settingMaxCards": "Max. aantal kaarten (0 = automatisch)",
   "next": "Volgende",
   "themeOled": "OLED-zwart",
-  "settingStep": "Stap van de plus- en min-knoppen"
+  "settingStep": "Stap van de plus- en min-knoppen",
+  "gameKlaverjassenDesc": "Wij en Zij, roem, nat en pit",
+  "teamsHint": "Spelers 1 en 3 vormen Wij, spelers 2 en 4 vormen Zij",
+  "teamWij": "Wij",
+  "teamZij": "Zij",
+  "variantAmsterdams": "Amsterdams",
+  "variantRotterdams": "Rotterdams",
+  "settingVariant": "Variant",
+  "settingTieIsNat": "Gelijke stand is nat",
+  "settingPitBonus": "Bonus voor pit",
+  "settingRoemThree": "Roem: drie op rij",
+  "settingRoemFour": "Roem: vier op rij",
+  "settingRoemStuk": "Roem: stuk",
+  "settingRoemFourEqual": "Roem: vier gelijke",
+  "settingRoemFourJacks": "Roem: vier boeren",
+  "settingRounds": "Aantal giffen (0 = onbeperkt)",
+  "playingTeam": "Spelende partij",
+  "pitLabel": "Pit (alle slagen gehaald)",
+  "cardPointsLine": "Kaartpunten: {playing} – {other}",
+  "@cardPointsLine": {
+    "placeholders": {
+      "playing": {
+        "type": "int"
+      },
+      "other": {
+        "type": "int"
+      }
+    }
+  },
+  "roemTitle": "Roem",
+  "roemHint": "Tik = erbij, lang indrukken = eraf",
+  "roemTotal": "Roem: {points}",
+  "@roemTotal": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "roemThree": "Drie op rij",
+  "roemFour": "Vier op rij",
+  "roemStuk": "Stuk",
+  "roemFourEqual": "Vier gelijke",
+  "roemFourJacks": "Vier boeren",
+  "natExplain": "Nat: de tegenpartij krijgt alle punten en alle roem",
+  "pitExplain": "Pit: alle slagen gehaald, met bonus",
+  "choosePlaying": "Kies eerst de spelende partij",
+  "cardsEmpty": "Vul de kaartpunten van de spelende partij in"
 }

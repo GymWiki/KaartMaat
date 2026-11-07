@@ -397,4 +397,100 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settingStep => 'Stap van de plus- en min-knoppen';
+
+  @override
+  String get gameKlaverjassenDesc => 'Wij en Zij, roem, nat en pit';
+
+  @override
+  String get teamsHint =>
+      'Spelers 1 en 3 vormen Wij, spelers 2 en 4 vormen Zij';
+
+  @override
+  String get teamWij => 'Wij';
+
+  @override
+  String get teamZij => 'Zij';
+
+  @override
+  String get variantAmsterdams => 'Amsterdams';
+
+  @override
+  String get variantRotterdams => 'Rotterdams';
+
+  @override
+  String get settingVariant => 'Variant';
+
+  @override
+  String get settingTieIsNat => 'Gelijke stand is nat';
+
+  @override
+  String get settingPitBonus => 'Bonus voor pit';
+
+  @override
+  String get settingRoemThree => 'Roem: drie op rij';
+
+  @override
+  String get settingRoemFour => 'Roem: vier op rij';
+
+  @override
+  String get settingRoemStuk => 'Roem: stuk';
+
+  @override
+  String get settingRoemFourEqual => 'Roem: vier gelijke';
+
+  @override
+  String get settingRoemFourJacks => 'Roem: vier boeren';
+
+  @override
+  String get settingRounds => 'Aantal giffen (0 = onbeperkt)';
+
+  @override
+  String get playingTeam => 'Spelende partij';
+
+  @override
+  String get pitLabel => 'Pit (alle slagen gehaald)';
+
+  @override
+  String cardPointsLine(int playing, int other) {
+    return 'Kaartpunten: $playing – $other';
+  }
+
+  @override
+  String get roemTitle => 'Roem';
+
+  @override
+  String get roemHint => 'Tik = erbij, lang indrukken = eraf';
+
+  @override
+  String roemTotal(int points) {
+    return 'Roem: $points';
+  }
+
+  @override
+  String get roemThree => 'Drie op rij';
+
+  @override
+  String get roemFour => 'Vier op rij';
+
+  @override
+  String get roemStuk => 'Stuk';
+
+  @override
+  String get roemFourEqual => 'Vier gelijke';
+
+  @override
+  String get roemFourJacks => 'Vier boeren';
+
+  @override
+  String get natExplain =>
+      'Nat: de tegenpartij krijgt alle punten en alle roem';
+
+  @override
+  String get pitExplain => 'Pit: alle slagen gehaald, met bonus';
+
+  @override
+  String get choosePlaying => 'Kies eerst de spelende partij';
+
+  @override
+  String get cardsEmpty => 'Vul de kaartpunten van de spelende partij in';
 }

@@ -5,6 +5,7 @@ import '../../../core/ui/dialogs.dart';
 import '../../games/rules/boerenbridge_rules.dart';
 import '../../games/rules/custom_rules.dart';
 import '../../games/rules/game_rules.dart';
+import '../../games/rules/klaverjas_rules.dart';
 
 String settingLabel(AppLocalizations l10n, String key) => switch (key) {
       CustomRules.targetScoreKey => l10n.settingTargetScore,
@@ -15,7 +16,22 @@ String settingLabel(AppLocalizations l10n, String key) => switch (key) {
       BoerenbridgeRules.exactPerTrickKey => l10n.settingExactPerTrick,
       BoerenbridgeRules.wrongPerTrickKey => l10n.settingWrongPerTrick,
       BoerenbridgeRules.maxCardsKey => l10n.settingMaxCards,
+      KlaverjasRules.variantKey => l10n.settingVariant,
+      KlaverjasRules.tieIsNatKey => l10n.settingTieIsNat,
+      KlaverjasRules.pitBonusKey => l10n.settingPitBonus,
+      KlaverjasRules.roemThreeKey => l10n.settingRoemThree,
+      KlaverjasRules.roemFourKey => l10n.settingRoemFour,
+      KlaverjasRules.roemStukKey => l10n.settingRoemStuk,
+      KlaverjasRules.roemFourEqualKey => l10n.settingRoemFourEqual,
+      KlaverjasRules.roemFourJacksKey => l10n.settingRoemFourJacks,
+      KlaverjasRules.roundsKey => l10n.settingRounds,
       _ => key,
+    };
+
+String optionLabel(AppLocalizations l10n, String option) => switch (option) {
+      KlaverjasRules.amsterdams => l10n.variantAmsterdams,
+      KlaverjasRules.rotterdams => l10n.variantRotterdams,
+      _ => option,
     };
 
 /// Renders the rule options of one game from its [SettingSpec]s.
@@ -42,6 +58,24 @@ class SettingsEditor extends StatelessWidget {
                 title: Text(settingLabel(l10n, spec.key)),
                 value: values[spec.key] == true,
                 onChanged: (v) => onChanged(spec.key, v),
+              ),
+            SettingKind.choice => ListTile(
+                title: Text(settingLabel(l10n, spec.key)),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final option in spec.options)
+                        ChoiceChip(
+                          label: Text(optionLabel(l10n, option)),
+                          selected: (values[spec.key] ?? spec.defaultValue) == option,
+                          onSelected: (_) => onChanged(spec.key, option),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             SettingKind.integer => ListTile(
                 title: Text(settingLabel(l10n, spec.key)),

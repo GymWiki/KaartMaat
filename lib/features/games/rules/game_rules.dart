@@ -11,12 +11,17 @@ class GameConfig {
     required this.type,
     required this.participants,
     required this.settings,
-  });
+    List<String>? players,
+  }) : players = players ?? participants;
 
   final String type;
 
-  /// Participant ids in seat order.
+  /// Who is scored: player ids, or team ids for team games.
   final List<String> participants;
+
+  /// Player ids in seat order. Equals [participants] unless the game scores
+  /// teams.
+  final List<String> players;
   final Map<String, Object?> settings;
 
   int intSetting(String key) => (settings[key] as num?)?.toInt() ?? 0;
@@ -54,7 +59,7 @@ enum RoundIssue {
   tricksMismatch,
 }
 
-enum SettingKind { boolean, integer }
+enum SettingKind { boolean, integer, choice }
 
 /// Describes one rule option so the UI can render an editor for it.
 class SettingSpec {
@@ -64,6 +69,7 @@ class SettingSpec {
     required this.defaultValue,
     this.min = 0,
     this.max = 9999,
+    this.options = const [],
   });
 
   final String key;
@@ -71,12 +77,23 @@ class SettingSpec {
   final Object defaultValue;
   final int min;
   final int max;
+
+  /// Allowed values for [SettingKind.choice].
+  final List<String> options;
 }
 
 abstract class GameRules {
   const GameRules();
 
   String get type;
+
+  /// Who gets a score, given the player ids in seat order. Team games map the
+  /// players onto team ids here.
+  List<String> participantsFor(List<String> playerKeys) => playerKeys;
+
+  /// The player ids that make up [participant].
+  List<String> membersOf(GameConfig config, String participant) => [participant];
+
   int get minPlayers;
   int get maxPlayers;
 

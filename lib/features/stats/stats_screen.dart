@@ -16,7 +16,7 @@ class _Stat {
 List<_Stat> _compute(List<GameState> games) {
   final stats = <int, _Stat>{};
   for (final g in games) {
-    final winners = GameView(g).winners;
+    final winners = GameView(g).winningPlayers;
     for (final p in g.players) {
       final s = stats.putIfAbsent(p.id, () => _Stat(p.name));
       s.played++;

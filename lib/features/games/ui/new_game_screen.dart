@@ -82,6 +82,12 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(l10n.seatOrderHint, style: Theme.of(context).textTheme.bodySmall),
+                if (def.newGameHint != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(def.newGameHint!(l10n),
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ),
                 if (rules.settingSpecs.isNotEmpty) ...[
                   const SizedBox(height: 24),
                   Text(l10n.rulesSection,

@@ -30,11 +30,15 @@ class GameState {
 
   bool get isFinished => finishedAt != null;
 
-  GameConfig get config => GameConfig(
-        type: type,
-        participants: [for (final p in players) p.key],
-        settings: settings,
-      );
+  GameConfig get config {
+    final keys = [for (final p in players) p.key];
+    return GameConfig(
+      type: type,
+      participants: rulesFor(type).participantsFor(keys),
+      players: keys,
+      settings: settings,
+    );
+  }
 }
 
 /// Derived scores for a [GameState]. Cheap enough to rebuild per frame.
@@ -91,10 +95,18 @@ class GameView {
 
   List<String> get winners => rules.winners(config, state.rounds);
 
-  String nameOf(String participant) => state.players
-      .firstWhere((p) => p.key == participant,
-          orElse: () => PlayerRef(id: 0, name: '?'))
+  String _playerName(String key) => state.players
+      .firstWhere((p) => p.key == key, orElse: () => PlayerRef(id: 0, name: '?'))
       .name;
+
+  /// A player's name, or for a team the names of its members ("Anna & Bas").
+  String nameOf(String participant) =>
+      rules.membersOf(config, participant).map(_playerName).join(' & ');
+
+  /// Winning participants expanded to player ids (for statistics).
+  List<String> get winningPlayers => [
+        for (final w in winners) ...rules.membersOf(config, w),
+      ];
 
   int rankOf(String participant) =>
       standings.firstWhere((s) => s.participant == participant).rank;

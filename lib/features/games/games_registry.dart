@@ -5,8 +5,11 @@ import 'data/game_state.dart';
 import 'rules/boerenbridge_rules.dart';
 import 'rules/custom_rules.dart';
 import 'rules/game_rules.dart';
+import 'rules/klaverjas_rules.dart';
 import 'ui/boerenbridge_entry.dart';
 import 'ui/boerenbridge_header.dart';
+import 'ui/klaverjas_entry.dart';
+import 'ui/klaverjas_header.dart';
 import 'ui/points_entry.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
@@ -27,6 +30,7 @@ class GameDefinition {
     required this.entryBuilder,
     this.headerBuilder,
     this.primaryLabel,
+    this.newGameHint,
   });
 
   final GameRules rules;
@@ -40,6 +44,9 @@ class GameDefinition {
 
   /// Label of the big bottom button. Defaults to "Ronde N invoeren".
   final String Function(AppLocalizations l10n, GameView view)? primaryLabel;
+
+  /// Extra explanation on the new-game screen (e.g. how teams are formed).
+  final String Function(AppLocalizations l10n)? newGameHint;
 
   String get id => rules.type;
   int get minPlayers => rules.minPlayers;
@@ -63,6 +70,16 @@ final Map<String, GameDefinition> gameDefinitions = {
         ? l.enterTricks(view.nextRoundNumber)
         : l.enterBids(view.nextRoundNumber),
   ),
+  KlaverjasRules.typeId: GameDefinition(
+    rules: const KlaverjasRules(),
+    icon: Icons.groups,
+    name: (l) => l.gameKlaverjassen,
+    description: (l) => l.gameKlaverjassenDesc,
+    entryBuilder: (view, number, existing, onSubmit) =>
+        KlaverjasEntry(view: view, existing: existing, onSubmit: onSubmit),
+    headerBuilder: (view) => KlaverjasHeader(view: view),
+    newGameHint: (l) => l.teamsHint,
+  ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
     icon: Icons.edit_note,
@@ -78,7 +95,6 @@ GameDefinition definitionFor(String type) =>
 
 /// Planned games, shown as disabled tiles until their phase is built.
 final List<(IconData, String Function(AppLocalizations))> comingSoonGames = [
-  (Icons.groups, (l) => l.gameKlaverjassen),
   (Icons.casino, (l) => l.gameYatzy),
   (Icons.filter_5, (l) => l.gameToepen),
   (Icons.looks_4, (l) => l.gameRikken),

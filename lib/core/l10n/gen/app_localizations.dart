@@ -741,6 +741,186 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Stap van de plus- en min-knoppen'**
   String get settingStep;
+
+  /// No description provided for @gameKlaverjassenDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wij en Zij, roem, nat en pit'**
+  String get gameKlaverjassenDesc;
+
+  /// No description provided for @teamsHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelers 1 en 3 vormen Wij, spelers 2 en 4 vormen Zij'**
+  String get teamsHint;
+
+  /// No description provided for @teamWij.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wij'**
+  String get teamWij;
+
+  /// No description provided for @teamZij.
+  ///
+  /// In nl, this message translates to:
+  /// **'Zij'**
+  String get teamZij;
+
+  /// No description provided for @variantAmsterdams.
+  ///
+  /// In nl, this message translates to:
+  /// **'Amsterdams'**
+  String get variantAmsterdams;
+
+  /// No description provided for @variantRotterdams.
+  ///
+  /// In nl, this message translates to:
+  /// **'Rotterdams'**
+  String get variantRotterdams;
+
+  /// No description provided for @settingVariant.
+  ///
+  /// In nl, this message translates to:
+  /// **'Variant'**
+  String get settingVariant;
+
+  /// No description provided for @settingTieIsNat.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gelijke stand is nat'**
+  String get settingTieIsNat;
+
+  /// No description provided for @settingPitBonus.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bonus voor pit'**
+  String get settingPitBonus;
+
+  /// No description provided for @settingRoemThree.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem: drie op rij'**
+  String get settingRoemThree;
+
+  /// No description provided for @settingRoemFour.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem: vier op rij'**
+  String get settingRoemFour;
+
+  /// No description provided for @settingRoemStuk.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem: stuk'**
+  String get settingRoemStuk;
+
+  /// No description provided for @settingRoemFourEqual.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem: vier gelijke'**
+  String get settingRoemFourEqual;
+
+  /// No description provided for @settingRoemFourJacks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem: vier boeren'**
+  String get settingRoemFourJacks;
+
+  /// No description provided for @settingRounds.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aantal giffen (0 = onbeperkt)'**
+  String get settingRounds;
+
+  /// No description provided for @playingTeam.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelende partij'**
+  String get playingTeam;
+
+  /// No description provided for @pitLabel.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pit (alle slagen gehaald)'**
+  String get pitLabel;
+
+  /// No description provided for @cardPointsLine.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kaartpunten: {playing} – {other}'**
+  String cardPointsLine(int playing, int other);
+
+  /// No description provided for @roemTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem'**
+  String get roemTitle;
+
+  /// No description provided for @roemHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tik = erbij, lang indrukken = eraf'**
+  String get roemHint;
+
+  /// No description provided for @roemTotal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Roem: {points}'**
+  String roemTotal(int points);
+
+  /// No description provided for @roemThree.
+  ///
+  /// In nl, this message translates to:
+  /// **'Drie op rij'**
+  String get roemThree;
+
+  /// No description provided for @roemFour.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vier op rij'**
+  String get roemFour;
+
+  /// No description provided for @roemStuk.
+  ///
+  /// In nl, this message translates to:
+  /// **'Stuk'**
+  String get roemStuk;
+
+  /// No description provided for @roemFourEqual.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vier gelijke'**
+  String get roemFourEqual;
+
+  /// No description provided for @roemFourJacks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vier boeren'**
+  String get roemFourJacks;
+
+  /// No description provided for @natExplain.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nat: de tegenpartij krijgt alle punten en alle roem'**
+  String get natExplain;
+
+  /// No description provided for @pitExplain.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pit: alle slagen gehaald, met bonus'**
+  String get pitExplain;
+
+  /// No description provided for @choosePlaying.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies eerst de spelende partij'**
+  String get choosePlaying;
+
+  /// No description provided for @cardsEmpty.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vul de kaartpunten van de spelende partij in'**
+  String get cardsEmpty;
 }
 
 class _AppLocalizationsDelegate
