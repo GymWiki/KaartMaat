@@ -7,7 +7,6 @@ import 'features/settings/data/settings_repository.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final container = ProviderContainer();
-  // Load settings first so the saved theme applies from the first frame.
-  await container.read(settingsProvider.future);
+  await preloadSettings(container);
   runApp(UncontrolledProviderScope(container: container, child: const KaartmaatApp()));
 }

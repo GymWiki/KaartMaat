@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -61,6 +62,21 @@ final settingsProvider = StreamProvider<Map<String, String>>(
 
 final prefsProvider =
     Provider((ref) => AppPrefs(ref.watch(settingsProvider).value ?? const {}));
+
+/// Loads the settings before the first frame so the saved theme applies at
+/// once. Riverpod 3 pauses providers nobody listens to, so a plain `read`
+/// would never get the database's first value: listen, then wait. If loading
+/// fails or hangs, the app starts with the defaults.
+Future<void> preloadSettings(ProviderContainer container) async {
+  container.listen(settingsProvider, (_, _) {});
+  try {
+    await container
+        .read(settingsProvider.future)
+        .timeout(const Duration(seconds: 8));
+  } catch (error, stack) {
+    debugPrint('Instellingen laden mislukt: $error\n$stack');
+  }
+}
 
 /// Light tap feedback, if enabled in settings.
 void haptic(WidgetRef ref) {
