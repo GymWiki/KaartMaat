@@ -5,10 +5,12 @@ import 'data/game_state.dart';
 import 'rules/boerenbridge_rules.dart';
 import 'rules/custom_rules.dart';
 import 'rules/game_rules.dart';
+import 'rules/hearts_rules.dart';
 import 'rules/klaverjas_rules.dart';
 import 'rules/rikken_rules.dart';
 import 'ui/boerenbridge_entry.dart';
 import 'ui/boerenbridge_header.dart';
+import 'ui/hearts_entry.dart';
 import 'ui/klaverjas_entry.dart';
 import 'ui/klaverjas_header.dart';
 import 'ui/points_entry.dart';
@@ -90,6 +92,14 @@ final Map<String, GameDefinition> gameDefinitions = {
     entryBuilder: (view, number, existing, onSubmit) =>
         RikkenEntry(view: view, existing: existing, onSubmit: onSubmit),
   ),
+  HeartsRules.typeId: GameDefinition(
+    rules: const HeartsRules(),
+    icon: Icons.favorite,
+    name: (l) => l.gameHartenjagen,
+    description: (l) => l.gameHartenjagenDesc,
+    entryBuilder: (view, number, existing, onSubmit) =>
+        HeartsEntry(view: view, existing: existing, onSubmit: onSubmit),
+  ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
     icon: Icons.edit_note,
@@ -107,5 +117,4 @@ GameDefinition definitionFor(String type) =>
 final List<(IconData, String Function(AppLocalizations))> comingSoonGames = [
   (Icons.casino, (l) => l.gameYatzy),
   (Icons.filter_5, (l) => l.gameToepen),
-  (Icons.favorite, (l) => l.gameHartenjagen),
 ];

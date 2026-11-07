@@ -574,4 +574,41 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settingMaatPays => 'Maat betaalt mee bij verlies';
+
+  @override
+  String get gameHartenjagenDesc => 'Strafpunten, schoppen vrouw en de maan';
+
+  @override
+  String heartsQueen(int points) {
+    return 'Schoppen Vrouw +$points';
+  }
+
+  @override
+  String get heartsMoon => 'Maan';
+
+  @override
+  String get heartsMoonShot => 'De maan is geschoten';
+
+  @override
+  String heartsHandedOut(int points, int total) {
+    return 'Verdeeld: $points van $total';
+  }
+
+  @override
+  String get settingTotalPoints => 'Strafpunten per ronde (totaal)';
+
+  @override
+  String get settingQueenPoints => 'Strafpunten Schoppen Vrouw';
+
+  @override
+  String get settingMoonEnabled => 'Maan schieten toestaan';
+
+  @override
+  String get settingMoonMode => 'Bij de maan';
+
+  @override
+  String get moonOthers => 'Anderen krijgen het totaal erbij';
+
+  @override
+  String get moonShooter => 'Schutter krijgt het totaal eraf';
 }

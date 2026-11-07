@@ -5,6 +5,7 @@ import '../../../core/ui/dialogs.dart';
 import '../../games/rules/boerenbridge_rules.dart';
 import '../../games/rules/custom_rules.dart';
 import '../../games/rules/game_rules.dart';
+import '../../games/rules/hearts_rules.dart';
 import '../../games/rules/klaverjas_rules.dart';
 import '../../games/rules/rikken_rules.dart';
 import '../../games/ui/rikken_labels.dart';
@@ -35,6 +36,10 @@ String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
       KlaverjasRules.roemFourEqualKey => l10n.settingRoemFourEqual,
       KlaverjasRules.roemFourJacksKey => l10n.settingRoemFourJacks,
       KlaverjasRules.roundsKey => l10n.settingRounds,
+      HeartsRules.totalPointsKey => l10n.settingTotalPoints,
+      HeartsRules.queenPointsKey => l10n.settingQueenPoints,
+      HeartsRules.moonEnabledKey => l10n.settingMoonEnabled,
+      HeartsRules.moonModeKey => l10n.settingMoonMode,
       RikkenRules.perTrickKey => l10n.settingPerTrick,
       RikkenRules.slamBonusKey => l10n.settingSlamBonus,
       RikkenRules.maatPaysKey => l10n.settingMaatPays,
@@ -44,6 +49,8 @@ String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
 String optionLabel(AppLocalizations l10n, String option) => switch (option) {
       KlaverjasRules.amsterdams => l10n.variantAmsterdams,
       KlaverjasRules.rotterdams => l10n.variantRotterdams,
+      HeartsRules.moonOthers => l10n.moonOthers,
+      HeartsRules.moonShooter => l10n.moonShooter,
       _ => option,
     };
 

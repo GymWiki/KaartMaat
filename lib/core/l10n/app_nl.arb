@@ -374,5 +374,33 @@
   },
   "settingPerTrick": "Punten per over- of onderslag",
   "settingSlamBonus": "Bonus voor alle 13 slagen (met maat)",
-  "settingMaatPays": "Maat betaalt mee bij verlies"
+  "settingMaatPays": "Maat betaalt mee bij verlies",
+  "gameHartenjagenDesc": "Strafpunten, schoppen vrouw en de maan",
+  "heartsQueen": "Schoppen Vrouw +{points}",
+  "@heartsQueen": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "heartsMoon": "Maan",
+  "heartsMoonShot": "De maan is geschoten",
+  "heartsHandedOut": "Verdeeld: {points} van {total}",
+  "@heartsHandedOut": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "settingTotalPoints": "Strafpunten per ronde (totaal)",
+  "settingQueenPoints": "Strafpunten Schoppen Vrouw",
+  "settingMoonEnabled": "Maan schieten toestaan",
+  "settingMoonMode": "Bij de maan",
+  "moonOthers": "Anderen krijgen het totaal erbij",
+  "moonShooter": "Schutter krijgt het totaal eraf"
 }

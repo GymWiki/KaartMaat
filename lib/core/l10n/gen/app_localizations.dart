@@ -1071,6 +1071,72 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Maat betaalt mee bij verlies'**
   String get settingMaatPays;
+
+  /// No description provided for @gameHartenjagenDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Strafpunten, schoppen vrouw en de maan'**
+  String get gameHartenjagenDesc;
+
+  /// No description provided for @heartsQueen.
+  ///
+  /// In nl, this message translates to:
+  /// **'Schoppen Vrouw +{points}'**
+  String heartsQueen(int points);
+
+  /// No description provided for @heartsMoon.
+  ///
+  /// In nl, this message translates to:
+  /// **'Maan'**
+  String get heartsMoon;
+
+  /// No description provided for @heartsMoonShot.
+  ///
+  /// In nl, this message translates to:
+  /// **'De maan is geschoten'**
+  String get heartsMoonShot;
+
+  /// No description provided for @heartsHandedOut.
+  ///
+  /// In nl, this message translates to:
+  /// **'Verdeeld: {points} van {total}'**
+  String heartsHandedOut(int points, int total);
+
+  /// No description provided for @settingTotalPoints.
+  ///
+  /// In nl, this message translates to:
+  /// **'Strafpunten per ronde (totaal)'**
+  String get settingTotalPoints;
+
+  /// No description provided for @settingQueenPoints.
+  ///
+  /// In nl, this message translates to:
+  /// **'Strafpunten Schoppen Vrouw'**
+  String get settingQueenPoints;
+
+  /// No description provided for @settingMoonEnabled.
+  ///
+  /// In nl, this message translates to:
+  /// **'Maan schieten toestaan'**
+  String get settingMoonEnabled;
+
+  /// No description provided for @settingMoonMode.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bij de maan'**
+  String get settingMoonMode;
+
+  /// No description provided for @moonOthers.
+  ///
+  /// In nl, this message translates to:
+  /// **'Anderen krijgen het totaal erbij'**
+  String get moonOthers;
+
+  /// No description provided for @moonShooter.
+  ///
+  /// In nl, this message translates to:
+  /// **'Schutter krijgt het totaal eraf'**
+  String get moonShooter;
 }
 
 class _AppLocalizationsDelegate
