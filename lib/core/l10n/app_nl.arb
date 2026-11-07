@@ -645,5 +645,11 @@
       }
     }
   },
-  "toepenPovertyBadge": "armoe"
+  "toepenPovertyBadge": "armoe",
+  "calcDone": "Klaar",
+  "calcAdd": "Bedrag optellen",
+  "calcTapeEmpty": "Nog geen bedragen",
+  "saveRoundShort": "Ronde opslaan",
+  "pageDigits": "Cijfers",
+  "pageQuick": "Snel"
 }

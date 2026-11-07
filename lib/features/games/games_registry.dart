@@ -13,6 +13,7 @@ import 'rules/rikken_rules.dart';
 import 'rules/toepen_rules.dart';
 import 'ui/boerenbridge_entry.dart';
 import 'ui/calculator_entry.dart';
+import 'ui/calculator_panel.dart';
 import 'ui/canasta_header.dart';
 import 'ui/boerenbridge_header.dart';
 import 'ui/boerenbridge_panel.dart';
@@ -198,12 +199,10 @@ final Map<String, GameDefinition> gameDefinitions = {
       view: view,
       existing: existing,
       onSubmit: onSubmit,
-      quick: [
-        QuickAmount((l) => l.quickJoker, view.config.intSetting(JokerenRules.quickJokerKey)),
-        QuickAmount((l) => l.quickAce, view.config.intSetting(JokerenRules.quickAceKey)),
-        QuickAmount((l) => l.quickFace, view.config.intSetting(JokerenRules.quickFaceKey)),
-      ],
+      quick: _jokerenQuick(view.config),
     ),
+    panelBuilder: (ctx) =>
+        CalculatorPanel(ctx: ctx, quick: _jokerenQuick(ctx.view.config)),
   ),
   CanastaRules.typeId: GameDefinition(
     rules: const CanastaRules(),
@@ -214,17 +213,12 @@ final Map<String, GameDefinition> gameDefinitions = {
       view: view,
       existing: existing,
       onSubmit: onSubmit,
-      quick: [
-        QuickAmount((l) => l.quickNaturalCanasta, view.config.intSetting(CanastaRules.naturalCanastaKey)),
-        QuickAmount((l) => l.quickMixedCanasta, view.config.intSetting(CanastaRules.mixedCanastaKey)),
-        QuickAmount((l) => l.quickGoOut, view.config.intSetting(CanastaRules.goOutKey)),
-        QuickAmount((l) => l.quickGoOutConcealed, view.config.intSetting(CanastaRules.goOutConcealedKey)),
-        QuickAmount((l) => l.quickRedThree, view.config.intSetting(CanastaRules.redThreeKey)),
-        QuickAmount((l) => l.quickAllRedThrees, view.config.intSetting(CanastaRules.allRedThreesKey)),
-      ],
+      quick: _canastaQuick(view.config),
     ),
     headerBuilder: (view) => CanastaHeader(view: view),
     newGameHint: (l) => l.teamsHint,
+    panelBuilder: (ctx) =>
+        CalculatorPanel(ctx: ctx, quick: _canastaQuick(ctx.view.config)),
   ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
@@ -235,6 +229,22 @@ final Map<String, GameDefinition> gameDefinitions = {
         PointsEntry(view: view, existing: existing, onSubmit: onSubmit),
   ),
 };
+
+/// Quick amounts (values from the game settings) for the calculator input.
+List<QuickAmount> _jokerenQuick(GameConfig c) => [
+      QuickAmount((l) => l.quickJoker, c.intSetting(JokerenRules.quickJokerKey)),
+      QuickAmount((l) => l.quickAce, c.intSetting(JokerenRules.quickAceKey)),
+      QuickAmount((l) => l.quickFace, c.intSetting(JokerenRules.quickFaceKey)),
+    ];
+
+List<QuickAmount> _canastaQuick(GameConfig c) => [
+      QuickAmount((l) => l.quickNaturalCanasta, c.intSetting(CanastaRules.naturalCanastaKey)),
+      QuickAmount((l) => l.quickMixedCanasta, c.intSetting(CanastaRules.mixedCanastaKey)),
+      QuickAmount((l) => l.quickGoOut, c.intSetting(CanastaRules.goOutKey)),
+      QuickAmount((l) => l.quickGoOutConcealed, c.intSetting(CanastaRules.goOutConcealedKey)),
+      QuickAmount((l) => l.quickRedThree, c.intSetting(CanastaRules.redThreeKey)),
+      QuickAmount((l) => l.quickAllRedThrees, c.intSetting(CanastaRules.allRedThreesKey)),
+    ];
 
 GameDefinition definitionFor(String type) =>
     gameDefinitions[type] ?? (throw ArgumentError('Unknown game type: $type'));

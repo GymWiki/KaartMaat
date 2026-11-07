@@ -958,4 +958,22 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get toepenPovertyBadge => 'armoe';
+
+  @override
+  String get calcDone => 'Klaar';
+
+  @override
+  String get calcAdd => 'Bedrag optellen';
+
+  @override
+  String get calcTapeEmpty => 'Nog geen bedragen';
+
+  @override
+  String get saveRoundShort => 'Ronde opslaan';
+
+  @override
+  String get pageDigits => 'Cijfers';
+
+  @override
+  String get pageQuick => 'Snel';
 }

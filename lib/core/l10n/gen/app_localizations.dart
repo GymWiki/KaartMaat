@@ -1754,6 +1754,42 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'armoe'**
   String get toepenPovertyBadge;
+
+  /// No description provided for @calcDone.
+  ///
+  /// In nl, this message translates to:
+  /// **'Klaar'**
+  String get calcDone;
+
+  /// No description provided for @calcAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bedrag optellen'**
+  String get calcAdd;
+
+  /// No description provided for @calcTapeEmpty.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nog geen bedragen'**
+  String get calcTapeEmpty;
+
+  /// No description provided for @saveRoundShort.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ronde opslaan'**
+  String get saveRoundShort;
+
+  /// No description provided for @pageDigits.
+  ///
+  /// In nl, this message translates to:
+  /// **'Cijfers'**
+  String get pageDigits;
+
+  /// No description provided for @pageQuick.
+  ///
+  /// In nl, this message translates to:
+  /// **'Snel'**
+  String get pageQuick;
 }
 
 class _AppLocalizationsDelegate
