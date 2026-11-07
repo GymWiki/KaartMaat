@@ -8,6 +8,7 @@ import '../../games/rules/game_rules.dart';
 import '../../games/rules/hearts_rules.dart';
 import '../../games/rules/klaverjas_rules.dart';
 import '../../games/rules/rikken_rules.dart';
+import '../../games/rules/toepen_rules.dart';
 import '../../games/ui/rikken_labels.dart';
 
 String settingLabel(AppLocalizations l10n, String key) {
@@ -40,6 +41,9 @@ String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
       HeartsRules.queenPointsKey => l10n.settingQueenPoints,
       HeartsRules.moonEnabledKey => l10n.settingMoonEnabled,
       HeartsRules.moonModeKey => l10n.settingMoonMode,
+      ToepenRules.limitKey => l10n.settingLimit,
+      ToepenRules.povertyKey => l10n.settingPoverty,
+      ToepenRules.playOnKey => l10n.settingPlayOn,
       RikkenRules.perTrickKey => l10n.settingPerTrick,
       RikkenRules.slamBonusKey => l10n.settingSlamBonus,
       RikkenRules.maatPaysKey => l10n.settingMaatPays,

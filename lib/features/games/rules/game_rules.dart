@@ -120,11 +120,15 @@ abstract class GameRules {
   /// True when the game's own end condition is met (e.g. target score).
   bool isFinished(GameConfig config, List<RoundData> rounds) => false;
 
+  /// Points per round. Games where a round depends on the scores before it
+  /// (e.g. Toepen's poverty rule) override this instead of [scoreRound].
+  List<Map<String, int>> roundScores(GameConfig config, List<RoundData> rounds) =>
+      [for (final r in rounds) scoreRound(config, r)];
+
   /// Totals, always derived from the rounds.
   Map<String, int> totals(GameConfig config, List<RoundData> rounds) {
     final result = {for (final p in config.participants) p: 0};
-    for (final round in rounds) {
-      final scores = scoreRound(config, round);
+    for (final scores in roundScores(config, rounds)) {
       for (final p in config.participants) {
         result[p] = result[p]! + (scores[p] ?? 0);
       }

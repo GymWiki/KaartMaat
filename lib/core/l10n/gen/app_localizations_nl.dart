@@ -611,4 +611,49 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get moonShooter => 'Schutter krijgt het totaal eraf';
+
+  @override
+  String get gameToepenDesc => 'Kloppen, armoede en uitvallen';
+
+  @override
+  String get toepenWinner => 'Winnaar van de ronde';
+
+  @override
+  String get toepenKnocks => 'Aantal keer geklopt';
+
+  @override
+  String get toepenStay => 'Gaat mee';
+
+  @override
+  String toepenFoldAt(int number) {
+    return 'Past bij klop $number';
+  }
+
+  @override
+  String get toepenPovertyKnock => 'De armoede-klop telt mee als klop 1';
+
+  @override
+  String toepenInPoverty(String names) {
+    return 'In de armoe: $names';
+  }
+
+  @override
+  String toepenOut(String names) {
+    return 'Uit: $names';
+  }
+
+  @override
+  String get toepenOutBadge => 'uit';
+
+  @override
+  String get toepenChooseWinner => 'Kies de winnaar van de ronde';
+
+  @override
+  String get settingLimit => 'Uitvalgrens (strafpunten)';
+
+  @override
+  String get settingPoverty => 'Armoede telt als klop';
+
+  @override
+  String get settingPlayOn => 'Doorspelen tot één speler over is';
 }

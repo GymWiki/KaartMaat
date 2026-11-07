@@ -8,6 +8,7 @@ import 'rules/game_rules.dart';
 import 'rules/hearts_rules.dart';
 import 'rules/klaverjas_rules.dart';
 import 'rules/rikken_rules.dart';
+import 'rules/toepen_rules.dart';
 import 'ui/boerenbridge_entry.dart';
 import 'ui/boerenbridge_header.dart';
 import 'ui/hearts_entry.dart';
@@ -15,6 +16,8 @@ import 'ui/klaverjas_entry.dart';
 import 'ui/klaverjas_header.dart';
 import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
+import 'ui/toepen_entry.dart';
+import 'ui/toepen_header.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
 /// entries; the screen validates them with the game's rules.
@@ -100,6 +103,19 @@ final Map<String, GameDefinition> gameDefinitions = {
     entryBuilder: (view, number, existing, onSubmit) =>
         HeartsEntry(view: view, existing: existing, onSubmit: onSubmit),
   ),
+  ToepenRules.typeId: GameDefinition(
+    rules: const ToepenRules(),
+    icon: Icons.filter_5,
+    name: (l) => l.gameToepen,
+    description: (l) => l.gameToepenDesc,
+    entryBuilder: (view, number, existing, onSubmit) => ToepenEntry(
+      view: view,
+      number: number,
+      existing: existing,
+      onSubmit: onSubmit,
+    ),
+    headerBuilder: (view) => ToepenHeader(view: view),
+  ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
     icon: Icons.edit_note,
@@ -116,5 +132,4 @@ GameDefinition definitionFor(String type) =>
 /// Planned games, shown as disabled tiles until their phase is built.
 final List<(IconData, String Function(AppLocalizations))> comingSoonGames = [
   (Icons.casino, (l) => l.gameYatzy),
-  (Icons.filter_5, (l) => l.gameToepen),
 ];

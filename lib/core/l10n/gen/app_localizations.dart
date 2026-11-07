@@ -1137,6 +1137,84 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Schutter krijgt het totaal eraf'**
   String get moonShooter;
+
+  /// No description provided for @gameToepenDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kloppen, armoede en uitvallen'**
+  String get gameToepenDesc;
+
+  /// No description provided for @toepenWinner.
+  ///
+  /// In nl, this message translates to:
+  /// **'Winnaar van de ronde'**
+  String get toepenWinner;
+
+  /// No description provided for @toepenKnocks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aantal keer geklopt'**
+  String get toepenKnocks;
+
+  /// No description provided for @toepenStay.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gaat mee'**
+  String get toepenStay;
+
+  /// No description provided for @toepenFoldAt.
+  ///
+  /// In nl, this message translates to:
+  /// **'Past bij klop {number}'**
+  String toepenFoldAt(int number);
+
+  /// No description provided for @toepenPovertyKnock.
+  ///
+  /// In nl, this message translates to:
+  /// **'De armoede-klop telt mee als klop 1'**
+  String get toepenPovertyKnock;
+
+  /// No description provided for @toepenInPoverty.
+  ///
+  /// In nl, this message translates to:
+  /// **'In de armoe: {names}'**
+  String toepenInPoverty(String names);
+
+  /// No description provided for @toepenOut.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uit: {names}'**
+  String toepenOut(String names);
+
+  /// No description provided for @toepenOutBadge.
+  ///
+  /// In nl, this message translates to:
+  /// **'uit'**
+  String get toepenOutBadge;
+
+  /// No description provided for @toepenChooseWinner.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies de winnaar van de ronde'**
+  String get toepenChooseWinner;
+
+  /// No description provided for @settingLimit.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitvalgrens (strafpunten)'**
+  String get settingLimit;
+
+  /// No description provided for @settingPoverty.
+  ///
+  /// In nl, this message translates to:
+  /// **'Armoede telt als klop'**
+  String get settingPoverty;
+
+  /// No description provided for @settingPlayOn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Doorspelen tot één speler over is'**
+  String get settingPlayOn;
 }
 
 class _AppLocalizationsDelegate

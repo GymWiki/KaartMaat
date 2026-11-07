@@ -50,7 +50,7 @@ class GameView {
     roundComplete = [
       for (final r in state.rounds) rules.isRoundComplete(config, r),
     ];
-    roundScores = [for (final r in state.rounds) rules.scoreRound(config, r)];
+    roundScores = rules.roundScores(config, state.rounds);
     final running = {for (final p in config.participants) p: 0};
     cumulative = [
       for (final scores in roundScores)
