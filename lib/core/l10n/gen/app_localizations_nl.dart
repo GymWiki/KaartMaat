@@ -728,4 +728,62 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settingQuickFace => 'Snelknop: plaatje';
+
+  @override
+  String get playersTab => 'Spelers';
+
+  @override
+  String get groupsTab => 'Groepen';
+
+  @override
+  String get addGroup => 'Groep toevoegen';
+
+  @override
+  String get editGroup => 'Groep bewerken';
+
+  @override
+  String get groupName => 'Groepsnaam';
+
+  @override
+  String get groupMembers => 'Leden';
+
+  @override
+  String get noGroups =>
+      'Nog geen groepen. Maak een vast kaartgroepje om snel te starten.';
+
+  @override
+  String deleteGroupConfirm(String name) {
+    return '$name verwijderen? Gespeelde spellen blijven bewaard.';
+  }
+
+  @override
+  String get startFromGroup => 'Start vanuit een groep';
+
+  @override
+  String get filterGame => 'Spel';
+
+  @override
+  String get filterGroup => 'Groep';
+
+  @override
+  String get filterYear => 'Jaar';
+
+  @override
+  String get filterAll => 'Alle';
+
+  @override
+  String get historyNoMatch => 'Geen spellen met deze filters';
+
+  @override
+  String get statsBest => 'Beste score';
+
+  @override
+  String kaartkoningTitle(int year) {
+    return 'Kaartkoning $year';
+  }
+
+  @override
+  String kaartkoningWins(int wins, int games) {
+    return '$wins winsten in $games spellen';
+  }
 }

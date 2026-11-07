@@ -17,12 +17,14 @@ class GameRepository {
   Future<int> createGame(
     String type,
     List<int> playerIds,
-    Map<String, Object?> settings,
-  ) =>
+    Map<String, Object?> settings, {
+    int? groupId,
+  }) =>
       db.transaction(() async {
         final id = await db.into(db.games).insert(GamesCompanion.insert(
               type: type,
               settings: Value(jsonEncode(settings)),
+              groupId: Value(groupId),
             ));
         for (var seat = 0; seat < playerIds.length; seat++) {
           await db.into(db.gamePlayers).insert(GamePlayersCompanion.insert(
@@ -55,6 +57,7 @@ class GameRepository {
       type: game.type,
       createdAt: game.createdAt,
       finishedAt: game.finishedAt,
+      groupId: game.groupId,
       settings: Map<String, Object?>.from(jsonDecode(game.settings) as Map),
       players: [
         for (final row in playerRows)

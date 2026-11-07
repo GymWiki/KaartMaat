@@ -10,6 +10,23 @@ class Players extends Table {
   DateTimeColumn get deletedAt => dateTime().nullable()();
 }
 
+@DataClassName('GroupRow')
+class Groups extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().withLength(min: 1, max: 30)();
+}
+
+@DataClassName('GroupMemberRow')
+class GroupMembers extends Table {
+  IntColumn get groupId =>
+      integer().references(Groups, #id, onDelete: KeyAction.cascade)();
+  IntColumn get playerId => integer().references(Players, #id)();
+  IntColumn get position => integer().withDefault(const Constant(0))();
+
+  @override
+  Set<Column> get primaryKey => {groupId, playerId};
+}
+
 @DataClassName('GameRow')
 class Games extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -17,6 +34,10 @@ class Games extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get finishedAt => dateTime().nullable()();
   TextColumn get settings => text().withDefault(const Constant('{}'))();
+
+  /// The saved card group this game was started from, if any.
+  IntColumn get groupId =>
+      integer().nullable().references(Groups, #id, onDelete: KeyAction.setNull)();
 }
 
 @DataClassName('GamePlayerRow')

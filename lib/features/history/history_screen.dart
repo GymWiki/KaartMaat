@@ -7,6 +7,8 @@ import '../../core/l10n/l10n.dart';
 import '../games/data/game_repository.dart';
 import '../games/data/game_state.dart';
 import '../games/games_registry.dart';
+import '../stats/filter_bar.dart';
+import '../stats/stats_calculator.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
@@ -14,13 +16,21 @@ class HistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final games = ref.watch(finishedGamesProvider).value ?? const <GameState>[];
+    final all = ref.watch(finishedGamesProvider).value ?? const <GameState>[];
+    final games = applyFilter(all, ref.watch(historyFilterProvider));
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.historyTitle)),
-      body: games.isEmpty
+      body: all.isEmpty
           ? Center(child: Text(l10n.historyEmpty))
-          : ListView(children: [for (final g in games) _GameTile(state: g)]),
+          : Column(children: [
+              FilterBar(provider: historyFilterProvider, games: all),
+              Expanded(
+                child: games.isEmpty
+                    ? Center(child: Text(l10n.historyNoMatch))
+                    : ListView(children: [for (final g in games) _GameTile(state: g)]),
+              ),
+            ]),
     );
   }
 }

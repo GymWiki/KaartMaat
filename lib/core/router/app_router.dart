@@ -5,6 +5,7 @@ import '../../features/games/ui/game_screen.dart';
 import '../../features/games/ui/home_screen.dart';
 import '../../features/games/ui/new_game_screen.dart';
 import '../../features/games/ui/round_entry_screen.dart';
+import '../../features/groups/ui/group_edit_screen.dart';
 import '../../features/history/finished_game_screen.dart';
 import '../../features/history/history_screen.dart';
 import '../../features/players/ui/players_screen.dart';
@@ -45,6 +46,11 @@ final appRouter = GoRouter(
               gameId: _id(s, 'id'), number: _id(s, 'number')),
         ),
       ],
+    ),
+    GoRoute(path: '/groups/new', builder: (_, _) => const GroupEditScreen()),
+    GoRoute(
+      path: '/groups/:id',
+      builder: (_, s) => GroupEditScreen(groupId: _id(s, 'id')),
     ),
     GoRoute(
       path: '/finished/:id',

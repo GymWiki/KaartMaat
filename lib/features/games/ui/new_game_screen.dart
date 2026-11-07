@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../groups/data/group_repository.dart';
 import '../../players/data/player_repository.dart';
 import '../../players/ui/players_screen.dart';
 import '../../settings/data/settings_repository.dart';
@@ -21,6 +22,7 @@ class NewGameScreen extends ConsumerStatefulWidget {
 class _NewGameScreenState extends ConsumerState<NewGameScreen> {
   /// Tap order is seat order.
   final List<int> _selected = [];
+  int? _groupId;
   late final Map<String, Object?> _options =
       ref.read(prefsProvider).ruleOptions(definitionFor(widget.type).rules);
 
@@ -30,6 +32,7 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
     final def = definitionFor(widget.type);
     final rules = def.rules;
     final players = ref.watch(playersProvider).value ?? const [];
+    final groups = ref.watch(groupsProvider).value ?? const <GroupRef>[];
     final count = _selected.length;
     final valid = count >= rules.minPlayers && count <= rules.maxPlayers;
 
@@ -41,6 +44,30 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                if (groups.isNotEmpty) ...[
+                  Text(l10n.startFromGroup,
+                      style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  Wrap(spacing: 8, runSpacing: 8, children: [
+                    for (final g in groups)
+                      ChoiceChip(
+                        avatar: const Icon(Icons.groups, size: 18),
+                        label: Text(g.name),
+                        selected: _groupId == g.id,
+                        onSelected: (on) => setState(() {
+                          if (on) {
+                            _groupId = g.id;
+                            _selected
+                              ..clear()
+                              ..addAll(g.memberIds.take(rules.maxPlayers));
+                          } else {
+                            _groupId = null;
+                          }
+                        }),
+                      ),
+                  ]),
+                  const SizedBox(height: 16),
+                ],
                 Text(l10n.choosePlayers,
                     style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
@@ -57,6 +84,8 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
                         onSelected: (on) => setState(() {
                           if (on) {
                             if (count < rules.maxPlayers) _selected.add(p.id);
+                            final g = groups.where((g) => g.id == _groupId).firstOrNull;
+                            if (g != null && !g.memberIds.contains(p.id)) _groupId = null;
                           } else {
                             _selected.remove(p.id);
                           }
@@ -111,7 +140,8 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
                       ? () async {
                           final id = await ref
                               .read(gameRepositoryProvider)
-                              .createGame(widget.type, _selected, _options);
+                              .createGame(widget.type, _selected, _options,
+                                  groupId: _groupId);
                           if (context.mounted) context.pushReplacement('/game/$id');
                         }
                       : null,

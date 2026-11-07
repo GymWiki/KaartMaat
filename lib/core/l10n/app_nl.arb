@@ -460,5 +460,46 @@
   "settingAllRedThrees": "Alle vier rode drieën",
   "settingQuickJoker": "Snelknop: joker",
   "settingQuickAce": "Snelknop: aas",
-  "settingQuickFace": "Snelknop: plaatje"
+  "settingQuickFace": "Snelknop: plaatje",
+  "playersTab": "Spelers",
+  "groupsTab": "Groepen",
+  "addGroup": "Groep toevoegen",
+  "editGroup": "Groep bewerken",
+  "groupName": "Groepsnaam",
+  "groupMembers": "Leden",
+  "noGroups": "Nog geen groepen. Maak een vast kaartgroepje om snel te starten.",
+  "deleteGroupConfirm": "{name} verwijderen? Gespeelde spellen blijven bewaard.",
+  "@deleteGroupConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "startFromGroup": "Start vanuit een groep",
+  "filterGame": "Spel",
+  "filterGroup": "Groep",
+  "filterYear": "Jaar",
+  "filterAll": "Alle",
+  "historyNoMatch": "Geen spellen met deze filters",
+  "statsBest": "Beste score",
+  "kaartkoningTitle": "Kaartkoning {year}",
+  "@kaartkoningTitle": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "kaartkoningWins": "{wins} winsten in {games} spellen",
+  "@kaartkoningWins": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "games": {
+        "type": "int"
+      }
+    }
+  }
 }

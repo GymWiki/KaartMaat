@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
+import '../../groups/ui/groups_tab.dart';
 import '../data/player_repository.dart';
 
 String nameErrorText(AppLocalizations l10n, PlayerNameError e) => switch (e) {
@@ -57,8 +58,8 @@ Future<void> showNameDialog(
   );
 }
 
-class PlayersScreen extends ConsumerWidget {
-  const PlayersScreen({super.key});
+class _PlayersList extends ConsumerWidget {
+  const _PlayersList();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,7 +68,6 @@ class PlayersScreen extends ConsumerWidget {
     final repo = ref.read(playerRepositoryProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.playersTitle)),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showNameDialog(
           context,
@@ -116,6 +116,26 @@ class PlayersScreen extends ConsumerWidget {
                   ),
               ],
             ),
+    );
+  }
+}
+
+/// Players and saved card groups in two tabs.
+class PlayersScreen extends StatelessWidget {
+  const PlayersScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.playersTitle),
+          bottom: TabBar(tabs: [Tab(text: l10n.playersTab), Tab(text: l10n.groupsTab)]),
+        ),
+        body: const TabBarView(children: [_PlayersList(), GroupsTab()]),
+      ),
     );
   }
 }

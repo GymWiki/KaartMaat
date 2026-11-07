@@ -1359,6 +1359,108 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Snelknop: plaatje'**
   String get settingQuickFace;
+
+  /// No description provided for @playersTab.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelers'**
+  String get playersTab;
+
+  /// No description provided for @groupsTab.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groepen'**
+  String get groupsTab;
+
+  /// No description provided for @addGroup.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groep toevoegen'**
+  String get addGroup;
+
+  /// No description provided for @editGroup.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groep bewerken'**
+  String get editGroup;
+
+  /// No description provided for @groupName.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groepsnaam'**
+  String get groupName;
+
+  /// No description provided for @groupMembers.
+  ///
+  /// In nl, this message translates to:
+  /// **'Leden'**
+  String get groupMembers;
+
+  /// No description provided for @noGroups.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nog geen groepen. Maak een vast kaartgroepje om snel te starten.'**
+  String get noGroups;
+
+  /// No description provided for @deleteGroupConfirm.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} verwijderen? Gespeelde spellen blijven bewaard.'**
+  String deleteGroupConfirm(String name);
+
+  /// No description provided for @startFromGroup.
+  ///
+  /// In nl, this message translates to:
+  /// **'Start vanuit een groep'**
+  String get startFromGroup;
+
+  /// No description provided for @filterGame.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spel'**
+  String get filterGame;
+
+  /// No description provided for @filterGroup.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groep'**
+  String get filterGroup;
+
+  /// No description provided for @filterYear.
+  ///
+  /// In nl, this message translates to:
+  /// **'Jaar'**
+  String get filterYear;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alle'**
+  String get filterAll;
+
+  /// No description provided for @historyNoMatch.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen spellen met deze filters'**
+  String get historyNoMatch;
+
+  /// No description provided for @statsBest.
+  ///
+  /// In nl, this message translates to:
+  /// **'Beste score'**
+  String get statsBest;
+
+  /// No description provided for @kaartkoningTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kaartkoning {year}'**
+  String kaartkoningTitle(int year);
+
+  /// No description provided for @kaartkoningWins.
+  ///
+  /// In nl, this message translates to:
+  /// **'{wins} winsten in {games} spellen'**
+  String kaartkoningWins(int wins, int games);
 }
 
 class _AppLocalizationsDelegate

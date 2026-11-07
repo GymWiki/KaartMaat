@@ -18,6 +18,7 @@ class GameState {
     required this.settings,
     required this.players,
     required this.rounds,
+    this.groupId,
   });
 
   final int id;
@@ -27,6 +28,7 @@ class GameState {
   final Map<String, Object?> settings;
   final List<PlayerRef> players;
   final List<RoundData> rounds;
+  final int? groupId;
 
   bool get isFinished => finishedAt != null;
 
@@ -107,6 +109,16 @@ class GameView {
   List<String> get winningPlayers => [
         for (final w in winners) ...rules.membersOf(config, w),
       ];
+
+  /// Final (or current) total of the participant a player belongs to.
+  int? totalOfPlayer(String playerKey) {
+    for (final s in standings) {
+      if (rules.membersOf(config, s.participant).contains(playerKey)) {
+        return s.total;
+      }
+    }
+    return null;
+  }
 
   int rankOf(String participant) =>
       standings.firstWhere((s) => s.participant == participant).rank;
