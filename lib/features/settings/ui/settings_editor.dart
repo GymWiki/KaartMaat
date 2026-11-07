@@ -6,8 +6,18 @@ import '../../games/rules/boerenbridge_rules.dart';
 import '../../games/rules/custom_rules.dart';
 import '../../games/rules/game_rules.dart';
 import '../../games/rules/klaverjas_rules.dart';
+import '../../games/rules/rikken_rules.dart';
+import '../../games/ui/rikken_labels.dart';
 
-String settingLabel(AppLocalizations l10n, String key) => switch (key) {
+String settingLabel(AppLocalizations l10n, String key) {
+  if (key.startsWith(RikkenRules.basePrefix)) {
+    return l10n.rikBaseLabel(rikContractName(
+        l10n, key.substring(RikkenRules.basePrefix.length)));
+  }
+  return _settingLabel(l10n, key);
+}
+
+String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
       CustomRules.targetScoreKey => l10n.settingTargetScore,
       CustomRules.lowestWinsKey => l10n.settingLowestWins,
       CustomRules.stepKey => l10n.settingStep,
@@ -25,6 +35,9 @@ String settingLabel(AppLocalizations l10n, String key) => switch (key) {
       KlaverjasRules.roemFourEqualKey => l10n.settingRoemFourEqual,
       KlaverjasRules.roemFourJacksKey => l10n.settingRoemFourJacks,
       KlaverjasRules.roundsKey => l10n.settingRounds,
+      RikkenRules.perTrickKey => l10n.settingPerTrick,
+      RikkenRules.slamBonusKey => l10n.settingSlamBonus,
+      RikkenRules.maatPaysKey => l10n.settingMaatPays,
       _ => key,
     };
 

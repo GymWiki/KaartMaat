@@ -6,11 +6,13 @@ import 'rules/boerenbridge_rules.dart';
 import 'rules/custom_rules.dart';
 import 'rules/game_rules.dart';
 import 'rules/klaverjas_rules.dart';
+import 'rules/rikken_rules.dart';
 import 'ui/boerenbridge_entry.dart';
 import 'ui/boerenbridge_header.dart';
 import 'ui/klaverjas_entry.dart';
 import 'ui/klaverjas_header.dart';
 import 'ui/points_entry.dart';
+import 'ui/rikken_entry.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
 /// entries; the screen validates them with the game's rules.
@@ -80,6 +82,14 @@ final Map<String, GameDefinition> gameDefinitions = {
     headerBuilder: (view) => KlaverjasHeader(view: view),
     newGameHint: (l) => l.teamsHint,
   ),
+  RikkenRules.typeId: GameDefinition(
+    rules: const RikkenRules(),
+    icon: Icons.looks_4,
+    name: (l) => l.gameRikken,
+    description: (l) => l.gameRikkenDesc,
+    entryBuilder: (view, number, existing, onSubmit) =>
+        RikkenEntry(view: view, existing: existing, onSubmit: onSubmit),
+  ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
     icon: Icons.edit_note,
@@ -97,6 +107,5 @@ GameDefinition definitionFor(String type) =>
 final List<(IconData, String Function(AppLocalizations))> comingSoonGames = [
   (Icons.casino, (l) => l.gameYatzy),
   (Icons.filter_5, (l) => l.gameToepen),
-  (Icons.looks_4, (l) => l.gameRikken),
   (Icons.favorite, (l) => l.gameHartenjagen),
 ];

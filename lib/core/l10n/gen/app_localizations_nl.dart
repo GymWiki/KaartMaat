@@ -493,4 +493,85 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get cardsEmpty => 'Vul de kaartpunten van de spelende partij in';
+
+  @override
+  String get gameRikkenDesc => 'Bieden, maat en nul-som uitbetaling';
+
+  @override
+  String get rikRik => 'Rik (met maat)';
+
+  @override
+  String get rikTroela => 'Troela';
+
+  @override
+  String rikAlone(int number) {
+    return '$number alleen';
+  }
+
+  @override
+  String get rikPiek => 'Piek';
+
+  @override
+  String get rikMisere => 'Misère';
+
+  @override
+  String get rikOpenPiek => 'Open piek';
+
+  @override
+  String get rikOpenMisere => 'Open misère';
+
+  @override
+  String get rikOpenPiekTalk => 'Open piek met praatje';
+
+  @override
+  String get rikOpenMisereTalk => 'Open misère met praatje';
+
+  @override
+  String get rikBidder => 'Wie biedt';
+
+  @override
+  String get rikContract => 'Contract';
+
+  @override
+  String get rikPartner => 'Maat';
+
+  @override
+  String get rikTricks => 'Slagen gehaald door de bieder (met maat)';
+
+  @override
+  String get rikChooseBidder => 'Kies wie er biedt';
+
+  @override
+  String get rikChooseContract => 'Kies het contract';
+
+  @override
+  String get rikChoosePartner => 'Kies de maat';
+
+  @override
+  String get rikChooseTricks => 'Kies het aantal slagen';
+
+  @override
+  String get rikMade => 'Gehaald';
+
+  @override
+  String get rikFailed => 'Niet gehaald';
+
+  @override
+  String zeroSum(int sum) {
+    return 'Som van alle spelers: $sum';
+  }
+
+  @override
+  String rikBaseLabel(String contract) {
+    return '$contract: basispunten';
+  }
+
+  @override
+  String get settingPerTrick => 'Punten per over- of onderslag';
+
+  @override
+  String get settingSlamBonus => 'Bonus voor alle 13 slagen (met maat)';
+
+  @override
+  String get settingMaatPays => 'Maat betaalt mee bij verlies';
 }

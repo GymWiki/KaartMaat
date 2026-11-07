@@ -328,5 +328,51 @@
   "natExplain": "Nat: de tegenpartij krijgt alle punten en alle roem",
   "pitExplain": "Pit: alle slagen gehaald, met bonus",
   "choosePlaying": "Kies eerst de spelende partij",
-  "cardsEmpty": "Vul de kaartpunten van de spelende partij in"
+  "cardsEmpty": "Vul de kaartpunten van de spelende partij in",
+  "gameRikkenDesc": "Bieden, maat en nul-som uitbetaling",
+  "rikRik": "Rik (met maat)",
+  "rikTroela": "Troela",
+  "rikAlone": "{number} alleen",
+  "@rikAlone": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "rikPiek": "Piek",
+  "rikMisere": "Misère",
+  "rikOpenPiek": "Open piek",
+  "rikOpenMisere": "Open misère",
+  "rikOpenPiekTalk": "Open piek met praatje",
+  "rikOpenMisereTalk": "Open misère met praatje",
+  "rikBidder": "Wie biedt",
+  "rikContract": "Contract",
+  "rikPartner": "Maat",
+  "rikTricks": "Slagen gehaald door de bieder (met maat)",
+  "rikChooseBidder": "Kies wie er biedt",
+  "rikChooseContract": "Kies het contract",
+  "rikChoosePartner": "Kies de maat",
+  "rikChooseTricks": "Kies het aantal slagen",
+  "rikMade": "Gehaald",
+  "rikFailed": "Niet gehaald",
+  "zeroSum": "Som van alle spelers: {sum}",
+  "@zeroSum": {
+    "placeholders": {
+      "sum": {
+        "type": "int"
+      }
+    }
+  },
+  "rikBaseLabel": "{contract}: basispunten",
+  "@rikBaseLabel": {
+    "placeholders": {
+      "contract": {
+        "type": "String"
+      }
+    }
+  },
+  "settingPerTrick": "Punten per over- of onderslag",
+  "settingSlamBonus": "Bonus voor alle 13 slagen (met maat)",
+  "settingMaatPays": "Maat betaalt mee bij verlies"
 }

@@ -921,6 +921,156 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Vul de kaartpunten van de spelende partij in'**
   String get cardsEmpty;
+
+  /// No description provided for @gameRikkenDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bieden, maat en nul-som uitbetaling'**
+  String get gameRikkenDesc;
+
+  /// No description provided for @rikRik.
+  ///
+  /// In nl, this message translates to:
+  /// **'Rik (met maat)'**
+  String get rikRik;
+
+  /// No description provided for @rikTroela.
+  ///
+  /// In nl, this message translates to:
+  /// **'Troela'**
+  String get rikTroela;
+
+  /// No description provided for @rikAlone.
+  ///
+  /// In nl, this message translates to:
+  /// **'{number} alleen'**
+  String rikAlone(int number);
+
+  /// No description provided for @rikPiek.
+  ///
+  /// In nl, this message translates to:
+  /// **'Piek'**
+  String get rikPiek;
+
+  /// No description provided for @rikMisere.
+  ///
+  /// In nl, this message translates to:
+  /// **'Misère'**
+  String get rikMisere;
+
+  /// No description provided for @rikOpenPiek.
+  ///
+  /// In nl, this message translates to:
+  /// **'Open piek'**
+  String get rikOpenPiek;
+
+  /// No description provided for @rikOpenMisere.
+  ///
+  /// In nl, this message translates to:
+  /// **'Open misère'**
+  String get rikOpenMisere;
+
+  /// No description provided for @rikOpenPiekTalk.
+  ///
+  /// In nl, this message translates to:
+  /// **'Open piek met praatje'**
+  String get rikOpenPiekTalk;
+
+  /// No description provided for @rikOpenMisereTalk.
+  ///
+  /// In nl, this message translates to:
+  /// **'Open misère met praatje'**
+  String get rikOpenMisereTalk;
+
+  /// No description provided for @rikBidder.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wie biedt'**
+  String get rikBidder;
+
+  /// No description provided for @rikContract.
+  ///
+  /// In nl, this message translates to:
+  /// **'Contract'**
+  String get rikContract;
+
+  /// No description provided for @rikPartner.
+  ///
+  /// In nl, this message translates to:
+  /// **'Maat'**
+  String get rikPartner;
+
+  /// No description provided for @rikTricks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Slagen gehaald door de bieder (met maat)'**
+  String get rikTricks;
+
+  /// No description provided for @rikChooseBidder.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies wie er biedt'**
+  String get rikChooseBidder;
+
+  /// No description provided for @rikChooseContract.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies het contract'**
+  String get rikChooseContract;
+
+  /// No description provided for @rikChoosePartner.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies de maat'**
+  String get rikChoosePartner;
+
+  /// No description provided for @rikChooseTricks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies het aantal slagen'**
+  String get rikChooseTricks;
+
+  /// No description provided for @rikMade.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gehaald'**
+  String get rikMade;
+
+  /// No description provided for @rikFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Niet gehaald'**
+  String get rikFailed;
+
+  /// No description provided for @zeroSum.
+  ///
+  /// In nl, this message translates to:
+  /// **'Som van alle spelers: {sum}'**
+  String zeroSum(int sum);
+
+  /// No description provided for @rikBaseLabel.
+  ///
+  /// In nl, this message translates to:
+  /// **'{contract}: basispunten'**
+  String rikBaseLabel(String contract);
+
+  /// No description provided for @settingPerTrick.
+  ///
+  /// In nl, this message translates to:
+  /// **'Punten per over- of onderslag'**
+  String get settingPerTrick;
+
+  /// No description provided for @settingSlamBonus.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bonus voor alle 13 slagen (met maat)'**
+  String get settingSlamBonus;
+
+  /// No description provided for @settingMaatPays.
+  ///
+  /// In nl, this message translates to:
+  /// **'Maat betaalt mee bij verlies'**
+  String get settingMaatPays;
 }
 
 class _AppLocalizationsDelegate
