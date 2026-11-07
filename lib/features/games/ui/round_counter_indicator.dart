@@ -111,11 +111,14 @@ class _RoundCounterIndicatorState extends State<RoundCounterIndicator>
                       label: playing && signal.tick > 0
                           ? '${signal.message}. ${widget.label}'
                           : widget.label,
-                      child: Text(
-                        widget.label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: style?.copyWith(color: color),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          widget.label,
+                          maxLines: 1,
+                          style: style?.copyWith(color: color),
+                        ),
                       ),
                     ),
                   ),
