@@ -232,20 +232,23 @@ class _GameScreenState extends ConsumerState<GameScreen>
       _generation++;
     });
     if (!mounted) return;
-    _rememberUndo(addedMessage: isNew ? l10n.roundSaved(number) : null, () async {
-      if (previous == null) {
-        await _repo.deleteLastRound(widget.gameId);
-      } else {
-        await _repo.updateRound(widget.gameId, number, previous);
-      }
-      if (!mounted) return;
-      // Bring the panel back as it was before saving.
-      if (undoDraft != null) _saver.schedule(undoDraft);
-      setState(() {
-        _draft = undoDraft;
-        _generation++;
-      });
-    });
+    _rememberUndo(
+      addedMessage: isNew ? l10n.roundSaved(number) : null,
+      () async {
+        if (previous == null) {
+          await _repo.deleteLastRound(widget.gameId);
+        } else {
+          await _repo.updateRound(widget.gameId, number, previous);
+        }
+        if (!mounted) return;
+        // Bring the panel back as it was before saving.
+        if (undoDraft != null) _saver.schedule(undoDraft);
+        setState(() {
+          _draft = undoDraft;
+          _generation++;
+        });
+      },
+    );
   }
 
   void _showProgress(GameView view) {
