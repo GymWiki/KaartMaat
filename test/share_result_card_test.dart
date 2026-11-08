@@ -120,6 +120,11 @@ void main() {
       scaffold: false,
     );
     await tester.pump();
+    // let the avatar pictures decode (real time) before the golden is taken
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 300)),
+    );
+    await tester.pump();
   }
 
   group('golden', () {

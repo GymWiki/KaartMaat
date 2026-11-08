@@ -59,7 +59,7 @@ void main() {
   });
 
   test('avatars wrap around and persist per player', () async {
-    expect(avatarCount, 8);
+    expect(avatarCount, 13);
     final db = AppDatabase(NativeDatabase.memory());
     addTearDown(db.close);
     final players = PlayerRepository(db);

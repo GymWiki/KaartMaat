@@ -1,35 +1,16 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
-/// Number of built-in avatars. Players store an index below this.
-const avatarCount = 8;
+/// Number of built-in avatars (assets/avatars/avatar_01.png ...). Players
+/// store an index below this.
+const avatarCount = 13;
 
-enum _Ears { none, pointed, round, long, tufts }
-
-enum _Extra { none, hat, glasses, bow, beard, shades }
-
-class _Spec {
-  const _Spec(this.background, this.fur, this.ears, this.extra);
-  final Color background;
-  final Color fur;
-  final _Ears ears;
-  final _Extra extra;
+String avatarAsset(int index) {
+  final n = (index % avatarCount) + 1;
+  return 'assets/avatars/avatar_${n.toString().padLeft(2, '0')}.png';
 }
 
-// Original, simple cartoon faces drawn with plain shapes.
-const _specs = [
-  _Spec(Color(0xFFFFC857), Color(0xFFF4A259), _Ears.pointed, _Extra.none),
-  _Spec(Color(0xFF9BC1BC), Color(0xFF8D6A4F), _Ears.round, _Extra.none),
-  _Spec(Color(0xFFF2B5D4), Color(0xFFF1F1F1), _Ears.long, _Extra.bow),
-  _Spec(Color(0xFFB8B8FF), Color(0xFFC9A66B), _Ears.tufts, _Extra.glasses),
-  _Spec(Color(0xFFFF9B71), Color(0xFFE8743B), _Ears.pointed, _Extra.hat),
-  _Spec(Color(0xFFA7E8BD), Color(0xFFF7D9B5), _Ears.none, _Extra.hat),
-  _Spec(Color(0xFFCDB4DB), Color(0xFFF2C6A0), _Ears.none, _Extra.beard),
-  _Spec(Color(0xFF8ECAE6), Color(0xFFD9B38C), _Ears.round, _Extra.shades),
-];
-
-/// A player's avatar. Safe for any [index]; it wraps around.
+/// A player's avatar: a round picture from the built-in set. Safe for any
+/// [index]; it wraps around.
 class PlayerAvatar extends StatelessWidget {
   const PlayerAvatar({super.key, required this.index, this.size = 40});
 
@@ -37,132 +18,29 @@ class PlayerAvatar extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-        width: size,
-        height: size,
-        child: CustomPaint(painter: _AvatarPainter(_specs[index % avatarCount])),
-      );
-}
-
-class _AvatarPainter extends CustomPainter {
-  _AvatarPainter(this.spec);
-  final _Spec spec;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final s = size.width;
-    final c = Offset(s / 2, s / 2);
-    final fill = Paint()..style = PaintingStyle.fill;
-    final dark = Paint()..color = const Color(0xFF2B2B2B);
-    Offset p(double x, double y) => Offset(s * x, s * y);
-
-    canvas.drawCircle(c, s / 2, fill..color = spec.background);
-    canvas.clipPath(Path()..addOval(Rect.fromCircle(center: c, radius: s / 2)));
-
-    // ears (behind the head)
-    fill.color = spec.fur;
-    switch (spec.ears) {
-      case _Ears.pointed:
-        for (final dx in [-1, 1]) {
-          canvas.drawPath(
-            Path()
-              ..moveTo(s * (0.5 + dx * 0.34), s * 0.5)
-              ..lineTo(s * (0.5 + dx * 0.28), s * 0.12)
-              ..lineTo(s * (0.5 + dx * 0.08), s * 0.34)
-              ..close(),
-            fill,
-          );
-        }
-      case _Ears.round:
-        for (final dx in [-1, 1]) {
-          canvas.drawCircle(p(0.5 + dx * 0.28, 0.24), s * 0.11, fill);
-        }
-      case _Ears.long:
-        for (final dx in [-1, 1]) {
-          canvas.drawOval(
-              Rect.fromCenter(center: p(0.5 + dx * 0.16, 0.14), width: s * 0.14, height: s * 0.34),
-              fill);
-        }
-      case _Ears.tufts:
-        for (final dx in [-1, 1]) {
-          canvas.drawPath(
-            Path()
-              ..moveTo(s * (0.5 + dx * 0.3), s * 0.36)
-              ..lineTo(s * (0.5 + dx * 0.36), s * 0.14)
-              ..lineTo(s * (0.5 + dx * 0.14), s * 0.28)
-              ..close(),
-            fill,
-          );
-        }
-      case _Ears.none:
-        break;
-    }
-
-    // head
-    canvas.drawCircle(p(0.5, 0.58), s * 0.32, fill..color = spec.fur);
-
-    // eyes and smile
-    canvas.drawCircle(p(0.38, 0.52), s * 0.045, dark);
-    canvas.drawCircle(p(0.62, 0.52), s * 0.045, dark);
-    canvas.drawArc(
-      Rect.fromCenter(center: p(0.5, 0.64), width: s * 0.22, height: s * 0.16),
-      0.2,
-      math.pi - 0.4,
-      false,
-      Paint()
-        ..color = dark.color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = s * 0.03
-        ..strokeCap = StrokeCap.round,
+  Widget build(BuildContext context) {
+    // Decode near the size it is shown at: sharp on the 1080 px share image,
+    // light in memory in lists.
+    final px = (size * MediaQuery.devicePixelRatioOf(context) * 3)
+        .round()
+        .clamp(64, 256);
+    return SizedBox(
+      width: size,
+      height: size,
+      child: ClipOval(
+        child: Image.asset(
+          avatarAsset(index),
+          width: size,
+          height: size,
+          cacheWidth: px,
+          fit: BoxFit.cover,
+          filterQuality: FilterQuality.medium,
+          excludeFromSemantics: true,
+          gaplessPlayback: true,
+        ),
+      ),
     );
-
-    // extras
-    switch (spec.extra) {
-      case _Extra.hat:
-        canvas.drawRect(
-            Rect.fromLTWH(s * 0.28, s * 0.18, s * 0.44, s * 0.16), fill..color = const Color(0xFF3D405B));
-        canvas.drawRect(
-            Rect.fromLTWH(s * 0.2, s * 0.32, s * 0.6, s * 0.05), fill..color = const Color(0xFF3D405B));
-      case _Extra.glasses:
-        final ring = Paint()
-          ..color = dark.color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = s * 0.025;
-        canvas.drawCircle(p(0.38, 0.52), s * 0.09, ring);
-        canvas.drawCircle(p(0.62, 0.52), s * 0.09, ring);
-        canvas.drawLine(p(0.47, 0.52), p(0.53, 0.52), ring);
-      case _Extra.shades:
-        canvas.drawRRect(
-            RRect.fromRectAndRadius(
-                Rect.fromLTWH(s * 0.26, s * 0.46, s * 0.48, s * 0.1), Radius.circular(s * 0.04)),
-            dark);
-      case _Extra.bow:
-        final bow = fill..color = const Color(0xFFE63946);
-        canvas.drawPath(
-            Path()
-              ..moveTo(s * 0.5, s * 0.9)
-              ..lineTo(s * 0.36, s * 0.82)
-              ..lineTo(s * 0.36, s * 0.98)
-              ..close()
-              ..moveTo(s * 0.5, s * 0.9)
-              ..lineTo(s * 0.64, s * 0.82)
-              ..lineTo(s * 0.64, s * 0.98)
-              ..close(),
-            bow);
-      case _Extra.beard:
-        canvas.drawArc(
-            Rect.fromCenter(center: p(0.5, 0.74), width: s * 0.5, height: s * 0.34),
-            0,
-            math.pi,
-            true,
-            fill..color = const Color(0xFF6D4C41));
-      case _Extra.none:
-        break;
-    }
   }
-
-  @override
-  bool shouldRepaint(_AvatarPainter old) => old.spec != spec;
 }
 
 /// Crown for the winner, drawn as a simple vector shape.
