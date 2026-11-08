@@ -429,6 +429,24 @@ class _GameScreenState extends ConsumerState<GameScreen>
                   def.statusLine?.call(l10n, view, number, editing) ??
                   (editing ? l10n.editRound(number) : l10n.roundTitle(number)),
             ),
+            if (view.isOver && !state.isFinished)
+              Material(
+                color: Theme.of(context).colorScheme.tertiaryContainer,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.flag, size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(child: Text(l10n.gameOver)),
+                      TextButton(
+                        onPressed: () => _finish(state),
+                        child: Text(l10n.finishGame),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             Expanded(
               child: RoundTable(
                 view: view,
