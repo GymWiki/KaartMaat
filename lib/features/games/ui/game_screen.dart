@@ -44,6 +44,11 @@ class _GameScreenState extends ConsumerState<GameScreen>
   Future<void> Function()? _undoAction;
   final _roundAdded = ValueNotifier<RoundSignal>((tick: 0, message: ''));
 
+  /// Panel saves run one after the other, and a confirm or "next round" that
+  /// is still being stored ignores a second tap (no duplicate rounds).
+  Future<void> _saveQueue = Future.value();
+  bool _confirming = false;
+
   Map<String, Object?>? _draft;
   bool _draftLoaded = false;
 
@@ -208,21 +213,37 @@ class _GameScreenState extends ConsumerState<GameScreen>
     Entries entries, {
     required bool complete,
     Map<String, Object?>? undoDraft,
+  }) {
+    if (complete) {
+      if (_confirming) return Future.value();
+      _confirming = true;
+    }
+    final run = _saveQueue.then(
+      (_) => _storePanelRound(
+        number,
+        entries,
+        complete: complete,
+        undoDraft: undoDraft,
+      ),
+    );
+    _saveQueue = run.then((_) {}, onError: (_) {});
+    return run.whenComplete(() {
+      if (complete) _confirming = false;
+    });
+  }
+
+  Future<void> _storePanelRound(
+    int number,
+    Entries entries, {
+    required bool complete,
+    Map<String, Object?>? undoDraft,
   }) async {
     final l10n = context.l10n;
     // Confirming the round being played (also after its bids were stored as
     // an open round) is new; correcting an earlier round is not.
     final isNew = _editingRound == null;
-    final current = ref.read(gameStateProvider(widget.gameId)).value;
-    final previous = current?.rounds
-        .where((r) => r.number == number)
-        .firstOrNull
-        ?.entries;
-    if (previous != null) {
-      await _repo.updateRound(widget.gameId, number, entries);
-    } else {
-      await _repo.addRound(widget.gameId, entries);
-    }
+    // The database decides between add and update (never the lagging stream).
+    final previous = await _repo.upsertRound(widget.gameId, number, entries);
     if (!complete || !mounted) return;
 
     await _saver.discard();
@@ -320,7 +341,14 @@ class _GameScreenState extends ConsumerState<GameScreen>
             onCancel: _stopEditing,
             onNewRound: def.liveRound
                 ? (entries) async {
-                    await _repo.addRound(widget.gameId, entries);
+                    if (_confirming) return;
+                    _confirming = true;
+                    try {
+                      await _saveQueue;
+                      await _repo.addRound(widget.gameId, entries);
+                    } finally {
+                      _confirming = false;
+                    }
                     if (!mounted) return;
                     setState(() {
                       _editingRound = null;

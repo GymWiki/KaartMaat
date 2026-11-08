@@ -48,6 +48,20 @@ class _FakeRepo extends GameRepository {
       _set([...state.rounds, RoundData(number: state.rounds.length + 1, entries: entries)]);
 
   @override
+  Future<Entries?> upsertRound(int gameId, int number, Entries entries) async {
+    final previous = state.rounds
+        .where((r) => r.number == number)
+        .firstOrNull
+        ?.entries;
+    if (previous == null) {
+      await addRound(gameId, entries);
+    } else {
+      await updateRound(gameId, number, entries);
+    }
+    return previous;
+  }
+
+  @override
   Future<void> updateRound(int gameId, int number, Entries entries) async => _set([
         for (final r in state.rounds)
           r.number == number ? RoundData(number: number, entries: entries) : r,

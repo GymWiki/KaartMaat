@@ -150,6 +150,27 @@ class GameRepository {
             );
       });
 
+  /// Stores round [number]: updates it when it exists, else adds it. Decided
+  /// inside one transaction on the database itself, so quick repeated calls
+  /// can never create duplicates. Returns the entries it replaced (null when
+  /// the round is new).
+  Future<Entries?> upsertRound(int gameId, int number, Entries entries) =>
+      db.transaction(() async {
+        final row =
+            await (db.select(db.rounds)..where(
+                  (r) => r.gameId.equals(gameId) & r.number.equals(number),
+                ))
+                .getSingleOrNull();
+        if (row != null) {
+          await (db.update(db.rounds)..where((r) => r.id.equals(row.id))).write(
+            RoundsCompanion(entries: Value(jsonEncode(entries))),
+          );
+          return _decodeEntries(row.entries);
+        }
+        await addRound(gameId, entries);
+        return null;
+      });
+
   Future<void> updateRound(int gameId, int number, Entries entries) =>
       (db.update(db.rounds)
             ..where((r) => r.gameId.equals(gameId) & r.number.equals(number)))
