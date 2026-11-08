@@ -13,7 +13,9 @@ import 'package:kaartmaat/core/theme/app_theme.dart';
 import 'package:kaartmaat/features/games/data/draft_store.dart';
 import 'package:kaartmaat/features/games/data/game_repository.dart';
 import 'package:kaartmaat/features/games/data/game_state.dart';
+import 'package:kaartmaat/core/ui/wide_digit_pad.dart';
 import 'package:kaartmaat/features/games/rules/custom_rules.dart';
+import 'package:kaartmaat/features/games/rules/duizenden_rules.dart';
 import 'package:kaartmaat/features/games/rules/game_rules.dart';
 import 'package:kaartmaat/features/games/ui/game_screen.dart';
 import 'package:kaartmaat/features/history/finished_game_screen.dart';
@@ -106,13 +108,16 @@ class _FakeRepo extends GameRepository {
 }
 
 class _MemoryDrafts extends DraftStore {
-  _MemoryDrafts(super.settings);
+  _MemoryDrafts(super.settings, [Map<int, Map<String, Object?>>? data])
+    : data = data ?? {};
+  final Map<int, Map<String, Object?>> data;
   @override
-  Future<Map<String, Object?>?> load(int gameId) async => null;
+  Future<Map<String, Object?>?> load(int gameId) async => data[gameId];
   @override
-  Future<void> save(int gameId, Map<String, Object?> draft) async {}
+  Future<void> save(int gameId, Map<String, Object?> draft) async =>
+      data[gameId] = draft;
   @override
-  Future<void> clear(int gameId) async {}
+  Future<void> clear(int gameId) async => data.remove(gameId);
 }
 
 class _MemorySettings extends SettingsRepository {
@@ -166,6 +171,44 @@ GameState customGame({
   ],
 );
 
+GameState duizendenGame({
+  Map<String, Object?> settings = const {},
+  List<List<int>> rounds = const [],
+  int players = 3,
+}) => GameState(
+  id: 1,
+  type: 'duizenden',
+  createdAt: DateTime(2026, 5, 1),
+  finishedAt: null,
+  settings: {...const DuizendenRules().defaultSettings, ...settings},
+  players: [
+    for (var i = 0; i < players; i++)
+      PlayerRef(
+        id: i + 1,
+        name: [
+          'Anna',
+          'Bas',
+          'Chris',
+          'Dora',
+          'Eva',
+          'Femke',
+          'Gijs',
+          'Hanna',
+        ][i],
+      ),
+  ],
+  rounds: [
+    for (var r = 0; r < rounds.length; r++)
+      RoundData(
+        number: r + 1,
+        entries: {
+          for (var i = 0; i < players; i++)
+            '${i + 1}': {'points': rounds[r][i]},
+        },
+      ),
+  ],
+);
+
 void main() {
   late AppDatabase db;
   late _FakeRepo repo;
@@ -184,6 +227,7 @@ void main() {
     GameState state, {
     required String start,
     bool reduceMotion = false,
+    Map<int, Map<String, Object?>>? drafts,
   }) async {
     usePhoneScreen(tester);
     repo = _FakeRepo(db, state);
@@ -223,7 +267,7 @@ void main() {
           gameRepositoryProvider.overrideWithValue(repo),
           gameStateProvider.overrideWith((ref, id) => repo.stream()),
           draftStoreProvider.overrideWithValue(
-            _MemoryDrafts(SettingsRepository(db)),
+            _MemoryDrafts(SettingsRepository(db), drafts),
           ),
           settingsRepositoryProvider.overrideWithValue(settings),
           prefsProvider.overrideWithValue(const AppPrefs({'haptics': '0'})),
@@ -493,6 +537,197 @@ void main() {
         expect(await resultLocationToRestore(settings, games), isNull);
         await settings.set(lastResultKey, 'x');
         expect(await resultLocationToRestore(settings, games), isNull);
+      },
+    );
+  });
+
+  group('Duizenden on the game screen', () {
+    Future<void> typeScore(WidgetTester tester, String keys) async {
+      for (final k in keys.split('')) {
+        await tester.tap(
+          find.descendant(
+            of: find.byType(WideDigitPad),
+            matching: find.text(k == '-' ? '±' : k),
+          ),
+        );
+        await tester.pump();
+      }
+    }
+
+    Future<void> enterRound(WidgetTester tester, List<String> scores) async {
+      for (var i = 0; i < scores.length; i++) {
+        await typeScore(tester, scores[i]);
+        if (i < scores.length - 1) {
+          await tester.tap(find.text('Volgende'));
+          await tester.pump();
+        }
+      }
+    }
+
+    Future<void> save(WidgetTester tester) async {
+      await tester.tap(find.text('Ronde opslaan'));
+      await settle(tester);
+    }
+
+    testWidgets('one tap saves the round, clears the panel and plays +1 once', (
+      tester,
+    ) async {
+      await open(tester, duizendenGame(), start: '/game/1');
+      await enterRound(tester, ['120', '-30', '0']);
+      await tester.tap(find.text('Ronde opslaan'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(repo.state.rounds.length, 1);
+      expect(repo.state.rounds.single.entries['2'], {'points': -30});
+      expect(find.text('+1'), findsOneWidget);
+      await settle(tester);
+      expect(find.text('+1'), findsNothing);
+      // the panel is empty again and the save button is off
+      expect(
+        tester
+            .widget<FilledButton>(
+              find.widgetWithText(FilledButton, 'Ronde opslaan'),
+            )
+            .onPressed,
+        isNull,
+      );
+      expect(visited, isEmpty);
+    });
+
+    testWidgets('correcting an earlier round does not play +1 again', (
+      tester,
+    ) async {
+      await open(
+        tester,
+        duizendenGame(
+          rounds: [
+            [10, 20, 30],
+            [5, 5, 5],
+          ],
+        ),
+        start: '/game/1',
+      );
+      await tester.tap(find.text('10').first); // tap round 1 in the table
+      await settle(tester);
+      expect(find.text('Ronde 1 corrigeren'), findsWidgets);
+      await tester.tap(find.text('Ronde opslaan'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('+1'), findsNothing);
+      expect(repo.state.rounds.length, 2);
+    });
+
+    testWidgets('reaching the target ends the game once and opens the result', (
+      tester,
+    ) async {
+      await open(
+        tester,
+        duizendenGame(
+          settings: {'targetScore': 100},
+          rounds: [
+            [60, 40, 10],
+          ],
+        ),
+        start: '/game/1',
+      );
+      await enterRound(tester, ['50', '10', '5']); // Anna 110
+      await save(tester);
+      expect(visited, ['/finished/1?celebrate=1']);
+      expect(repo.finishCalls, 1);
+      expect(repo.state.isFinished, isTrue);
+      await settle(tester);
+      expect(visited.length, 1);
+    });
+
+    testWidgets(
+      'two players past the target: the game ends with the highest total',
+      (tester) async {
+        await open(
+          tester,
+          duizendenGame(
+            settings: {'targetScore': 100},
+            rounds: [
+              [90, 95, 0],
+            ],
+          ),
+          start: '/game/1',
+        );
+        await enterRound(tester, ['15', '20', '0']); // 105 and 115
+        await save(tester);
+        expect(visited, ['/finished/1?celebrate=1']);
+        expect(find.text('Bas'), findsWidgets);
+        expect(find.text('115'), findsWidgets);
+      },
+    );
+
+    testWidgets('a round that stays below the target does not end the game', (
+      tester,
+    ) async {
+      await open(
+        tester,
+        duizendenGame(
+          settings: {'targetScore': 100},
+          rounds: [
+            [10, 10, 10],
+          ],
+        ),
+        start: '/game/1',
+      );
+      await enterRound(tester, ['80', '-5', '0']);
+      await save(tester);
+      expect(visited, isEmpty);
+      expect(repo.state.isFinished, isFalse);
+    });
+
+    testWidgets('half-filled scores survive the app being killed', (
+      tester,
+    ) async {
+      final drafts = <int, Map<String, Object?>>{};
+      await open(tester, duizendenGame(), start: '/game/1', drafts: drafts);
+      await enterRound(tester, ['45', '-3']);
+      await tester.pump(const Duration(seconds: 1)); // the draft timer fires
+      expect(drafts[1], isNotNull);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump();
+
+      await open(tester, duizendenGame(), start: '/game/1', drafts: drafts);
+      await settle(tester);
+      expect(find.text('45'), findsWidgets);
+      expect(find.text('-3'), findsWidgets);
+    });
+
+    testWidgets(
+      'an edit that moves the total below the target ends the "over" state',
+      (tester) async {
+        await open(
+          tester,
+          duizendenGame(
+            settings: {'targetScore': 100},
+            rounds: [
+              [60, 0, 0],
+              [50, 0, 0],
+            ],
+          ),
+          start: '/game/1',
+        );
+        expect(find.text('Spel afgelopen'), findsWidgets); // Anna 110
+        await tester.tap(find.text('60').first); // correct round 1
+        await settle(tester);
+        for (var i = 0; i < 2; i++) {
+          await tester.tap(
+            find.descendant(
+              of: find.byType(WideDigitPad),
+              matching: find.byIcon(Icons.backspace_outlined),
+            ),
+          );
+          await tester.pump();
+        }
+        await typeScore(tester, '10'); // Anna: 10 + 50 = 60
+        await tester.tap(find.text('Ronde opslaan'));
+        await settle(tester);
+        expect(repo.state.rounds.first.entries['1'], {'points': 10});
+        expect(find.text('Spel afgelopen'), findsNothing);
+        expect(visited, isEmpty, reason: 'an edit never jumps to the result');
       },
     );
   });

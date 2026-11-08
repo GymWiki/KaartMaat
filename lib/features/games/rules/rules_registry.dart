@@ -1,6 +1,7 @@
 import 'boerenbridge_rules.dart';
 import 'canasta_rules.dart';
 import 'custom_rules.dart';
+import 'duizenden_rules.dart';
 import 'game_rules.dart';
 import 'hearts_rules.dart';
 import 'jokeren_rules.dart';
@@ -17,6 +18,7 @@ const Map<String, GameRules> allRules = {
   ToepenRules.typeId: ToepenRules(),
   JokerenRules.typeId: JokerenRules(),
   CanastaRules.typeId: CanastaRules(),
+  DuizendenRules.typeId: DuizendenRules(),
 };
 
 GameRules rulesFor(String type) =>

@@ -7,7 +7,14 @@ import '../theme/app_theme.dart';
 import 'touch.dart';
 
 class PlayerChipData {
-  const PlayerChipData({required this.label, this.value, this.done = false});
+  const PlayerChipData({
+    required this.label,
+    this.value,
+    this.done = false,
+    this.caption,
+    this.highlight = false,
+    this.error = false,
+  });
 
   final String label;
 
@@ -16,6 +23,15 @@ class PlayerChipData {
 
   /// Entered or derived; shown with a check so it does not rely on color.
   final bool done;
+
+  /// Small third line (for example the new running total).
+  final String? caption;
+
+  /// Marks the chip with an accent border (for example: reaches the target).
+  final bool highlight;
+
+  /// Marks the chip as holding an unacceptable value.
+  final bool error;
 }
 
 /// Row of players (wrapping, never scrolling) to pick whose value is being
@@ -66,6 +82,7 @@ class PlayerSelector extends StatelessWidget {
               label: [
                 chips[i].label,
                 if (chips[i].value != null) chips[i].value!,
+                if (chips[i].caption != null) chips[i].caption!,
                 if (chips[i].done) l10n.entered,
               ].join(', '),
               excludeSemantics: true,
@@ -82,9 +99,14 @@ class PlayerSelector extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: i == selectedIndex
+                      color: chips[i].error
+                          ? scheme.error
+                          : chips[i].highlight
+                          ? scheme.tertiary
+                          : i == selectedIndex
                           ? scheme.primary
                           : scheme.outlineVariant,
+                      width: chips[i].error || chips[i].highlight ? 2.5 : 1,
                     ),
                   ),
                   child: InkWell(
@@ -134,6 +156,24 @@ class PlayerSelector extends StatelessWidget {
                               ),
                             ],
                           ),
+                          if (chips[i].caption != null)
+                            Text(
+                              chips[i].caption!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11,
+                                height: 1.1,
+                                fontWeight: chips[i].highlight
+                                    ? FontWeight.w800
+                                    : null,
+                                color: chips[i].error
+                                    ? scheme.error
+                                    : i == selectedIndex
+                                    ? AppTheme.ink
+                                    : scheme.onSurfaceVariant,
+                              ),
+                            ),
                         ],
                       ),
                     ),

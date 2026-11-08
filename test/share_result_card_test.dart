@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kaartmaat/features/games/data/game_state.dart';
 import 'package:kaartmaat/features/games/rules/boerenbridge_rules.dart';
+import 'package:kaartmaat/features/games/rules/duizenden_rules.dart';
 import 'package:kaartmaat/features/games/rules/game_rules.dart';
 import 'package:kaartmaat/features/games/rules/klaverjas_rules.dart';
 import 'package:kaartmaat/features/history/share_result_card.dart';
@@ -43,6 +44,30 @@ GameState custom(
         entries: {
           for (var i = 0; i < points.length; i++)
             '${i + 1}': {'points': r == 1 ? points[i] : 0},
+        },
+      ),
+  ],
+);
+
+GameState duizenden() => GameState(
+  id: 1,
+  type: 'duizenden',
+  createdAt: DateTime(2026, 5, 1),
+  finishedAt: DateTime(2026, 5, 1),
+  settings: const DuizendenRules().defaultSettings,
+  players: [
+    for (var i = 0; i < 4; i++) PlayerRef(id: i + 1, name: _names[i], avatar: i),
+  ],
+  rounds: [
+    for (final (n, scores) in [
+      (1, [620, 450, 300, -80]),
+      (2, [-100, 220, 100, 60]),
+      (3, [530, 200, 0, 40]),
+    ])
+      RoundData(
+        number: n,
+        entries: {
+          for (var i = 0; i < 4; i++) '${i + 1}': {'points': scores[i]},
         },
       ),
   ],
@@ -143,6 +168,7 @@ void main() {
         ],
       ),
       'lowest_wins': custom([30, 12, 3], lowestWins: true),
+      'duizenden': duizenden(),
     };
     cases.forEach((name, state) {
       testWidgets(name, (tester) async {

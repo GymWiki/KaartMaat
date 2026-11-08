@@ -122,6 +122,43 @@ class AppLocalizationsNl extends AppLocalizations {
   String get closeResult => 'Sluiten';
 
   @override
+  String get gameDuizenden => 'Duizenden';
+
+  @override
+  String get gameDuizendenDesc => 'Als eerste naar 1000 punten';
+
+  @override
+  String get duizendenHint =>
+      'Wie als eerste de doelscore haalt (standaard 1000) wint. Een score per ronde mag negatief zijn. Het spel eindigt aan het einde van een ronde: halen meer spelers de doelscore, dan wint de hoogste stand.';
+
+  @override
+  String get settingMinEntry => 'Laagste score per ronde';
+
+  @override
+  String get settingMaxEntry => 'Hoogste score per ronde';
+
+  @override
+  String duizendenToGo(int points) {
+    return 'nog $points';
+  }
+
+  @override
+  String get duizendenReached => 'doel bereikt';
+
+  @override
+  String duizendenOutOfRange(int min, int max) {
+    return 'Score buiten $min tot $max';
+  }
+
+  @override
+  String duizendenReaches(String names) {
+    return '$names haalt de doelscore';
+  }
+
+  @override
+  String get duizendenFillAll => 'Vul de score van alle spelers in';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

@@ -461,6 +461,9 @@ class _GameScreenState extends ConsumerState<GameScreen>
                 cellHighlight: def.cellHighlight == null
                     ? null
                     : (i, p) => def.cellHighlight!(view, i, p),
+                totalDetail: def.totalDetail == null
+                    ? null
+                    : (p) => def.totalDetail!(l10n, view, p),
               ),
             ),
           ],

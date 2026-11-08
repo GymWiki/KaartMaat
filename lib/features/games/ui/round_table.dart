@@ -24,6 +24,7 @@ class RoundTable extends StatefulWidget {
     this.onTapRound,
     this.cellDetail,
     this.cellHighlight,
+    this.totalDetail,
   });
 
   final GameView view;
@@ -32,6 +33,9 @@ class RoundTable extends StatefulWidget {
   final void Function(int roundNumber)? onTapRound;
   final String? Function(int roundIndex, String participant)? cellDetail;
   final bool Function(int roundIndex, String participant)? cellHighlight;
+
+  /// Small line under a participant's total (for example "nog 340").
+  final String? Function(String participant)? totalDetail;
 
   @override
   State<RoundTable> createState() => _RoundTableState();
@@ -293,6 +297,18 @@ class _RoundTableState extends State<RoundTable> {
             ],
           ),
         ),
+        if (widget.totalDetail != null)
+          rowFrame(
+            color: scheme.surfaceContainer,
+            border: Border(bottom: BorderSide(color: scheme.outline)),
+            child: Row(
+              children: [
+                const SizedBox(width: 40),
+                for (final p in ids)
+                  numberCell(widget.totalDetail!(p) ?? '', size: 12),
+              ],
+            ),
+          ),
         Expanded(
           child: ListView(
             controller: _controller,

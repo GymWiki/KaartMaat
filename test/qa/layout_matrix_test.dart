@@ -39,6 +39,7 @@ void main() {
     ('toepen', 8),
     ('jokeren', 8),
     ('canasta', 4),
+    ('duizenden', 8),
     ('custom', 8),
   ];
   // name, logical size (w x h), text scale

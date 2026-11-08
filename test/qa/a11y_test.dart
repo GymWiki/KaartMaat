@@ -36,6 +36,7 @@ void main() {
     ('toepen', 4),
     ('jokeren', 4),
     ('canasta', 4),
+    ('duizenden', 4),
     ('custom', 4),
   ];
 

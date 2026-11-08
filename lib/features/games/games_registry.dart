@@ -5,6 +5,7 @@ import 'data/game_state.dart';
 import 'rules/boerenbridge_rules.dart';
 import 'rules/canasta_rules.dart';
 import 'rules/custom_rules.dart';
+import 'rules/duizenden_rules.dart';
 import 'rules/game_rules.dart';
 import 'rules/hearts_rules.dart';
 import 'rules/jokeren_rules.dart';
@@ -27,6 +28,7 @@ import 'ui/klaverjas_panel.dart';
 import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
 import 'ui/rikken_labels.dart';
+import 'ui/duizenden_panel.dart';
 import 'ui/rikken_panel.dart';
 import 'ui/toepen_panel.dart';
 
@@ -54,6 +56,7 @@ class GameDefinition {
     this.cellHighlight,
     this.liveRound = false,
     this.statusLine,
+    this.totalDetail,
   });
 
   final GameRules rules;
@@ -84,6 +87,11 @@ class GameDefinition {
   final String Function(
           AppLocalizations l10n, GameView view, int roundNumber, bool editing)?
       statusLine;
+
+  /// Small line under a participant's total in the table (progress to a
+  /// target, for example).
+  final String? Function(AppLocalizations l10n, GameView view, String participant)?
+      totalDetail;
 
   /// Counting games: the panel edits the latest round on every tap, and
   /// "next round" starts a new one, instead of confirming a round at a time.
@@ -240,6 +248,23 @@ final Map<String, GameDefinition> gameDefinitions = {
     newGameHint: (l) => l.teamsHint,
     panelBuilder: (ctx) =>
         CalculatorPanel(ctx: ctx, quick: _canastaQuick(ctx.view.config)),
+  ),
+  DuizendenRules.typeId: GameDefinition(
+    rules: const DuizendenRules(),
+    icon: Icons.trending_up,
+    name: (l) => l.gameDuizenden,
+    description: (l) => l.gameDuizendenDesc,
+    entryBuilder: (view, number, existing, onSubmit) =>
+        PointsEntry(view: view, existing: existing, onSubmit: onSubmit),
+    newGameHint: (l) => l.duizendenHint,
+    panelBuilder: (ctx) => DuizendenPanel(ctx: ctx),
+    totalDetail: (l, view, p) {
+      final total = view.standings.firstWhere((s) => s.participant == p).total;
+      final target = view.config.intSetting(DuizendenRules.targetScoreKey);
+      if (target <= 0 || view.state.rounds.isEmpty) return null;
+      final left = const DuizendenRules().toGo(view.config, total);
+      return left == 0 ? l.duizendenReached : l.duizendenToGo(left);
+    },
   ),
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),

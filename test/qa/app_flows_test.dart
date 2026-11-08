@@ -122,10 +122,11 @@ void main() {
       'Hartenjagen',
       'Jokeren',
       'Canasta',
+      'Duizenden',
     ]) {
       expect(find.text(t), findsOneWidget, reason: t);
     }
-    expect(gameDefinitions.length, 8);
+    expect(gameDefinitions.length, 9);
     // bottom navigation
     for (final t in [
       'Spellen',

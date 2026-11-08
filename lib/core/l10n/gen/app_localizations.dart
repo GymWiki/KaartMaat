@@ -292,6 +292,66 @@ abstract class AppLocalizations {
   /// **'Sluiten'**
   String get closeResult;
 
+  /// No description provided for @gameDuizenden.
+  ///
+  /// In nl, this message translates to:
+  /// **'Duizenden'**
+  String get gameDuizenden;
+
+  /// No description provided for @gameDuizendenDesc.
+  ///
+  /// In nl, this message translates to:
+  /// **'Als eerste naar 1000 punten'**
+  String get gameDuizendenDesc;
+
+  /// No description provided for @duizendenHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Wie als eerste de doelscore haalt (standaard 1000) wint. Een score per ronde mag negatief zijn. Het spel eindigt aan het einde van een ronde: halen meer spelers de doelscore, dan wint de hoogste stand.'**
+  String get duizendenHint;
+
+  /// No description provided for @settingMinEntry.
+  ///
+  /// In nl, this message translates to:
+  /// **'Laagste score per ronde'**
+  String get settingMinEntry;
+
+  /// No description provided for @settingMaxEntry.
+  ///
+  /// In nl, this message translates to:
+  /// **'Hoogste score per ronde'**
+  String get settingMaxEntry;
+
+  /// No description provided for @duizendenToGo.
+  ///
+  /// In nl, this message translates to:
+  /// **'nog {points}'**
+  String duizendenToGo(int points);
+
+  /// No description provided for @duizendenReached.
+  ///
+  /// In nl, this message translates to:
+  /// **'doel bereikt'**
+  String get duizendenReached;
+
+  /// No description provided for @duizendenOutOfRange.
+  ///
+  /// In nl, this message translates to:
+  /// **'Score buiten {min} tot {max}'**
+  String duizendenOutOfRange(int min, int max);
+
+  /// No description provided for @duizendenReaches.
+  ///
+  /// In nl, this message translates to:
+  /// **'{names} haalt de doelscore'**
+  String duizendenReaches(String names);
+
+  /// No description provided for @duizendenFillAll.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vul de score van alle spelers in'**
+  String get duizendenFillAll;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:
