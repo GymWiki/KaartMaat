@@ -15,6 +15,10 @@
   "gameHartenjagen": "Hartenjagen",
   "comingSoon": "Binnenkort",
   "otherRunningGames": "Andere lopende spellen",
+  "settingEndMode": "Het spel eindigt",
+  "endModeHands": "Na een aantal giffen",
+  "endModeTarget": "Bij een streefscore",
+  "settingTargetInclusive": "Streefscore zelf telt mee (5000 of meer)",
   "resumeGame": "Hervat spel",
   "resumeSubtitle": "{game} · {count, plural, =0{nog geen rondes} =1{1 ronde} other{{count} rondes}}",
   "@resumeSubtitle": {

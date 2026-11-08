@@ -19,6 +19,7 @@ class HeartsRules extends GameRules {
   static const totalPointsKey = 'totalPoints';
   static const queenPointsKey = 'queenPoints';
   static const targetScoreKey = 'targetScore';
+  static const roundsKey = 'rounds';
   static const moonEnabledKey = 'moonEnabled';
   static const moonModeKey = 'moonMode';
 
@@ -55,6 +56,13 @@ class HeartsRules extends GameRules {
           kind: SettingKind.integer,
           defaultValue: 100,
           max: 10000,
+        ),
+        // 0 = no fixed number of rounds: the target score decides.
+        SettingSpec(
+          key: roundsKey,
+          kind: SettingKind.integer,
+          defaultValue: 0,
+          max: 99,
         ),
         SettingSpec(
           key: moonEnabledKey,
@@ -199,7 +207,15 @@ class HeartsRules extends GameRules {
       };
 
   @override
+  int? plannedRounds(GameConfig config) {
+    final n = config.intSetting(roundsKey);
+    return n > 0 ? n : null;
+  }
+
+  @override
   bool isFinished(GameConfig config, List<RoundData> rounds) {
+    final planned = plannedRounds(config);
+    if (planned != null && rounds.length >= planned) return true;
     final target = config.intSetting(targetScoreKey);
     return target > 0 && totals(config, rounds).values.any((t) => t >= target);
   }

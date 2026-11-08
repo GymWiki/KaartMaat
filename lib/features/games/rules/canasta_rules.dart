@@ -16,6 +16,7 @@ class CanastaRules extends AmountsRules {
   static const zij = 'zij';
 
   static const targetScoreKey = 'targetScore';
+  static const targetInclusiveKey = 'targetInclusive';
   static const naturalCanastaKey = 'naturalCanasta';
   static const mixedCanastaKey = 'mixedCanasta';
   static const goOutKey = 'goOut';
@@ -46,6 +47,9 @@ class CanastaRules extends AmountsRules {
   List<SettingSpec> get settingSpecs => const [
         SettingSpec(
             key: targetScoreKey, kind: SettingKind.integer, defaultValue: 5000, max: 100000),
+        // true: "5000 or more" ends the game, false: "more than 5000".
+        SettingSpec(
+            key: targetInclusiveKey, kind: SettingKind.boolean, defaultValue: true),
         SettingSpec(key: naturalCanastaKey, kind: SettingKind.integer, defaultValue: 500, max: 5000),
         SettingSpec(key: mixedCanastaKey, kind: SettingKind.integer, defaultValue: 300, max: 5000),
         SettingSpec(key: goOutKey, kind: SettingKind.integer, defaultValue: 100, max: 5000),
@@ -67,6 +71,8 @@ class CanastaRules extends AmountsRules {
   @override
   bool isFinished(GameConfig config, List<RoundData> rounds) {
     final target = config.intSetting(targetScoreKey);
-    return target > 0 && totals(config, rounds).values.any((t) => t >= target);
+    final inclusive = config.settings[targetInclusiveKey] != false;
+    return target > 0 &&
+        totals(config, rounds).values.any((t) => inclusive ? t >= target : t > target);
   }
 }

@@ -33,6 +33,11 @@ class KlaverjasRules extends GameRules {
   static const roundsKey = 'rounds';
   static const targetScoreKey = 'targetScore';
 
+  /// How the game ends: after a number of hands, or at a target score.
+  static const endModeKey = 'endMode';
+  static const endModeHands = 'hands';
+  static const endModeTarget = 'target';
+
   /// Card points in a deal (152 + 10 for the last trick).
   static const totalCardPoints = 162;
 
@@ -57,6 +62,12 @@ class KlaverjasRules extends GameRules {
           options: [amsterdams, rotterdams],
         ),
         SettingSpec(
+          key: endModeKey,
+          kind: SettingKind.choice,
+          defaultValue: endModeHands,
+          options: [endModeHands, endModeTarget],
+        ),
+        SettingSpec(
           key: roundsKey,
           kind: SettingKind.integer,
           defaultValue: 16,
@@ -65,7 +76,7 @@ class KlaverjasRules extends GameRules {
         SettingSpec(
           key: targetScoreKey,
           kind: SettingKind.integer,
-          defaultValue: 0,
+          defaultValue: 1500,
           max: 100000,
         ),
         SettingSpec(
@@ -250,16 +261,23 @@ class KlaverjasRules extends GameRules {
   Map<String, int> scoreRound(GameConfig config, RoundData round) =>
       outcome(config, round).points;
 
+  /// Games saved before [endModeKey] existed have no mode: they end on
+  /// whichever of hands or target score comes first.
+  String? _mode(GameConfig config) => config.settings[endModeKey] as String?;
+
   @override
   int? plannedRounds(GameConfig config) {
+    if (_mode(config) == endModeTarget) return null;
     final n = config.intSetting(roundsKey);
     return n > 0 ? n : null;
   }
 
   @override
   bool isFinished(GameConfig config, List<RoundData> rounds) {
+    final mode = _mode(config);
     final planned = plannedRounds(config);
     if (planned != null && rounds.length >= planned) return true;
+    if (mode == endModeHands) return false;
     final target = config.intSetting(targetScoreKey);
     return target > 0 && totals(config, rounds).values.any((t) => t >= target);
   }

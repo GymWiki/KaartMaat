@@ -671,7 +671,7 @@ void main() {
         rules,
         ['wij', 'zij'],
         players: ['1', '2', '3', '4'],
-        settings: {'rounds': 0, 'targetScore': 300},
+        settings: {'endMode': 'target', 'targetScore': 300},
       );
       expect(rules.isFinished(target, rounds(2)), isFalse); // 200
       expect(rules.isFinished(target, rounds(3)), isTrue); // 300 reached

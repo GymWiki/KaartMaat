@@ -184,6 +184,30 @@ abstract class AppLocalizations {
   /// **'Andere lopende spellen'**
   String get otherRunningGames;
 
+  /// No description provided for @settingEndMode.
+  ///
+  /// In nl, this message translates to:
+  /// **'Het spel eindigt'**
+  String get settingEndMode;
+
+  /// No description provided for @endModeHands.
+  ///
+  /// In nl, this message translates to:
+  /// **'Na een aantal giffen'**
+  String get endModeHands;
+
+  /// No description provided for @endModeTarget.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bij een streefscore'**
+  String get endModeTarget;
+
+  /// No description provided for @settingTargetInclusive.
+  ///
+  /// In nl, this message translates to:
+  /// **'Streefscore zelf telt mee (5000 of meer)'**
+  String get settingTargetInclusive;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:

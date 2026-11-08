@@ -77,6 +77,7 @@ class RikkenRules extends GameRules {
   static const perTrickKey = 'perTrick';
   static const slamBonusKey = 'slamBonus';
   static const maatPaysKey = 'maatPaysWhenLost';
+  static const roundsKey = 'rounds';
 
   static String baseKey(String contractId) => '$basePrefix$contractId';
 
@@ -104,6 +105,9 @@ class RikkenRules extends GameRules {
             key: slamBonusKey, kind: SettingKind.integer, defaultValue: 35, max: 500),
         const SettingSpec(
             key: maatPaysKey, kind: SettingKind.boolean, defaultValue: false),
+        // 0 = no end: finish by hand.
+        const SettingSpec(
+            key: roundsKey, kind: SettingKind.integer, defaultValue: 0, max: 99),
         for (final c in rikContracts)
           SettingSpec(
             key: baseKey(c.id),
@@ -239,4 +243,16 @@ class RikkenRules extends GameRules {
   @override
   Map<String, int> scoreRound(GameConfig config, RoundData round) =>
       outcome(config, round).points;
+
+  @override
+  int? plannedRounds(GameConfig config) {
+    final n = config.intSetting(roundsKey);
+    return n > 0 ? n : null;
+  }
+
+  @override
+  bool isFinished(GameConfig config, List<RoundData> rounds) {
+    final planned = plannedRounds(config);
+    return planned != null && rounds.length >= planned;
+  }
 }

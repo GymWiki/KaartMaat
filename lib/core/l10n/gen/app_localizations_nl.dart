@@ -54,6 +54,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get otherRunningGames => 'Andere lopende spellen';
 
   @override
+  String get settingEndMode => 'Het spel eindigt';
+
+  @override
+  String get endModeHands => 'Na een aantal giffen';
+
+  @override
+  String get endModeTarget => 'Bij een streefscore';
+
+  @override
+  String get settingTargetInclusive =>
+      'Streefscore zelf telt mee (5000 of meer)';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override
