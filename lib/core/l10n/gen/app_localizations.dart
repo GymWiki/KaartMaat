@@ -232,6 +232,66 @@ abstract class AppLocalizations {
   /// **'Uitslag {game}: gedeelde winst voor {winner} met {points} punten'**
   String shareCaptionTie(String game, String winner, int points);
 
+  /// No description provided for @shareAction.
+  ///
+  /// In nl, this message translates to:
+  /// **'Delen'**
+  String get shareAction;
+
+  /// No description provided for @saveImage.
+  ///
+  /// In nl, this message translates to:
+  /// **'Opslaan als afbeelding'**
+  String get saveImage;
+
+  /// No description provided for @imageSaved.
+  ///
+  /// In nl, this message translates to:
+  /// **'Afbeelding opgeslagen in de galerij'**
+  String get imageSaved;
+
+  /// No description provided for @imageSaveDenied.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen toegang om de afbeelding op te slaan'**
+  String get imageSaveDenied;
+
+  /// No description provided for @imageSaveFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Opslaan is niet gelukt'**
+  String get imageSaveFailed;
+
+  /// No description provided for @shareFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Delen is niet gelukt'**
+  String get shareFailed;
+
+  /// No description provided for @newGameAgain.
+  ///
+  /// In nl, this message translates to:
+  /// **'Nieuw spel'**
+  String get newGameAgain;
+
+  /// No description provided for @resumeFinished.
+  ///
+  /// In nl, this message translates to:
+  /// **'Hervat spel'**
+  String get resumeFinished;
+
+  /// No description provided for @resumeFinishedConfirm.
+  ///
+  /// In nl, this message translates to:
+  /// **'Het spel weer openen om verder te spelen of te corrigeren?'**
+  String get resumeFinishedConfirm;
+
+  /// No description provided for @closeResult.
+  ///
+  /// In nl, this message translates to:
+  /// **'Sluiten'**
+  String get closeResult;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:

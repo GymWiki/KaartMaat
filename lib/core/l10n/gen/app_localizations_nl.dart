@@ -91,6 +91,37 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get shareAction => 'Delen';
+
+  @override
+  String get saveImage => 'Opslaan als afbeelding';
+
+  @override
+  String get imageSaved => 'Afbeelding opgeslagen in de galerij';
+
+  @override
+  String get imageSaveDenied => 'Geen toegang om de afbeelding op te slaan';
+
+  @override
+  String get imageSaveFailed => 'Opslaan is niet gelukt';
+
+  @override
+  String get shareFailed => 'Delen is niet gelukt';
+
+  @override
+  String get newGameAgain => 'Nieuw spel';
+
+  @override
+  String get resumeFinished => 'Hervat spel';
+
+  @override
+  String get resumeFinishedConfirm =>
+      'Het spel weer openen om verder te spelen of te corrigeren?';
+
+  @override
+  String get closeResult => 'Sluiten';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

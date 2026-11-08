@@ -12,7 +12,8 @@ import 'package:kaartmaat/core/ui/avatars.dart';
 import 'package:kaartmaat/features/games/data/game_state.dart';
 import 'package:kaartmaat/features/games/rules/game_rules.dart';
 import 'package:kaartmaat/features/history/result_image.dart';
-import 'package:kaartmaat/features/history/share.dart';
+import 'package:kaartmaat/features/history/result_export.dart';
+import 'package:kaartmaat/features/history/share_result_card.dart';
 import 'package:kaartmaat/features/players/data/player_repository.dart';
 
 GameState game(Map<int, int> points) => GameState(
@@ -68,7 +69,7 @@ void main() {
     expect((await players.watchActive().first).single.avatar, 5);
   });
 
-  testWidgets('the result card renders to a 1080 px wide PNG with the watermark',
+  testWidgets('the result card renders to a 1080x1350 PNG with the watermark',
       (tester) async {
     final key = GlobalKey();
     await tester.pumpWidget(MaterialApp(
@@ -84,20 +85,21 @@ void main() {
         body: SingleChildScrollView(
           child: RepaintBoundary(
             key: key,
-            child: ResultImageCard(view: GameView(game({1: 30, 2: 20, 3: 5}))),
+            child: ShareResultCard(view: GameView(game({1: 30, 2: 20, 3: 5}))),
           ),
         ),
       ),
     ));
 
     expect(find.text('Uitslag bijgehouden met de Kaartmaat App'), findsOneWidget);
-    expect(find.text('P1'), findsOneWidget);
+    expect(find.text('P1'), findsWidgets);
 
     final boundary = key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    final bytes = await tester.runAsync(() => renderPng(boundary));
+    final bytes = await tester.runAsync(() => renderCardPng(boundary));
     expect(bytes!.sublist(1, 4), [0x50, 0x4E, 0x47]); // "PNG"
     final codec = await tester.runAsync(() => ui.instantiateImageCodec(bytes));
     final frame = await tester.runAsync(() => codec!.getNextFrame());
     expect(frame!.image.width, 1080);
+    expect(frame.image.height, 1350);
   });
 }

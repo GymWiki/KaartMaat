@@ -1,15 +1,13 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../core/l10n/l10n.dart';
 import '../games/data/game_state.dart';
 import '../games/games_registry.dart';
-import 'result_image.dart';
+import 'result_export.dart';
+import 'share_result_card.dart';
 
 String buildShareText(AppLocalizations l10n, GameView view) {
   final date = DateFormat('d MMM yyyy', 'nl')
@@ -20,13 +18,6 @@ String buildShareText(AppLocalizations l10n, GameView view) {
     for (final s in view.standings)
       l10n.shareTotalLine(s.rank, view.nameOf(s.participant), s.total),
   ].join('\n');
-}
-
-/// Renders [boundary] as a PNG at 3x (1080 px wide for the result card).
-Future<Uint8List> renderPng(RenderRepaintBoundary boundary) async {
-  final image = await boundary.toImage(pixelRatio: 3);
-  final data = await image.toByteData(format: ui.ImageByteFormat.png);
-  return data!.buffer.asUint8List();
 }
 
 /// Preview of the result picture with share and copy-text buttons.
@@ -55,12 +46,8 @@ class _ShareDialogState extends State<_ShareDialog> {
     try {
       final boundary =
           _key.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      final bytes = await renderPng(boundary);
-      await SharePlus.instance.share(ShareParams(
-        files: [XFile.fromData(bytes, mimeType: 'image/png')],
-        fileNameOverrides: const ['kaartmaat-uitslag.png'],
-        text: buildShareText(l10n, widget.view),
-      ));
+      final bytes = await renderCardPng(boundary);
+      await shareCardPng(bytes, shareCaption(l10n, widget.view));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -86,7 +73,7 @@ class _ShareDialogState extends State<_ShareDialog> {
             FittedBox(
               child: RepaintBoundary(
                 key: _key,
-                child: ResultImageCard(view: widget.view),
+                child: ShareResultCard(view: widget.view),
               ),
             ),
             const SizedBox(height: 12),

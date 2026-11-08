@@ -54,7 +54,10 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/finished/:id',
-      builder: (_, s) => FinishedGameScreen(gameId: _id(s, 'id')),
+      builder: (_, s) => FinishedGameScreen(
+        gameId: _id(s, 'id'),
+        celebrate: s.uri.queryParameters['celebrate'] == '1',
+      ),
     ),
   ],
 );

@@ -3,7 +3,6 @@
 import 'package:drift/drift.dart' as d;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -15,6 +14,7 @@ import 'package:kaartmaat/features/games/data/game_repository.dart';
 import 'package:kaartmaat/features/games/data/game_state.dart';
 import 'package:kaartmaat/features/games/games_registry.dart';
 import 'package:kaartmaat/features/groups/data/group_repository.dart';
+import 'package:kaartmaat/features/history/share_result_card.dart';
 import 'package:kaartmaat/features/players/data/player_repository.dart';
 
 import '../helpers.dart';
@@ -174,25 +174,9 @@ void main() {
     );
   }
 
-  appTest('history: a finished game opens, can be shared as text and copied', (
+  appTest('history: a finished game opens the result screen with its actions', (
     tester,
   ) async {
-    String? clip;
-    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-      SystemChannels.platform,
-      (c) async {
-        if (c.method == 'Clipboard.setData') {
-          clip = (c.arguments as Map)['text'] as String?;
-        }
-        return null;
-      },
-    );
-    addTearDown(
-      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.platform,
-        null,
-      ),
-    );
     await boot(
       tester,
       seedPlayers: 2,
@@ -211,16 +195,13 @@ void main() {
     expect(find.textContaining('Winnaar: Anna'), findsOneWidget);
     await tester.tap(find.text('Algemene teller').last);
     await settle(tester);
-    expect(find.byTooltip('Uitslag delen'), findsOneWidget);
-    await tester.tap(find.byTooltip('Uitslag delen'));
-    await settle(tester);
-    expect(find.text('Deel als afbeelding'), findsOneWidget);
-    await tester.tap(find.text('Resultaat kopiëren'));
-    await settle(tester);
-    expect(clip, isNotNull);
-    expect(clip, contains('Anna'));
-    expect(clip, contains('Algemene teller'));
-    expect(find.text('Resultaat gekopieerd'), findsOneWidget);
+    // the share card is the screen, the actions sit below it
+    expect(find.byType(ShareResultCard), findsOneWidget);
+    expect(find.text('Delen'), findsOneWidget);
+    expect(find.text('Opslaan als afbeelding'), findsOneWidget);
+    expect(find.text('Nieuw spel'), findsOneWidget);
+    expect(find.text('Hervat spel'), findsOneWidget);
+    expect(find.text('Anna'), findsWidgets);
   });
 
   appTest('players: duplicate names are refused with a message, rename works', (

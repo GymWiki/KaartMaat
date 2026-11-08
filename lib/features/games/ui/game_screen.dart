@@ -130,9 +130,30 @@ class _GameScreenState extends ConsumerState<GameScreen>
     )) {
       return;
     }
+    await _endGame(state.id);
+  }
+
+  /// True once this screen has taken the player to the result: it happens
+  /// once, whether the game ended by itself or by hand.
+  bool _resultShown = false;
+
+  Future<void> _endGame(int id) async {
+    if (_resultShown) return;
+    _resultShown = true;
     await _saver.discard();
-    await _repo.finish(state.id);
-    if (mounted) context.pushReplacement('/finished/${state.id}');
+    await _repo.finish(id);
+    if (mounted) context.pushReplacement('/finished/$id?celebrate=1');
+  }
+
+  /// The game ended by itself (target reached, last round played): go to the
+  /// result once. Not when the game was already over when it was opened, and
+  /// not while an earlier round is being corrected.
+  void _watchForEnd(GameState? previous, GameState? next) {
+    if (previous == null || next == null || next.isFinished) return;
+    if (_editingRound != null) return;
+    if (!GameView(previous).isOver && GameView(next).isOver) {
+      unawaited(_endGame(next.id));
+    }
   }
 
   Future<void> _delete(GameState state) async {
@@ -436,6 +457,10 @@ class _GameScreenState extends ConsumerState<GameScreen>
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    ref.listen(
+      gameStateProvider(widget.gameId),
+      (prev, next) => _watchForEnd(prev?.value, next.value),
+    );
     final async = ref.watch(gameStateProvider(widget.gameId));
     final state = async.value;
     if (state == null) {
