@@ -68,121 +68,128 @@ class PlayerSelector extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final l10n = context.l10n;
 
-    return LayoutBuilder(builder: (context, constraints) {
-      final per = math.max(1, math.min(perRow, chips.length));
-      final width = (constraints.maxWidth - kTouchGap * (per - 1)) / per;
-      return Wrap(
-        spacing: kTouchGap,
-        runSpacing: kTouchGap,
-        children: [
-          for (var i = 0; i < chips.length; i++)
-            Semantics(
-              button: true,
-              selected: i == selectedIndex,
-              label: [
-                chips[i].label,
-                if (chips[i].value != null) chips[i].value!,
-                if (chips[i].caption != null) chips[i].caption!,
-                if (chips[i].done) l10n.entered,
-              ].join(', '),
-              excludeSemantics: true,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: width,
-                  maxWidth: width,
-                  minHeight: kTouchTarget,
-                ),
-                child: Material(
-                  color: i == selectedIndex
-                      ? scheme.primary
-                      : scheme.surfaceContainerHighest,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                      color: chips[i].error
-                          ? scheme.error
-                          : chips[i].highlight
-                          ? scheme.tertiary
-                          : i == selectedIndex
-                          ? scheme.primary
-                          : scheme.outlineVariant,
-                      width: chips[i].error || chips[i].highlight ? 2.5 : 1,
-                    ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final per = math.max(1, math.min(perRow, chips.length));
+        final width = (constraints.maxWidth - kTouchGap * (per - 1)) / per;
+        return Wrap(
+          spacing: kTouchGap,
+          runSpacing: kTouchGap,
+          children: [
+            for (var i = 0; i < chips.length; i++)
+              Semantics(
+                button: true,
+                selected: i == selectedIndex,
+                label: [
+                  chips[i].label,
+                  if (chips[i].value != null) chips[i].value!,
+                  if (chips[i].caption != null) chips[i].caption!,
+                  if (chips[i].done) l10n.entered,
+                ].join(', '),
+                excludeSemantics: true,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: width,
+                    maxWidth: width,
+                    minHeight: kTouchTarget,
                   ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () => onSelected(i),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            chips[i].label,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: i == selectedIndex
-                                  ? AppTheme.ink
-                                  : scheme.onSurfaceVariant,
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (chips[i].done)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 4),
-                                  child: Icon(
-                                    Icons.check,
-                                    size: 14,
-                                    color: i == selectedIndex
-                                        ? AppTheme.ink
-                                        : scheme.secondary,
-                                  ),
-                                ),
-                              Text(
-                                chips[i].value ?? '–',
-                                style: TextStyle(
-                                  fontFamily: AppTheme.numeralFont,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 22,
-                                  height: 1.1,
-                                  color: i == selectedIndex
-                                      ? AppTheme.ink
-                                      : scheme.onSurface,
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (chips[i].caption != null)
+                  child: Material(
+                    color: i == selectedIndex
+                        ? scheme.primary
+                        : scheme.surfaceContainerHighest,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(
+                        color: chips[i].error
+                            ? scheme.error
+                            : chips[i].highlight
+                            ? scheme.tertiary
+                            : i == selectedIndex
+                            ? scheme.primary
+                            : scheme.outlineVariant,
+                        width: chips[i].error || chips[i].highlight ? 2.5 : 1,
+                      ),
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => onSelected(i),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
                             Text(
-                              chips[i].caption!,
+                              chips[i].label,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 11,
-                                height: 1.1,
-                                fontWeight: chips[i].highlight
-                                    ? FontWeight.w800
-                                    : null,
-                                color: chips[i].error
-                                    ? scheme.error
-                                    : i == selectedIndex
+                                fontSize: 12,
+                                color: i == selectedIndex
                                     ? AppTheme.ink
                                     : scheme.onSurfaceVariant,
                               ),
                             ),
-                        ],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (chips[i].done)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 4),
+                                    child: Icon(
+                                      Icons.check,
+                                      size: 14,
+                                      color: i == selectedIndex
+                                          ? AppTheme.ink
+                                          : scheme.secondary,
+                                    ),
+                                  ),
+                                Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      chips[i].value ?? '–',
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.numeralFont,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 22,
+                                        height: 1.1,
+                                        color: i == selectedIndex
+                                            ? AppTheme.ink
+                                            : scheme.onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (chips[i].caption != null)
+                              Text(
+                                chips[i].caption!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  height: 1.1,
+                                  fontWeight: chips[i].highlight
+                                      ? FontWeight.w800
+                                      : null,
+                                  color: chips[i].error
+                                      ? scheme.error
+                                      : i == selectedIndex
+                                      ? AppTheme.ink
+                                      : scheme.onSurfaceVariant,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-        ],
-      );
-    });
+          ],
+        );
+      },
+    );
   }
 }

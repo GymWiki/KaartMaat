@@ -29,6 +29,7 @@ import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
 import 'ui/rikken_labels.dart';
 import 'ui/duizenden_panel.dart';
+import 'ui/gronings_steps.dart' show suitSign;
 import 'ui/rikken_panel.dart';
 import 'ui/toepen_panel.dart';
 
@@ -171,6 +172,16 @@ final Map<String, GameDefinition> gameDefinitions = {
       final entry = round.entries[team];
       if (entry == null) return null;
       final outcome = rules.outcome(view.config, round);
+      // Gronings: bid, trump and bidder in one short line for the playing team
+      if (outcome.playing == team && outcome.bid != null) {
+        final sign = suitSign('${entry['suit']}');
+        final tail = outcome.nat
+            ? l.natInTable
+            : outcome.pit
+            ? l.pitInTable
+            : view.nameOf('${entry['bidder']}');
+        return '${outcome.bid}$sign $tail';
+      }
       if (outcome.playing == team && outcome.nat) return l.natInTable;
       if (outcome.playing == team && outcome.pit) return l.pitInTable;
       final roem = rules.roemOf(view.config, entry);
