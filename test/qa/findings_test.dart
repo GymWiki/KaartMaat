@@ -135,11 +135,12 @@ void main() {
     },
   );
 
-  test('QA-08 the Klaverjassen variant setting has no effect on scoring', () {
+  test('QA-08 Amsterdams and Rotterdams score alike; Gronings is the variant that differs', () {
     const r = KlaverjasRules();
     expect(r.settingSpecs.firstWhere((s) => s.key == 'variant').options, [
       'amsterdams',
       'rotterdams',
+      'gronings',
     ]);
     // see rules_worked_examples_test: identical scores for both variants
   });

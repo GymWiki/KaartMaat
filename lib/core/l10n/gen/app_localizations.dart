@@ -352,6 +352,138 @@ abstract class AppLocalizations {
   /// **'Vul de score van alle spelers in'**
   String get duizendenFillAll;
 
+  /// No description provided for @variantGronings.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gronings'**
+  String get variantGronings;
+
+  /// No description provided for @variantHintAmsterdams.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gewoon klaverjassen: de spelende partij moet meer punten halen dan de tegenpartij.'**
+  String get variantHintAmsterdams;
+
+  /// No description provided for @variantHintRotterdams.
+  ///
+  /// In nl, this message translates to:
+  /// **'Rekent in de app hetzelfde als Amsterdams.'**
+  String get variantHintRotterdams;
+
+  /// No description provided for @variantHintGronings.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eerst bieden: de spelende partij moet haar bod halen (met roem). Troeven is verplicht; overtroeven niet als de slag al van je maat is.'**
+  String get variantHintGronings;
+
+  /// No description provided for @settingMinBid.
+  ///
+  /// In nl, this message translates to:
+  /// **'Laagste bod'**
+  String get settingMinBid;
+
+  /// No description provided for @settingMaxBid.
+  ///
+  /// In nl, this message translates to:
+  /// **'Hoogste bod'**
+  String get settingMaxBid;
+
+  /// No description provided for @groningsBidTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bieden'**
+  String get groningsBidTitle;
+
+  /// No description provided for @groningsPass.
+  ///
+  /// In nl, this message translates to:
+  /// **'Iedereen past'**
+  String get groningsPass;
+
+  /// No description provided for @groningsForced.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} moet {bid} bieden'**
+  String groningsForced(String name, int bid);
+
+  /// No description provided for @groningsToTrump.
+  ///
+  /// In nl, this message translates to:
+  /// **'Troef kiezen'**
+  String get groningsToTrump;
+
+  /// No description provided for @groningsClearBid.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bod wissen'**
+  String get groningsClearBid;
+
+  /// No description provided for @groningsRaise.
+  ///
+  /// In nl, this message translates to:
+  /// **'+{step}'**
+  String groningsRaise(int step);
+
+  /// No description provided for @groningsBidOf.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name}: {bid}'**
+  String groningsBidOf(String name, int bid);
+
+  /// No description provided for @groningsChooseBid.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies wie biedt en hoeveel'**
+  String get groningsChooseBid;
+
+  /// No description provided for @groningsChooseTrump.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kies de troef'**
+  String get groningsChooseTrump;
+
+  /// No description provided for @groningsBidSummary.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} biedt {bid}'**
+  String groningsBidSummary(String name, int bid);
+
+  /// No description provided for @groningsBidMade.
+  ///
+  /// In nl, this message translates to:
+  /// **'bod {bid} gehaald'**
+  String groningsBidMade(int bid);
+
+  /// No description provided for @groningsBidFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'bod {bid} niet gehaald'**
+  String groningsBidFailed(int bid);
+
+  /// No description provided for @suitHearts.
+  ///
+  /// In nl, this message translates to:
+  /// **'Harten'**
+  String get suitHearts;
+
+  /// No description provided for @suitDiamonds.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ruiten'**
+  String get suitDiamonds;
+
+  /// No description provided for @suitSpades.
+  ///
+  /// In nl, this message translates to:
+  /// **'Schoppen'**
+  String get suitSpades;
+
+  /// No description provided for @suitClubs.
+  ///
+  /// In nl, this message translates to:
+  /// **'Klaveren'**
+  String get suitClubs;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:

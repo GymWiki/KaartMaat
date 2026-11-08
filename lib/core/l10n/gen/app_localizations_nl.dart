@@ -159,6 +159,87 @@ class AppLocalizationsNl extends AppLocalizations {
   String get duizendenFillAll => 'Vul de score van alle spelers in';
 
   @override
+  String get variantGronings => 'Gronings';
+
+  @override
+  String get variantHintAmsterdams =>
+      'Gewoon klaverjassen: de spelende partij moet meer punten halen dan de tegenpartij.';
+
+  @override
+  String get variantHintRotterdams =>
+      'Rekent in de app hetzelfde als Amsterdams.';
+
+  @override
+  String get variantHintGronings =>
+      'Eerst bieden: de spelende partij moet haar bod halen (met roem). Troeven is verplicht; overtroeven niet als de slag al van je maat is.';
+
+  @override
+  String get settingMinBid => 'Laagste bod';
+
+  @override
+  String get settingMaxBid => 'Hoogste bod';
+
+  @override
+  String get groningsBidTitle => 'Bieden';
+
+  @override
+  String get groningsPass => 'Iedereen past';
+
+  @override
+  String groningsForced(String name, int bid) {
+    return '$name moet $bid bieden';
+  }
+
+  @override
+  String get groningsToTrump => 'Troef kiezen';
+
+  @override
+  String get groningsClearBid => 'Bod wissen';
+
+  @override
+  String groningsRaise(int step) {
+    return '+$step';
+  }
+
+  @override
+  String groningsBidOf(String name, int bid) {
+    return '$name: $bid';
+  }
+
+  @override
+  String get groningsChooseBid => 'Kies wie biedt en hoeveel';
+
+  @override
+  String get groningsChooseTrump => 'Kies de troef';
+
+  @override
+  String groningsBidSummary(String name, int bid) {
+    return '$name biedt $bid';
+  }
+
+  @override
+  String groningsBidMade(int bid) {
+    return 'bod $bid gehaald';
+  }
+
+  @override
+  String groningsBidFailed(int bid) {
+    return 'bod $bid niet gehaald';
+  }
+
+  @override
+  String get suitHearts => 'Harten';
+
+  @override
+  String get suitDiamonds => 'Ruiten';
+
+  @override
+  String get suitSpades => 'Schoppen';
+
+  @override
+  String get suitClubs => 'Klaveren';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

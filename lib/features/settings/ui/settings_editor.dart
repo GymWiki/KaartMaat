@@ -35,6 +35,8 @@ String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
       BoerenbridgeRules.maxCardsKey => l10n.settingMaxCards,
       KlaverjasRules.variantKey => l10n.settingVariant,
       KlaverjasRules.endModeKey => l10n.settingEndMode,
+      KlaverjasRules.minBidKey => l10n.settingMinBid,
+      KlaverjasRules.maxBidKey => l10n.settingMaxBid,
       CanastaRules.targetInclusiveKey => l10n.settingTargetInclusive,
       KlaverjasRules.tieIsNatKey => l10n.settingTieIsNat,
       KlaverjasRules.pitBonusKey => l10n.settingPitBonus,
@@ -69,12 +71,24 @@ String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
 String optionLabel(AppLocalizations l10n, String option) => switch (option) {
       KlaverjasRules.amsterdams => l10n.variantAmsterdams,
       KlaverjasRules.rotterdams => l10n.variantRotterdams,
+      KlaverjasRules.gronings => l10n.variantGronings,
       KlaverjasRules.endModeHands => l10n.endModeHands,
       KlaverjasRules.endModeTarget => l10n.endModeTarget,
       HeartsRules.moonOthers => l10n.moonOthers,
       HeartsRules.moonShooter => l10n.moonShooter,
       _ => option,
     };
+
+/// One line under a choice that explains the selected option.
+String? optionHint(AppLocalizations l10n, String key, Object? option) =>
+    key == KlaverjasRules.variantKey
+        ? switch (option) {
+            KlaverjasRules.amsterdams => l10n.variantHintAmsterdams,
+            KlaverjasRules.rotterdams => l10n.variantHintRotterdams,
+            KlaverjasRules.gronings => l10n.variantHintGronings,
+            _ => null,
+          }
+        : null;
 
 /// Renders the rule options of one game from its [SettingSpec]s.
 class SettingsEditor extends StatelessWidget {
@@ -94,7 +108,13 @@ class SettingsEditor extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        for (final spec in rules.settingSpecs)
+        for (final spec in rules.settingSpecs.where(
+          (s) =>
+              s.visibleIf == null ||
+              (values[s.visibleIf!.$1] ??
+                      rules.defaultSettings[s.visibleIf!.$1]) ==
+                  s.visibleIf!.$2,
+        ))
           switch (spec.kind) {
             SettingKind.boolean => SwitchListTile(
                 title: Text(settingLabel(l10n, spec.key)),
@@ -105,15 +125,35 @@ class SettingsEditor extends StatelessWidget {
                 title: Text(settingLabel(l10n, spec.key)),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (final option in spec.options)
-                        ChoiceChip(
-                          label: Text(optionLabel(l10n, option)),
-                          selected: (values[spec.key] ?? spec.defaultValue) == option,
-                          onSelected: (_) => onChanged(spec.key, option),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final option in spec.options)
+                            ChoiceChip(
+                              label: Text(optionLabel(l10n, option)),
+                              selected:
+                                  (values[spec.key] ?? spec.defaultValue) ==
+                                  option,
+                              onSelected: (_) => onChanged(spec.key, option),
+                            ),
+                        ],
+                      ),
+                      if (optionHint(
+                            l10n,
+                            spec.key,
+                            values[spec.key] ?? spec.defaultValue,
+                          )
+                          case final hint?)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            hint,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ),
                     ],
                   ),
