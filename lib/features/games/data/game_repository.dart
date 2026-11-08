@@ -203,9 +203,22 @@ class GameRepository {
     }
   });
 
-  Future<void> finish(int gameId) =>
+  /// Marks the game as finished. Finishing twice keeps the first time, so a
+  /// double tap or a second path can never change or double-count a game.
+  /// Returns true when this call finished it.
+  Future<bool> finish(int gameId) async {
+    final n =
+        await (db.update(db.games)
+              ..where((g) => g.id.equals(gameId) & g.finishedAt.isNull()))
+            .write(GamesCompanion(finishedAt: Value(DateTime.now())));
+    return n > 0;
+  }
+
+  /// Undoes [finish]: the game is playable again and no longer in history or
+  /// statistics (those only read finished games).
+  Future<void> reopen(int gameId) =>
       (db.update(db.games)..where((g) => g.id.equals(gameId))).write(
-        GamesCompanion(finishedAt: Value(DateTime.now())),
+        const GamesCompanion(finishedAt: Value(null)),
       );
 
   Future<void> deleteGame(int gameId) => db.transaction(() async {
