@@ -178,6 +178,12 @@ abstract class AppLocalizations {
   /// **'Binnenkort'**
   String get comingSoon;
 
+  /// No description provided for @otherRunningGames.
+  ///
+  /// In nl, this message translates to:
+  /// **'Andere lopende spellen'**
+  String get otherRunningGames;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:

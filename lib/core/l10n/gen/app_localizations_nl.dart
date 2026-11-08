@@ -51,6 +51,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get comingSoon => 'Binnenkort';
 
   @override
+  String get otherRunningGames => 'Andere lopende spellen';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

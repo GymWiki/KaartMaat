@@ -14,6 +14,7 @@
   "gameRikken": "Rikken",
   "gameHartenjagen": "Hartenjagen",
   "comingSoon": "Binnenkort",
+  "otherRunningGames": "Andere lopende spellen",
   "resumeGame": "Hervat spel",
   "resumeSubtitle": "{game} · {count, plural, =0{nog geen rondes} =1{1 ronde} other{{count} rondes}}",
   "@resumeSubtitle": {

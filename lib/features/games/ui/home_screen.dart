@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/ui/dialogs.dart';
 import '../../../core/ui/suits.dart';
 import '../data/game_repository.dart';
 import '../games_registry.dart';
@@ -13,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final lastId = ref.watch(lastUnfinishedIdProvider).value;
+    final running = ref.watch(unfinishedIdsProvider).value ?? const <int>[];
     final games = gameDefinitions.values.toList();
 
     return Scaffold(
@@ -21,7 +22,18 @@ class HomeScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
         children: [
-          if (lastId != null) _ResumeCard(gameId: lastId),
+          if (running.isNotEmpty) _ResumeCard(gameId: running.first),
+          if (running.length > 1) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                context.l10n.otherRunningGames,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+            for (final id in running.skip(1)) _RunningGameTile(gameId: id),
+            const SizedBox(height: 16),
+          ],
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
@@ -92,6 +104,40 @@ class _ResumeCard extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// An older unfinished game: open it, or delete it.
+class _RunningGameTile extends ConsumerWidget {
+  const _RunningGameTile({required this.gameId});
+  final int gameId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final state = ref.watch(gameStateProvider(gameId)).value;
+    if (state == null) return const SizedBox.shrink();
+    final name = definitionFor(state.type).name(l10n);
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      leading: Icon(definitionFor(state.type).icon),
+      title: Text(name),
+      subtitle: Text(l10n.roundsCount(state.rounds.length)),
+      onTap: () => context.push('/game/$gameId'),
+      trailing: IconButton(
+        tooltip: l10n.deleteGame,
+        icon: const Icon(Icons.delete_outline),
+        onPressed: () async {
+          if (await confirmDialog(
+            context,
+            l10n.deleteGameConfirm,
+            actionLabel: l10n.delete,
+          )) {
+            await ref.read(gameRepositoryProvider).deleteGame(gameId);
+          }
+        },
       ),
     );
   }

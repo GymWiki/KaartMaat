@@ -25,18 +25,17 @@ GameConfig cfg(
 );
 
 void main() {
-  test('QA-01 only the newest unfinished game can be resumed', () async {
-    final db = AppDatabase(NativeDatabase.memory());
-    addTearDown(db.close);
-    final repo = GameRepository(db);
-    final first = await repo.createGame('custom', [], {});
-    final second = await repo.createGame('custom', [], {});
-    // Home shows a single "Hervat spel" card for the newest one ...
-    expect(await repo.watchLastUnfinishedId().first, second);
-    // ... History only lists finished games, so `first` has no way in the UI.
-    expect(await repo.watchFinished().first, isEmpty);
-    expect((await repo.load(first))!.isFinished, isFalse);
-  });
+  test(
+    'QA-01 (fixed) all unfinished games stay reachable, newest first',
+    () async {
+      final db = AppDatabase(NativeDatabase.memory());
+      addTearDown(db.close);
+      final repo = GameRepository(db);
+      final first = await repo.createGame('custom', [], {});
+      final second = await repo.createGame('custom', [], {});
+      expect(await repo.watchUnfinishedIds().first, [second, first]);
+    },
+  );
 
   test(
     'QA-03 Toepen totals can exceed the limit after correcting an earlier round',

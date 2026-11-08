@@ -109,6 +109,16 @@ class GameRepository {
           .watch()
           .map((rows) => rows.isEmpty ? null : rows.first.id);
 
+  /// Ids of all unfinished games, newest first.
+  Stream<List<int>> watchUnfinishedIds() => (db.select(db.games)
+        ..where((g) => g.finishedAt.isNull())
+        ..orderBy([
+          (g) => OrderingTerm.desc(g.createdAt),
+          (g) => OrderingTerm.desc(g.id),
+        ]))
+      .watch()
+      .map((rows) => [for (final r in rows) r.id]);
+
   /// Finished games, newest first.
   Stream<List<GameState>> watchFinished() => db
       .customSelect('SELECT 1', readsFrom: _tables)
@@ -221,6 +231,9 @@ final gameStateProvider = StreamProvider.family<GameState?, int>(
 final lastUnfinishedIdProvider = StreamProvider<int?>(
   (ref) => ref.watch(gameRepositoryProvider).watchLastUnfinishedId(),
 );
+
+final unfinishedIdsProvider = StreamProvider<List<int>>(
+    (ref) => ref.watch(gameRepositoryProvider).watchUnfinishedIds());
 
 final finishedGamesProvider = StreamProvider<List<GameState>>(
   (ref) => ref.watch(gameRepositoryProvider).watchFinished(),

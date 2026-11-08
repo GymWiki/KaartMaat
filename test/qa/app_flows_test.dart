@@ -294,6 +294,31 @@ void main() {
 }
 
 void startGuardTests() {
+  appTest('QA-01: older unfinished games are listed and can be deleted', (
+    tester,
+  ) async {
+    await boot(
+      tester,
+      seedPlayers: 2,
+      seed: () async {
+        final repo = GameRepository(db);
+        await repo.createGame('toepen', ids, {});
+        await repo.createGame('custom', ids, {});
+      },
+    );
+    expect(find.text('Hervat spel'), findsOneWidget);
+    expect(find.text('Andere lopende spellen'), findsOneWidget);
+    // the older one (Toepen) is a tile of its own
+    expect(find.text('Toepen'), findsWidgets);
+    await tester.tap(find.byTooltip('Spel verwijderen'));
+    await settle(tester);
+    await tester.tap(find.text('Verwijderen').last);
+    await settle(tester);
+    final left = await real(tester, () => db.select(db.games).get());
+    expect(left.length, 1);
+    expect(left.single.type, 'custom');
+  });
+
   appTest('QA-02b: tapping Start spel twice starts only one game', (
     tester,
   ) async {
