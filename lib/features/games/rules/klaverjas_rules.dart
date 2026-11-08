@@ -22,6 +22,16 @@ class KlaverjasRules extends GameRules {
   static const amsterdams = 'amsterdams';
   static const rotterdams = 'rotterdams';
 
+  /// Gronings: every hand starts with bidding. The playing team has to make
+  /// the bid (card points plus roem), else it is nat.
+  static const gronings = 'gronings';
+
+  static const minBidKey = 'minBid';
+  static const maxBidKey = 'maxBid';
+
+  /// Trump suits as stored in a Gronings hand.
+  static const suits = ['hearts', 'diamonds', 'spades', 'clubs'];
+
   static const variantKey = 'variant';
   static const tieIsNatKey = 'tieIsNat';
   static const pitBonusKey = 'pitBonus';
@@ -59,7 +69,25 @@ class KlaverjasRules extends GameRules {
           key: variantKey,
           kind: SettingKind.choice,
           defaultValue: amsterdams,
-          options: [amsterdams, rotterdams],
+          options: [amsterdams, rotterdams, gronings],
+        ),
+        // Gronings bidding: lowest opening bid (also what the player left of
+        // the dealer must bid when everybody passes) and the highest bid.
+        SettingSpec(
+          key: minBidKey,
+          kind: SettingKind.integer,
+          defaultValue: 70,
+          min: 10,
+          max: 160,
+          visibleIf: (variantKey, gronings),
+        ),
+        SettingSpec(
+          key: maxBidKey,
+          kind: SettingKind.integer,
+          defaultValue: 260,
+          min: 70,
+          max: 500,
+          visibleIf: (variantKey, gronings),
         ),
         SettingSpec(
           key: endModeKey,
@@ -160,6 +188,74 @@ class KlaverjasRules extends GameRules {
     return v != null && v >= 0 && v <= totalCardPoints;
   }
 
+  // ---- Gronings bidding --------------------------------------------------
+
+  bool isGronings(GameConfig config) => config.settings[variantKey] == gronings;
+
+  int minBid(GameConfig config) =>
+      (config.settings[minBidKey] as num?)?.toInt() ?? 70;
+
+  int maxBid(GameConfig config) =>
+      (config.settings[maxBidKey] as num?)?.toInt() ?? 260;
+
+  /// The player left of the dealer: bids first, and has to bid the minimum
+  /// when everybody else passes.
+  String bidStarter(GameConfig config, int roundNumber) =>
+      config.players[(dealerSeat(config, roundNumber) + 1) % config.players.length];
+
+  /// Bidding order: starts left of the dealer, the dealer bids last.
+  List<String> bidOrder(GameConfig config, int roundNumber) {
+    final n = config.players.length;
+    final start = (dealerSeat(config, roundNumber) + 1) % n;
+    return [for (var i = 0; i < n; i++) config.players[(start + i) % n]];
+  }
+
+  /// A first bid: a multiple of 10 between the lowest and highest bid.
+  bool isValidOpening(GameConfig config, int bid) =>
+      bid % 10 == 0 && bid >= minBid(config) && bid <= maxBid(config);
+
+  /// A raise is +10, +20 or +30 on the current bid, within the highest bid.
+  bool isValidRaise(GameConfig config, int current, int next) {
+    final d = next - current;
+    return (d == 10 || d == 20 || d == 30) && next <= maxBid(config);
+  }
+
+  /// Opening bids the panel offers as quick buttons.
+  List<int> openingBids(GameConfig config) => [
+    for (var b = minBid(config); b <= maxBid(config) && b <= 160; b += 10) b,
+  ];
+
+  /// The raises (+10/+20/+30) that are still allowed on [current].
+  List<int> raisesFor(GameConfig config, int current) => [
+    for (final d in const [10, 20, 30])
+      if (current + d <= maxBid(config)) d,
+  ];
+
+  /// Who won the bidding. [bids] is the bidding in order (passes are left
+  /// out); every bid must be a valid opening or raise, the last one is the
+  /// highest. When nobody bid, the starter plays at the lowest bid.
+  ({String bidder, int bid}) resolveBidding(
+    GameConfig config,
+    int roundNumber,
+    List<({String player, int bid})> bids,
+  ) {
+    if (bids.isEmpty) {
+      return (bidder: bidStarter(config, roundNumber), bid: minBid(config));
+    }
+    return (bidder: bids.last.player, bid: bids.last.bid);
+  }
+
+  /// Whether a whole bidding is legal: a valid opening, then only raises.
+  bool isValidBidding(GameConfig config, List<({String player, int bid})> bids) {
+    for (var i = 0; i < bids.length; i++) {
+      final ok = i == 0
+          ? isValidOpening(config, bids[i].bid)
+          : isValidRaise(config, bids[i - 1].bid, bids[i].bid);
+      if (!ok) return false;
+    }
+    return true;
+  }
+
   // ---- Scoring ---------------------------------------------------------
 
   int _int(Entry? e, String key) => e?[key] is int ? e![key] as int : 0;
@@ -202,6 +298,19 @@ class KlaverjasRules extends GameRules {
       return RoundIssue.invalidValue;
     }
     final team = playingTeam(round)!;
+    if (isGronings(config)) {
+      final e = round.entries[team]!;
+      final bid = e['bid'];
+      if (bid is! int) return RoundIssue.missingEntry;
+      if (bid % 10 != 0) return RoundIssue.invalidValue;
+      if (bid < minBid(config) || bid > maxBid(config)) {
+        return RoundIssue.outOfRange;
+      }
+      if (!suits.contains(e['suit'])) return RoundIssue.missingEntry;
+      if (!membersOf(config, team).contains(e['bidder'])) {
+        return RoundIssue.invalidValue;
+      }
+    }
     if (round.entries[team]!['pit'] == true) {
       // A pit means all tricks: nothing for the other team, not even roem.
       final o = round.entries[other(team)]!;
@@ -235,6 +344,7 @@ class KlaverjasRules extends GameRules {
         playing: team,
         nat: false,
         pit: true,
+        bid: isGronings(config) ? round.entries[team]!['bid'] as int? : null,
         points: {
           team: cardsP + roemP + config.intSetting(pitBonusKey),
           opp: 0,
@@ -244,11 +354,17 @@ class KlaverjasRules extends GameRules {
 
     final totalP = cardsP + roemP;
     final totalO = cardsO + roemO;
-    final nat = config.boolSetting(tieIsNatKey) ? totalP <= totalO : totalP < totalO;
+    // Gronings: the bid decides (made with exactly the bid is made). The
+    // other variants need more than the opponents.
+    final bid = isGronings(config) ? round.entries[team]!['bid'] as int : null;
+    final nat = bid != null
+        ? totalP < bid
+        : (config.boolSetting(tieIsNatKey) ? totalP <= totalO : totalP < totalO);
     return KlaverjasOutcome(
       playing: team,
       nat: nat,
       pit: false,
+      bid: bid,
       points: nat
           // The team that failed gets nothing; the other team gets all card
           // points and the roem of both teams.
@@ -289,6 +405,7 @@ class KlaverjasOutcome {
     required this.nat,
     required this.pit,
     required this.points,
+    this.bid,
   });
 
   /// The team that chose trump; null while the entry is incomplete.
@@ -296,4 +413,7 @@ class KlaverjasOutcome {
   final bool nat;
   final bool pit;
   final Map<String, int> points;
+
+  /// Gronings: the bid of the playing team; null in the other variants.
+  final int? bid;
 }

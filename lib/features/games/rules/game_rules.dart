@@ -70,6 +70,7 @@ class SettingSpec {
     this.min = 0,
     this.max = 9999,
     this.options = const [],
+    this.visibleIf,
   });
 
   final String key;
@@ -80,6 +81,10 @@ class SettingSpec {
 
   /// Allowed values for [SettingKind.choice].
   final List<String> options;
+
+  /// Only shown in the settings editor while another setting has this value
+  /// (for example the Gronings bid limits only matter for that variant).
+  final (String key, Object value)? visibleIf;
 }
 
 abstract class GameRules {
