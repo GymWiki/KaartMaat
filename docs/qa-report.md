@@ -9,6 +9,20 @@ Wat ik wel en niet kon doen:
 - Beperking: in widgettests komen Drift-stream-updates niet door naar de UI. Flows die live stream-updates nodig hebben (tikken in de teller, rondes bijwerken) zijn daarom op de emulator gecontroleerd, niet in de widgettests.
 - **Niet gedaan / niet gemeten** (zie sectie 6): frameprestaties (gfxinfo gaf 0 frames), rotatie midden in invoer, telefoontje/low-memory-kill, OLED-contrast op echt scherm, haptics, vibratie, "keep screen on", delen via de Android-deelsheet.
 
+## Status na de fixes (branch `fix/qa-blockers`)
+
+| ID | Status | Hoe geverifieerd |
+|---|---|---|
+| QA-02 snel tikken, dubbele rondes | opgelost (upsert in databasetransactie, wachtrij, dubbele bevestiging genegeerd) | regressietests; emulator: 5 snelle tikken = 1 ronde, totaal klopt |
+| QA-02b dubbel Start spel | opgelost (guard in de knop) | regressietest; emulator: 2 snelle tikken = 1 nieuw spel |
+| QA-01 onbereikbare lopende spellen | opgelost (lijst "Andere lopende spellen" met verwijderknop) | widgettest; emulator gezien |
+| QA-09 layout bij 200% lettergrootte | opgelost: geen overflow meer in 56 cellen; 8 spelers passen op een normale telefoon. Op kleine (360x640) en liggende schermen scrolt het paneel nog binnenin (bewust: paneel is max. 50% van het scherm) | layoutmatrix is nu een harde test |
+| QA-10 icoon | plaatshouder: spade en hart op kaartengroen (adaptief), Play-icoon 512 px in docs/store | emulator: icoon zichtbaar |
+
+Tijdens de verificatie op de emulator bleek dat een eerste versie van de QA-02-fix (geneste transactie) het scherm geen live updates meer liet krijgen. Dat is gecorrigeerd met een eigen regressietest; de definitieve versie is op het toestel gecontroleerd.
+
+Nog open: alle minors (QA-03 t/m QA-06, QA-11 t/m QA-16) en de regelvragen in sectie 3.
+
 ## 1. Samenvatting
 
 | Gebied | Tests toegevoegd | Resultaat |
