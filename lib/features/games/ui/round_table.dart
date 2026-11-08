@@ -297,7 +297,8 @@ class _RoundTableState extends State<RoundTable> {
             ],
           ),
         ),
-        if (widget.totalDetail != null)
+        if (widget.totalDetail != null &&
+            ids.any((p) => (widget.totalDetail!(p) ?? '').isNotEmpty))
           rowFrame(
             color: scheme.surfaceContainer,
             border: Border(bottom: BorderSide(color: scheme.outline)),

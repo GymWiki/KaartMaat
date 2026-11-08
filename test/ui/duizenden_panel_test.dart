@@ -165,6 +165,30 @@ void main() {
     expect(find.text('-7'), findsOneWidget);
   });
 
+  testWidgets('the keys never move when a hint appears or goes away', (
+    tester,
+  ) async {
+    await pumpPanel(tester);
+    final five = find.descendant(
+      of: find.byType(WideDigitPad),
+      matching: find.text('5'),
+    );
+    final before = tester.getTopLeft(five);
+    await type(tester, '-1000'); // out-of-range hint appears
+    expect(tester.getTopLeft(five), before);
+    await tester.tap(find.text('Bas').first);
+    await tester.pump();
+    await type(tester, '1');
+    await tester.tap(find.text('Chris').first);
+    await tester.pump();
+    await type(tester, '1');
+    expect(tester.getTopLeft(five), before);
+    await tester.tap(find.text('Anna').first);
+    await tester.pump();
+    await type(tester, '0'); // hint goes away (also not all filled)
+    expect(tester.getTopLeft(five), before);
+  });
+
   testWidgets('"-0" is stored as 0, never as a lone minus', (tester) async {
     await pumpPanel(tester);
     await type(tester, '-0');

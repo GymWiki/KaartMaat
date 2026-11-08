@@ -259,17 +259,24 @@ class _DuizendenPanelState extends ConsumerState<DuizendenPanel> {
             ),
           ],
         ),
-        if (message != null) ...[
-          const SizedBox(height: 6),
-          Text(
-            message,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: text.bodySmall?.copyWith(
-              color: messageIsError ? scheme.error : scheme.onSurfaceVariant,
-            ),
-          ),
-        ],
+        // A line of fixed height, so the keys never move under the thumb when
+        // a hint appears or goes away.
+        const SizedBox(height: 6),
+        SizedBox(
+          height: 18,
+          child: message == null
+              ? null
+              : Text(
+                  message,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: text.bodySmall?.copyWith(
+                    color: messageIsError
+                        ? scheme.error
+                        : scheme.onSurfaceVariant,
+                  ),
+                ),
+        ),
       ],
     );
   }
