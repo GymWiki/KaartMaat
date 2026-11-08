@@ -107,9 +107,12 @@ class _ToepenPanelState extends ConsumerState<ToepenPanel> {
         CustomSemanticsAction(label: l10n.counterMinus(1)): () =>
             _change(p, -1),
       },
-      child: SizedBox(
-        width: width,
-        height: dense ? 76 : 96,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: width,
+          maxWidth: width,
+          minHeight: dense ? 76 : 96,
+        ),
         child: Material(
           color: out
               ? scheme.surfaceContainerLow

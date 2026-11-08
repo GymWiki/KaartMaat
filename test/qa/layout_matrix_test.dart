@@ -132,10 +132,11 @@ void main() {
         final line =
             '$type/${players}p $label: ${exception != null ? 'EXCEPTION ${exception.toString().split('\n').first}' : 'ok'}, panel scrolls ${hidden.toStringAsFixed(0)} dp';
         report.add(line);
-        // Only the baseline (normal phone, 100% font) is a hard requirement here;
-        // the other cells are findings, listed in docs/qa-report.md.
+        // No cell may overflow (QA-09), and on a normal phone at 100% font the
+        // whole panel must be visible without scrolling inside it.
+        expect(exception, isNull, reason: line);
         if (label.startsWith('normal 411x914 @100%')) {
-          expect(exception, isNull, reason: line);
+          expect(hidden, lessThanOrEqualTo(0.5), reason: line);
         }
       });
     }

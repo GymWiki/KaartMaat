@@ -162,6 +162,8 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
         ])[p]) ??
         0;
     final inRound = points[p]!;
+    // 7 or 8 players: one line less per tile, so the panel still fits.
+    final tight = ids.length > 6;
 
     return Semantics(
       container: true,
@@ -172,9 +174,12 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
         CustomSemanticsAction(label: l10n.counterMinus(step)): () =>
             _change(p, -step),
       },
-      child: SizedBox(
-        width: width,
-        height: ids.length > 4 ? 76 : 96,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: width,
+          maxWidth: width,
+          minHeight: tight ? 60 : (ids.length > 4 ? 76 : 96),
+        ),
         child: Material(
           color: scheme.surfaceContainerHighest,
           shape: RoundedRectangleBorder(
@@ -208,14 +213,27 @@ class _CounterPanelState extends ConsumerState<CounterPanel> {
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            '$total',
+                          child: Text.rich(
+                            TextSpan(
+                              text: '$total',
+                              children: [
+                                if (tight && inRound != 0)
+                                  TextSpan(
+                                    text: '  ${inRound > 0 ? '+' : ''}$inRound',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: scheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                              ],
+                            ),
                             style: text.displaySmall?.copyWith(
                               fontSize: ids.length > 4 ? 30 : 34,
                               height: 1.0,
                             ),
                           ),
                         ),
+                        if (!tight)
                         Text(
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

@@ -69,9 +69,12 @@ class PlayerSelector extends StatelessWidget {
                 if (chips[i].done) l10n.entered,
               ].join(', '),
               excludeSemantics: true,
-              child: SizedBox(
-                width: width,
-                height: kTouchTarget,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: width,
+                  maxWidth: width,
+                  minHeight: kTouchTarget,
+                ),
                 child: Material(
                   color: i == selectedIndex
                       ? scheme.primary

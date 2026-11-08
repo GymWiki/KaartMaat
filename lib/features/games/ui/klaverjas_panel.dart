@@ -417,21 +417,26 @@ class _KlaverjasPanelState extends ConsumerState<KlaverjasPanel> {
               ),
             ),
             const SizedBox(width: kTouchGap),
-            Semantics(
-              button: true,
-              selected: roemPage,
-              label: l10n.pageRoem,
-              excludeSemantics: true,
-              child: SizedBox(
-                height: kTouchTarget,
-                child: FilterChip(
-                  selected: roemPage,
-                  showCheckmark: false,
-                  label: Text(
-                    '${l10n.pageRoem} · ${_roemTotal(KlaverjasRules.wij)} / ${_roemTotal(KlaverjasRules.zij)}',
-                    style: const TextStyle(fontWeight: FontWeight.w700),
+            Flexible(
+              child: Semantics(
+                button: true,
+                selected: roemPage,
+                label: l10n.pageRoem,
+                excludeSemantics: true,
+                child: SizedBox(
+                  height: kTouchTarget,
+                  child: FilterChip(
+                    selected: roemPage,
+                    showCheckmark: false,
+                    label: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '${l10n.pageRoem} · ${_roemTotal(KlaverjasRules.wij)} / ${_roemTotal(KlaverjasRules.zij)}',
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    onSelected: (_) => _update(() => roemPage = !roemPage),
                   ),
-                  onSelected: (_) => _update(() => roemPage = !roemPage),
                 ),
               ),
             ),

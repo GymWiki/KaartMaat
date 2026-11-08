@@ -57,7 +57,7 @@ void main() {
       expect(tester.getTopLeft(find.text('Eva')).dy,
           greaterThan(tester.getTopLeft(find.text('Anna')).dy));
       final height = tester.getSize(find.ancestor(
-          of: find.text('Anna'), matching: find.byType(SizedBox)).first).height;
+          of: find.text('Anna'), matching: find.byType(ConstrainedBox)).first).height;
       expect(height, greaterThanOrEqualTo(kTouchTarget));
     });
   });
