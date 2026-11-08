@@ -23,6 +23,9 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
   /// Tap order is seat order.
   final List<int> _selected = [];
   int? _groupId;
+
+  /// True from the first tap on Start: a second tap must not start a second game.
+  bool _starting = false;
   late final Map<String, Object?> _options = ref
       .read(prefsProvider)
       .ruleOptions(definitionFor(widget.type).rules);
@@ -160,8 +163,11 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: valid
+                  onPressed: valid && !_starting
                       ? () async {
+                          if (_starting) return;
+                          _starting = true;
+                          setState(() {});
                           final id = await ref
                               .read(gameRepositoryProvider)
                               .createGame(

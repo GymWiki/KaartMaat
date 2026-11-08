@@ -108,6 +108,7 @@ void appTest(String name, Future<void> Function(WidgetTester) body) {
 }
 
 void main() {
+  startGuardTests();
   setUpAll(() => initializeDateFormatting('nl'));
 
   appTest('home shows every game, Dutch only', (tester) async {
@@ -289,5 +290,24 @@ void main() {
     await tester.tap(find.text('Hervat spel'));
     await settle(tester);
     expect(find.text('Anna'), findsWidgets);
+  });
+}
+
+void startGuardTests() {
+  appTest('QA-02b: tapping Start spel twice starts only one game', (
+    tester,
+  ) async {
+    await boot(tester, seedPlayers: 2);
+    await goTo(tester, '/new/custom');
+    await tester.tap(find.widgetWithText(FilterChip, 'Anna'));
+    await tester.tap(find.widgetWithText(FilterChip, 'Bas'));
+    await settle(tester, 2);
+    final start = find.text('Start spel');
+    // two taps without a frame in between, like a nervous double tap
+    await tester.tap(start);
+    await tester.tap(start, warnIfMissed: false);
+    await settle(tester);
+    final all = await real(tester, () => db.select(db.games).get());
+    expect(all.length, 1);
   });
 }
