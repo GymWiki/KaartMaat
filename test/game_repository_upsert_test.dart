@@ -43,4 +43,17 @@ void main() {
     expect(await games.upsertRound(gameId, 2, pts(5)), isNull);
     expect((await games.load(gameId))!.rounds.map((r) => r.number), [1, 2]);
   });
+
+  test('live queries see an upsert (no nested transaction)', () async {
+    final seen = <int>[];
+    final sub = games.watch(gameId).listen((s) => seen.add(s!.rounds.length));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await games.upsertRound(gameId, 1, pts(1));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await games.upsertRound(gameId, 1, pts(2));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await sub.cancel();
+    expect(seen.first, 0);
+    expect(seen.last, 1);
+  });
 }

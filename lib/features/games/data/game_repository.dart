@@ -141,24 +141,29 @@ class GameRepository {
       });
 
   Future<void> addRound(int gameId, Entries entries) =>
-      db.transaction(() async {
-        final max = db.rounds.number.max();
-        final last =
-            await (db.selectOnly(db.rounds)
-                  ..addColumns([max])
-                  ..where(db.rounds.gameId.equals(gameId)))
-                .map((r) => r.read(max))
-                .getSingle();
-        await db
-            .into(db.rounds)
-            .insert(
-              RoundsCompanion.insert(
-                gameId: gameId,
-                number: (last ?? 0) + 1,
-                entries: jsonEncode(entries),
-              ),
-            );
-      });
+      db.transaction(() => _insertRound(gameId, entries));
+
+  /// Appends a round. It has no transaction of its own on purpose: a
+  /// transaction inside a transaction stops the live queries behind the
+  /// screens from noticing the change.
+  Future<void> _insertRound(int gameId, Entries entries) async {
+    final max = db.rounds.number.max();
+    final last =
+        await (db.selectOnly(db.rounds)
+              ..addColumns([max])
+              ..where(db.rounds.gameId.equals(gameId)))
+            .map((r) => r.read(max))
+            .getSingle();
+    await db
+        .into(db.rounds)
+        .insert(
+          RoundsCompanion.insert(
+            gameId: gameId,
+            number: (last ?? 0) + 1,
+            entries: jsonEncode(entries),
+          ),
+        );
+  }
 
   /// Stores round [number]: updates it when it exists, else adds it. Decided
   /// inside one transaction on the database itself, so quick repeated calls
@@ -177,7 +182,7 @@ class GameRepository {
           );
           return _decodeEntries(row.entries);
         }
-        await addRound(gameId, entries);
+        await _insertRound(gameId, entries);
         return null;
       });
 
