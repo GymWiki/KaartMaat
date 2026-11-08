@@ -25,8 +25,19 @@ Future<Uint8List> renderCardPng(RenderRepaintBoundary boundary) async {
 
 /// Shares the picture with the system share sheet (WhatsApp is the main
 /// target). The file is written to a temporary folder and removed again.
+/// share_plus keeps its own copy of a shared file in the cache folder (the
+/// receiving app reads it after we are done), so that copy is removed at the
+/// start of the next share instead of right away.
+Future<void> _removeStaleShares() async {
+  try {
+    final stale = Directory('${Directory.systemTemp.path}/share_plus');
+    if (await stale.exists()) await stale.delete(recursive: true);
+  } catch (_) {}
+}
+
 Future<void> shareCardPng(Uint8List bytes, String caption) async {
   Directory? dir;
+  await _removeStaleShares();
   try {
     XFile file;
     try {
@@ -64,7 +75,7 @@ Future<SaveResult> saveCardPng(Uint8List bytes) async {
     final stamp = DateTime.now().millisecondsSinceEpoch;
     await Gal.putImageBytes(
       bytes,
-      name: 'kaartmaat-uitslag-$stamp.png',
+      name: 'kaartmaat-uitslag-$stamp',
       album: 'Kaartmaat',
     );
     return SaveResult.saved;
