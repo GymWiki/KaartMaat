@@ -19,6 +19,13 @@
   "endModeHands": "Na een aantal giffen",
   "endModeTarget": "Bij een streefscore",
   "settingTargetInclusive": "Streefscore zelf telt mee (5000 of meer)",
+  "sharedWin": "Gedeelde winst",
+  "roundsPlayed": "{count, plural, =1{1 ronde gespeeld} other{{count} rondes gespeeld}}",
+  "@roundsPlayed": {"placeholders": {"count": {"type": "int"}}},
+  "shareCaption": "Uitslag {game}: {winner} wint met {points} punten",
+  "@shareCaption": {"placeholders": {"game": {"type": "String"}, "winner": {"type": "String"}, "points": {"type": "int"}}},
+  "shareCaptionTie": "Uitslag {game}: gedeelde winst voor {winner} met {points} punten",
+  "@shareCaptionTie": {"placeholders": {"game": {"type": "String"}, "winner": {"type": "String"}, "points": {"type": "int"}}},
   "resumeGame": "Hervat spel",
   "resumeSubtitle": "{game} · {count, plural, =0{nog geen rondes} =1{1 ronde} other{{count} rondes}}",
   "@resumeSubtitle": {

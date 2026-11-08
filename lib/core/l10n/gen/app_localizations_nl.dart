@@ -67,6 +67,30 @@ class AppLocalizationsNl extends AppLocalizations {
       'Streefscore zelf telt mee (5000 of meer)';
 
   @override
+  String get sharedWin => 'Gedeelde winst';
+
+  @override
+  String roundsPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rondes gespeeld',
+      one: '1 ronde gespeeld',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shareCaption(String game, String winner, int points) {
+    return 'Uitslag $game: $winner wint met $points punten';
+  }
+
+  @override
+  String shareCaptionTie(String game, String winner, int points) {
+    return 'Uitslag $game: gedeelde winst voor $winner met $points punten';
+  }
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

@@ -208,6 +208,30 @@ abstract class AppLocalizations {
   /// **'Streefscore zelf telt mee (5000 of meer)'**
   String get settingTargetInclusive;
 
+  /// No description provided for @sharedWin.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gedeelde winst'**
+  String get sharedWin;
+
+  /// No description provided for @roundsPlayed.
+  ///
+  /// In nl, this message translates to:
+  /// **'{count, plural, =1{1 ronde gespeeld} other{{count} rondes gespeeld}}'**
+  String roundsPlayed(int count);
+
+  /// No description provided for @shareCaption.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitslag {game}: {winner} wint met {points} punten'**
+  String shareCaption(String game, String winner, int points);
+
+  /// No description provided for @shareCaptionTie.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitslag {game}: gedeelde winst voor {winner} met {points} punten'**
+  String shareCaptionTie(String game, String winner, int points);
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:
