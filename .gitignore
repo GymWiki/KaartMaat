@@ -55,3 +55,6 @@ key.properties
 
 # Full-size avatar originals (27 MB); the app uses the 256 px copies in assets/avatars
 /Avatars/
+
+# golden test failure output
+test/failures/
