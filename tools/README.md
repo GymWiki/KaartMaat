@@ -40,3 +40,13 @@ python -m pip install pillow
 
 De koppen staan in `SHOTS` in het script. Het lettertype is Roboto Condensed Bold
 uit `assets/fonts` (Apache 2.0).
+
+## App-iconen
+
+`make_icons.py` maakt alle iconen uit het logo in `store_assets/logo/logo.png`
+(transparant): Android (adaptief en klassiek), iOS, het Play-icoon
+(`store_assets/play/icon_512.png`) en `docs/store/icon-512.png`.
+
+```bash
+python tools/make_icons.py
+```
