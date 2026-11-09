@@ -50,3 +50,13 @@ uit `assets/fonts` (Apache 2.0).
 ```bash
 python tools/make_icons.py
 ```
+
+## Tablet-screenshots
+
+`store_assets.py` maakt ook `play/tablet7/` (1200x1920) en `play/tablet10/`
+(1600x2560) uit de ruwe opnames in `store_assets/raw_tablet7/` en
+`store_assets/raw_tablet10/` (staand), met dezelfde koppen als de telefoonset.
+De opnames kun je maken met een emulator op 1200x1920 en 1600x2560 bij 320 dpi
+(`adb shell wm size 1200x1920` en `adb shell wm density 320` werkt ook op een
+telefoon-emulator; zet het na afloop terug met `wm size reset` en
+`wm density reset`).
