@@ -748,6 +748,66 @@ abstract class AppLocalizations {
   /// **'Pro uit'**
   String get proDebugOff;
 
+  /// No description provided for @rulebookTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelregels'**
+  String get rulebookTitle;
+
+  /// No description provided for @rulebookTooltip.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelregels'**
+  String get rulebookTooltip;
+
+  /// No description provided for @rulebookGoal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Doel'**
+  String get rulebookGoal;
+
+  /// No description provided for @rulebookNeeds.
+  ///
+  /// In nl, this message translates to:
+  /// **'Benodigdheden'**
+  String get rulebookNeeds;
+
+  /// No description provided for @rulebookFlow.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelverloop'**
+  String get rulebookFlow;
+
+  /// No description provided for @rulebookScoring.
+  ///
+  /// In nl, this message translates to:
+  /// **'Puntentelling'**
+  String get rulebookScoring;
+
+  /// No description provided for @rulebookRules.
+  ///
+  /// In nl, this message translates to:
+  /// **'Regels en varianten'**
+  String get rulebookRules;
+
+  /// No description provided for @rulebookTips.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tips'**
+  String get rulebookTips;
+
+  /// No description provided for @rulebookScoringNote.
+  ///
+  /// In nl, this message translates to:
+  /// **'Met de instellingen van dit spel'**
+  String get rulebookScoringNote;
+
+  /// No description provided for @rulebookError.
+  ///
+  /// In nl, this message translates to:
+  /// **'De spelregels konden niet worden geladen.'**
+  String get rulebookError;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:

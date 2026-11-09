@@ -396,6 +396,36 @@ class AppLocalizationsNl extends AppLocalizations {
   String get proDebugOff => 'Pro uit';
 
   @override
+  String get rulebookTitle => 'Spelregels';
+
+  @override
+  String get rulebookTooltip => 'Spelregels';
+
+  @override
+  String get rulebookGoal => 'Doel';
+
+  @override
+  String get rulebookNeeds => 'Benodigdheden';
+
+  @override
+  String get rulebookFlow => 'Spelverloop';
+
+  @override
+  String get rulebookScoring => 'Puntentelling';
+
+  @override
+  String get rulebookRules => 'Regels en varianten';
+
+  @override
+  String get rulebookTips => 'Tips';
+
+  @override
+  String get rulebookScoringNote => 'Met de instellingen van dit spel';
+
+  @override
+  String get rulebookError => 'De spelregels konden niet worden geladen.';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

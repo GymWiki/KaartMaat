@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../rulebook/rulebook_sheet.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -427,6 +428,15 @@ class _GameScreenState extends ConsumerState<GameScreen>
         title: Text(def.name(l10n)),
         actions: [
           _awakeButton(l10n),
+          IconButton(
+            tooltip: l10n.rulebookTooltip,
+            icon: const Icon(Icons.help_outline),
+            onPressed: () => showRulebook(
+              context,
+              type: state.type,
+              settings: state.settings,
+            ),
+          ),
           IconButton(
             tooltip: l10n.showProgress,
             icon: const Icon(Icons.show_chart),

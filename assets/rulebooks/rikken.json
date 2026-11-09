@@ -1,0 +1,78 @@
+{
+  "title": "Rikken",
+  "texts": {
+    "maatText": {
+      "by": "maatPaysWhenLost",
+      "cases": {
+        "true": "Verliest een bieder met maat, dan betalen bieder en maat samen: elk één keer de inzet aan een tegenstander.",
+        "false": "Verliest een bieder met maat, dan betaalt de bieder alleen: de inzet aan beide tegenstanders. De maat verliest niets.",
+        "default": ""
+      }
+    },
+    "endText": {
+      "by": "rounds",
+      "cases": {
+        "0": "Er is geen vast aantal giffen: jullie bepalen zelf wanneer het spel klaar is.",
+        "default": "Er worden {rounds} giffen gespeeld."
+      }
+    }
+  },
+  "goal": [
+    "Bied in elke gif op een contract en haal het, alleen of met een maat. Wie na afloop de meeste punten heeft, wint. {endText}"
+  ],
+  "needs": [
+    "Precies 4 spelers.",
+    "Een kaartspel van 52 kaarten. Elke speler krijgt 13 kaarten, dus alle kaarten worden uitgedeeld."
+  ],
+  "flow": [
+    "De deler schudt en deelt 13 kaarten aan iedereen. De deler schuift elke gif een plek naar links op.",
+    "Er wordt geboden in oplopende volgorde, te beginnen links van de deler. Je mag steeds passen of een hoger contract noemen (zie de tabel bij Puntentelling). Het hoogste contract wordt gespeeld.",
+    "Bij 'rik' en 'troela' speel je met een maat: de bieder noemt een kleur en vraagt een aas van die kleur; wie die aas heeft, is de maat, maar geeft dat pas bij het uitkomen bloot. Bij 'alleen' speel je zonder maat tegen de drie anderen. De bieder bepaalt de troefkleur.",
+    "Bij piek en misère wordt er zonder troef gespeeld. Bij piek moet de bieder precies 1 slag halen, bij misère geen enkele. Bij 'open' liggen de kaarten van de bieder open na de eerste slag.",
+    "Je speelt 13 slagen; je moet de gevraagde kleur bekennen. De speler links van de deler komt uit.",
+    "Voer na afloop in wie de bieder en de maat waren, welk contract er gespeeld werd en hoeveel slagen de bieder (met maat) haalde. De app verdeelt de punten."
+  ],
+  "scoring": {
+    "intro": [
+      "Elk contract heeft basispunten (instelbaar). Over- en onderslagen op een 'minstens'-contract tellen mee: de inzet is de basis plus {perTrick} per slag erboven of eronder."
+    ],
+    "table": [
+      { "cols": ["Rik (met maat)", "{base.rik}"] },
+      { "cols": ["Troela", "{base.troela}"] },
+      { "cols": ["8 alleen", "{base.alone8}"] },
+      { "cols": ["Piek (precies 1 slag)", "{base.piek}"] },
+      { "cols": ["9 alleen", "{base.alone9}"] },
+      { "cols": ["Misère (geen slag)", "{base.misere}"] },
+      { "cols": ["10 alleen", "{base.alone10}"] },
+      { "cols": ["Open piek", "{base.openPiek}"] },
+      { "cols": ["11 alleen", "{base.alone11}"] },
+      { "cols": ["Open misère", "{base.openMisere}"] },
+      { "cols": ["Open piek met praatje", "{base.openPiekTalk}"] },
+      { "cols": ["12 alleen", "{base.alone12}"] },
+      { "cols": ["Open misère met praatje", "{base.openMisereTalk}"] },
+      { "cols": ["13 alleen", "{base.alone13}"] },
+      { "cols": ["Bonus: alle 13 slagen met maat", "+{slamBonus}"] }
+    ],
+    "notes": [
+      "Het is een nulsomspel: wat de ene partij wint, verliest de andere.",
+      "Gehaald met maat: bieder en maat krijgen allebei de inzet van een tegenstander. Alleen gehaald: de bieder krijgt de inzet van alle drie de tegenstanders.",
+      "{maatText}",
+      "Alleen verloren: de bieder betaalt de inzet aan alle drie de tegenstanders.",
+      "Piek en misère: het aantal slagen verandert de inzet niet, alleen of het precies klopt."
+    ]
+  },
+  "rules": [
+    {
+      "title": "Aantallen",
+      "text": "'Minstens'-contracten (rik, troela, 8 tot en met 13 alleen) zijn gehaald bij het aantal slagen of meer. Piek en misère zijn alleen gehaald bij precies 1 respectievelijk 0 slagen."
+    },
+    {
+      "title": "Punten zijn aanpasbaar",
+      "text": "Welke bedragen bij welk contract horen, verschilt per streek en tafel. Alle basispunten, de punten per over- of onderslag en de bonus zijn daarom instelbaar bij de spelregels."
+    }
+  ],
+  "tips": [
+    "Spreek vooraf af wat een praatje precies inhoudt en of troela gespeeld wordt.",
+    "Noteer de contracten op volgorde van hoogte op een kaartje: dan weet iedereen wat er nog te bieden valt."
+  ]
+}

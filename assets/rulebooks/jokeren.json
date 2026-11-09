@@ -1,0 +1,63 @@
+{
+  "title": "Jokeren",
+  "texts": {
+    "winText": {
+      "by": "lowestWins",
+      "cases": {
+        "true": "De speler met het laagste totaal wint.",
+        "false": "De speler met het hoogste totaal wint.",
+        "default": ""
+      }
+    },
+    "endText": {
+      "by": "rounds",
+      "cases": {
+        "0": "Het aantal rondes staat niet vast.",
+        "default": "Er worden {rounds} rondes gespeeld."
+      }
+    },
+    "targetText": {
+      "by": "targetScore",
+      "cases": {
+        "0": "Er is geen doelscore.",
+        "default": "Zodra een speler {targetScore} punten of meer heeft, is het spel afgelopen."
+      }
+    }
+  },
+  "goal": [
+    "Kom als eerste van al je kaarten af door ze neer te leggen in combinaties. De anderen krijgen punten voor de kaarten die ze nog in hun hand hebben. {winText}"
+  ],
+  "needs": [
+    "2 tot en met 8 spelers.",
+    "Kaarten met jokers (zoals voor rummy): jokers zijn jokers en mogen elke kaart vervangen."
+  ],
+  "flow": [
+    "Deel de kaarten. Hoeveel kaarten je per ronde krijgt en hoe je mag openen, verschilt per tafel. Spreek dat vooraf af.",
+    "Je beurt: trek een kaart, leg zo nodig combinaties neer (een rij van minstens drie opeenvolgende kaarten van één kleur, of minstens drie gelijke kaarten) en gooi een kaart af.",
+    "Wie als eerste al zijn kaarten kwijt is, beëindigt de ronde.",
+    "De anderen tellen de kaarten die ze nog hebben. Voer die bedragen in de app in; je kunt de snelknoppen (joker, aas, plaatje) gebruiken of een bedrag typen."
+  ],
+  "scoring": {
+    "intro": [
+      "De winnaar van een ronde krijgt 0. De anderen krijgen punten voor de kaarten in hun hand. De snelknoppen tellen op:"
+    ],
+    "table": [
+      { "cols": ["Joker", "{quickJoker}"] },
+      { "cols": ["Aas", "{quickAce}"] },
+      { "cols": ["Plaatje (boer, vrouw, heer)", "{quickFace}"] }
+    ],
+    "notes": [
+      "{endText} {targetText} {winText}",
+      "De app telt alle ingevoerde bedragen per speler bij elkaar. Andere kaarten tik je als eigen bedrag in."
+    ]
+  },
+  "rules": [
+    {
+      "title": "Rondes en openen",
+      "text": "Dit regelboek geeft alleen de basis van het spel. Het aantal kaarten per ronde, het minimum om te openen en wat een kaart telt als je hem niet in de knoppen vindt, hoort bij de afspraken van jullie tafel."
+    }
+  ],
+  "tips": [
+    "Houd je jokers zo lang mogelijk: ze kosten veel punten als je ermee blijft zitten."
+  ]
+}

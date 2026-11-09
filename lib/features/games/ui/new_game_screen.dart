@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../rulebook/rulebook_sheet.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -420,6 +421,13 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
           _tableBlock(l10n, byId, gameName, rules.maxPlayers, def),
           const SizedBox(height: 16),
           _playersBlock(l10n, players, last, gameName, rules.maxPlayers),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: () =>
+                showRulebook(context, type: widget.type, settings: _options),
+            icon: const Icon(Icons.help_outline),
+            label: Text(l10n.rulebookTitle),
+          ),
           if (rules.settingSpecs.isNotEmpty) ...[
             const SizedBox(height: 24),
             Text(

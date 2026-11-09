@@ -167,6 +167,16 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   }
 
+  testWidgets('the ? in the bar opens the rulebook of this game', (
+    tester,
+  ) async {
+    await openGame(tester, newGame());
+    await tester.tap(find.byIcon(Icons.help_outline));
+    await tester.pumpAndSettle();
+    expect(find.text('Spelregels: Boerenbridge'), findsOneWidget);
+    await close(tester);
+  });
+
   testWidgets('a full round without leaving the screen, then undo', (
     tester,
   ) async {

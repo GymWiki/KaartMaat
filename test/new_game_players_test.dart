@@ -171,6 +171,18 @@ void main() {
       await tester.pump();
     }
 
+    testWidgets('the Spelregels button opens the rulebook of the game', (
+      tester,
+    ) async {
+      await pumpScreen(tester, type: 'klaverjassen');
+      final button = find.widgetWithText(OutlinedButton, 'Spelregels');
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+      expect(find.text('Spelregels: Klaverjassen'), findsOneWidget);
+      expect(find.text('Puntentelling'), findsWidgets);
+    });
+
     testWidgets('players are picked into the table in tap order', (
       tester,
     ) async {
