@@ -1,3 +1,4 @@
+import '../../../core/ui/content_width.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../rulebook/rulebook_sheet.dart';
@@ -414,7 +415,7 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('${l10n.newGame}: $gameName')),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: contentPadding(context, const EdgeInsets.all(16)),
         children: [
           _groupRow(l10n, groups, gameName, rules.maxPlayers),
           const SizedBox(height: 16),
@@ -444,7 +445,8 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
       ),
       // in the bottom bar, so snackbars show above the button instead of on it
       bottomNavigationBar: SafeArea(
-        child: Padding(
+        child: ContentWidth(
+          child: Padding(
           padding: const EdgeInsets.all(16),
           child: SizedBox(
             width: double.infinity,
@@ -457,6 +459,7 @@ class _NewGameScreenState extends ConsumerState<NewGameScreen> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );

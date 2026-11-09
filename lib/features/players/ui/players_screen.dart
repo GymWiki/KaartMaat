@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/ui/content_width.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
@@ -143,7 +144,9 @@ class PlayersScreen extends StatelessWidget {
           title: Text(l10n.playersTitle),
           bottom: TabBar(tabs: [Tab(text: l10n.playersTab), Tab(text: l10n.groupsTab)]),
         ),
-        body: const TabBarView(children: [_PlayersList(), GroupsTab()]),
+        body: const ContentWidth(
+          child: TabBarView(children: [_PlayersList(), GroupsTab()]),
+        ),
       ),
     );
   }

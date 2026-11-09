@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/ui/content_width.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../../core/ui/suits.dart';
 import '../data/game_repository.dart';
@@ -19,7 +20,8 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.appTitle)),
-      body: ListView(
+      body: ContentWidth(
+        child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
         children: [
           if (running.isNotEmpty) _ResumeCard(gameId: running.first),
@@ -35,7 +37,8 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 16),
           ],
           GridView.count(
-            crossAxisCount: 2,
+            // two columns on a phone, three from tablet width
+            crossAxisCount: MediaQuery.sizeOf(context).width >= kTabletWidth ? 3 : 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             mainAxisSpacing: 12,
@@ -51,6 +54,7 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
         ],
+      ),
       ),
     );
   }

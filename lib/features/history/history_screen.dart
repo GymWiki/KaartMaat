@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/ui/content_width.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -35,9 +36,11 @@ class HistoryScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.historyTitle)),
       // Pro: free users see a faded preview of their own history (or a sample)
-      body: ProGate(
-        preview: all.isEmpty ? const SampleHistoryPreview() : content,
-        child: content,
+      body: ContentWidth(
+        child: ProGate(
+          preview: all.isEmpty ? const SampleHistoryPreview() : content,
+          child: content,
+        ),
       ),
     );
   }
