@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kaartmaat/features/games/rules/boerenbridge_rules.dart';
+import 'package:kaartmaat/features/games/rules/duizenden_rules.dart';
 import 'package:kaartmaat/features/settings/ui/settings_editor.dart';
 
 import '../helpers.dart';
@@ -28,5 +29,20 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+
+  testWidgets('Duizenden: only the target score is a setting', (tester) async {
+    const rules = DuizendenRules();
+    await pumpApp(
+      tester,
+      SettingsEditor(
+        rules: rules,
+        values: rules.defaultSettings,
+        onChanged: (_, _) {},
+      ),
+    );
+    expect(find.text('Doelscore (0 = geen)'), findsOneWidget);
+    expect(find.text('Laagste score per ronde'), findsNothing);
+    expect(find.text('Hoogste score per ronde'), findsNothing);
   });
 }

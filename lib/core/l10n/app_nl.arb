@@ -39,8 +39,6 @@
   "gameDuizenden": "Duizenden",
   "gameDuizendenDesc": "Als eerste naar 1000 punten",
   "duizendenHint": "Wie als eerste de doelscore haalt (standaard 1000) wint. Een score per ronde mag negatief zijn. Het spel eindigt aan het einde van een ronde: halen meer spelers de doelscore, dan wint de hoogste stand.",
-  "settingMinEntry": "Laagste score per ronde",
-  "settingMaxEntry": "Hoogste score per ronde",
   "duizendenToGo": "nog {points}",
   "@duizendenToGo": {"placeholders": {"points": {"type": "int"}}},
   "duizendenReached": "doel bereikt",

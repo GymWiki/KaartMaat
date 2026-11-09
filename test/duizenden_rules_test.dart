@@ -156,14 +156,28 @@ void main() {
       );
     });
 
-    test('the limits are settings', () {
-      final c = cfg({'minEntry': -50, 'maxEntry': 200});
-      expect(r.validateRound(c, round(1, [-50, 200, 0])), isNull);
-      expect(r.validateRound(c, round(1, [-51, 0, 0])), RoundIssue.outOfRange);
-      expect(r.validateRound(c, round(1, [0, 201, 0])), RoundIssue.outOfRange);
-      expect(r.maxDigits(c), 3);
-      expect(r.maxDigits(cfg()), 4);
-    });
+    test(
+      'the limits are fixed constants; saved min/max values are ignored',
+      () {
+        expect(
+          (DuizendenRules.minEntry, DuizendenRules.maxEntry),
+          (-999, 9999),
+        );
+        expect(DuizendenRules.maxDigits, 4);
+        // an older saved game that still carries the removed settings
+        final old = cfg({'minEntry': -50, 'maxEntry': 200});
+        expect(r.validateRound(old, round(1, [-999, 9999, 0])), isNull);
+        expect(
+          r.validateRound(old, round(1, [-1000, 0, 0])),
+          RoundIssue.outOfRange,
+        );
+        expect(
+          r.validateRound(old, round(1, [0, 10000, 0])),
+          RoundIssue.outOfRange,
+        );
+        expect(r.settingSpecs.map((s) => s.key), ['targetScore']);
+      },
+    );
 
     test('0 is a value, a missing or non-integer value is not', () {
       expect(r.validateRound(cfg(), round(1, [0, 0, 0])), isNull);

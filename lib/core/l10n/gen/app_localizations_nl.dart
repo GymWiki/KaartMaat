@@ -132,12 +132,6 @@ class AppLocalizationsNl extends AppLocalizations {
       'Wie als eerste de doelscore haalt (standaard 1000) wint. Een score per ronde mag negatief zijn. Het spel eindigt aan het einde van een ronde: halen meer spelers de doelscore, dan wint de hoogste stand.';
 
   @override
-  String get settingMinEntry => 'Laagste score per ronde';
-
-  @override
-  String get settingMaxEntry => 'Hoogste score per ronde';
-
-  @override
   String duizendenToGo(int points) {
     return 'nog $points';
   }

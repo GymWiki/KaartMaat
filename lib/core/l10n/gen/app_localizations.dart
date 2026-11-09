@@ -310,18 +310,6 @@ abstract class AppLocalizations {
   /// **'Wie als eerste de doelscore haalt (standaard 1000) wint. Een score per ronde mag negatief zijn. Het spel eindigt aan het einde van een ronde: halen meer spelers de doelscore, dan wint de hoogste stand.'**
   String get duizendenHint;
 
-  /// No description provided for @settingMinEntry.
-  ///
-  /// In nl, this message translates to:
-  /// **'Laagste score per ronde'**
-  String get settingMinEntry;
-
-  /// No description provided for @settingMaxEntry.
-  ///
-  /// In nl, this message translates to:
-  /// **'Hoogste score per ronde'**
-  String get settingMaxEntry;
-
   /// No description provided for @duizendenToGo.
   ///
   /// In nl, this message translates to:

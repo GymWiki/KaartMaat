@@ -33,9 +33,9 @@ class _DuizendenPanelState extends ConsumerState<DuizendenPanel> {
   late final int number = ctx.roundNumber;
   late final List<String> ids = config.participants;
   late final int target = config.intSetting(DuizendenRules.targetScoreKey);
-  late final int lo = _rules.minEntry(config);
-  late final int hi = _rules.maxEntry(config);
-  late final int maxDigits = _rules.maxDigits(config);
+  static const int lo = DuizendenRules.minEntry;
+  static const int hi = DuizendenRules.maxEntry;
+  static final int maxDigits = DuizendenRules.maxDigits;
 
   /// What is typed per player ("-", "-12", "340", ...).
   final Map<String, String> typed = {};
