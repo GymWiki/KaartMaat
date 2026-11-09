@@ -8,9 +8,8 @@ import 'package:kaartmaat/features/settings/data/settings_repository.dart';
 
 /// A settings store in memory that announces changes like the database does.
 class MemorySettings extends SettingsRepository {
-  MemorySettings(AppDatabase db, [Map<String, String>? initial])
-    : values = {...?initial},
-      super(db);
+  MemorySettings(super.db, [Map<String, String>? initial])
+    : values = {...?initial};
 
   final Map<String, String> values;
   final _changes = StreamController<Map<String, String>>.broadcast();
