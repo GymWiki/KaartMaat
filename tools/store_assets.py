@@ -4,11 +4,13 @@
     python tools/store_assets.py            # build everything
     python tools/store_assets.py --check    # only verify the outputs
 
-Input : store_assets/raw/NN_name.png (full-screen device screenshots)
+Input : store_assets/raw/NN_name.png (phone), raw_tablet7/ and raw_tablet10/
 Output: store_assets/play/phone/01.png .. 08.png   1080x1920, RGB
+        store_assets/play/tablet7/01.png ..        1200x1920, RGB (7-inch, portrait)
+        store_assets/play/tablet10/01.png ..       1600x2560, RGB (10-inch, portrait)
         store_assets/play/feature_graphic.png      1024x500, RGB
         store_assets/play/icon_512.png             512x512
-        store_assets/play/overzicht.png            contact sheet
+        store_assets/play/overzicht*.png           contact sheets
 
 Not part of the Flutter app. Needs only Pillow (see tools/README.md).
 """
@@ -18,7 +20,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "store_assets" / "raw"
+RAW_ROOT = ROOT / "store_assets"
 OUT = ROOT / "store_assets" / "play"
 PHONE = OUT / "phone"
 # The app's own headline font (Roboto Condensed Bold, Apache 2.0, see
@@ -43,7 +45,15 @@ SHOTS = [
     ("08_regelboek", "Regelboek bij elk spel"),
 ]
 
-W, H = 1080, 1920
+# name -> (raw folder, output folder, canvas size). The layout is drawn for a
+# 1080 px wide canvas and scaled with the width, so every set looks the same.
+SETS = {
+    "phone": ("raw", "phone", (1080, 1920)),
+    "tablet7": ("raw_tablet7", "tablet7", (1200, 1920)),
+    "tablet10": ("raw_tablet10", "tablet10", (1600, 2560)),
+}
+W, H = 1080, 1920   # the phone size, used by the checks below
+BASE_W = 1080
 SIDE = 70           # minimum space left and right of the headline
 HEAD_TOP = 90       # headline starts here
 HEAD_BOTTOM = 330   # headline block ends here
@@ -81,34 +91,40 @@ def rounded_mask(size, radius):
     return m
 
 
-def phone_image(raw_name, headline):
-    canvas = Image.new("RGB", (W, H), BG)
+def phone_image(raw_dir, raw_name, headline, size=(W, H)):
+    cw, ch = size
+    k = cw / BASE_W
+    canvas = Image.new("RGB", size, BG)
     draw = ImageDraw.Draw(canvas)
 
     # headline, centered, up to 2 lines, vertically centered in its block
-    f, lines = wrap(draw, headline, 104, W - 2 * SIDE)
+    head_top, head_bottom = HEAD_TOP * k, HEAD_BOTTOM * k
+    f, lines = wrap(draw, headline, round(104 * k), cw - 2 * SIDE * k)
     line_h = f.size * 1.08
     block = line_h * len(lines)
-    y = HEAD_TOP + (HEAD_BOTTOM - HEAD_TOP - block) / 2
+    y = head_top + (head_bottom - head_top - block) / 2
     for line in lines:
-        draw.text((W / 2, y), line, font=f, fill=CREAM, anchor="mt")
+        draw.text((cw / 2, y), line, font=f, fill=CREAM, anchor="mt")
         y += line_h
-    draw.rounded_rectangle((W / 2 - 40, HEAD_BOTTOM + 8, W / 2 + 40, HEAD_BOTTOM + 14), 3, fill=BRASS)
+    draw.rounded_rectangle(
+        (cw / 2 - 40 * k, head_bottom + 8 * k, cw / 2 + 40 * k, head_bottom + 14 * k),
+        round(3 * k), fill=BRASS,
+    )
 
     # screenshot, straight, rounded corners, soft shadow
-    shot = Image.open(RAW / f"{raw_name}.png").convert("RGB")
-    top = HEAD_BOTTOM + 44
-    height = H - top - SHOT_BOTTOM_GAP
+    shot = Image.open(RAW_ROOT / raw_dir / f"{raw_name}.png").convert("RGB")
+    top = round(head_bottom + 44 * k)
+    height = round(ch - top - SHOT_BOTTOM_GAP * k)
     width = round(shot.width * height / shot.height)
     shot = shot.resize((width, height), Image.LANCZOS)
-    x = (W - width) // 2
-    radius = 46
+    x = (cw - width) // 2
+    radius = round(46 * k)
 
-    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    shadow = Image.new("RGBA", size, (0, 0, 0, 0))
     ImageDraw.Draw(shadow).rounded_rectangle(
-        (x, top + 14, x + width, top + height + 14), radius, fill=(0, 0, 0, 150)
+        (x, top + 14 * k, x + width, top + height + 14 * k), radius, fill=(0, 0, 0, 150)
     )
-    shadow = shadow.filter(ImageFilter.GaussianBlur(26))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(26 * k))
     canvas = Image.alpha_composite(canvas.convert("RGBA"), shadow).convert("RGB")
     canvas.paste(shot, (x, top), rounded_mask(shot.size, radius))
     return canvas
@@ -166,7 +182,8 @@ def feature_graphic():
 
 def contact_sheet(files):
     cols, tw = 4, 270
-    th = round(tw * H / W)
+    first = Image.open(files[0])
+    th = round(tw * first.height / first.width)
     pad = 24
     rows = (len(files) + cols - 1) // cols
     sheet = Image.new("RGB", (pad + cols * (tw + pad), pad + rows * (th + pad)), (0x0B, 0x14, 0x10))
@@ -194,20 +211,36 @@ def check(paths_and_sizes):
 
 
 def main():
-    phone_files = [PHONE / f"{i + 1:02d}.png" for i in range(len(SHOTS))]
+    out_files = {}
+    for name, (raw_dir, out_dir, size) in SETS.items():
+        out = OUT / out_dir
+        files = [out / f"{i + 1:02d}.png" for i in range(len(SHOTS))]
+        out_files[name] = (files, size)
+        if "--check" in sys.argv:
+            continue
+        if not (RAW_ROOT / raw_dir).exists():
+            print(f"skip {name}: no {raw_dir}/")
+            continue
+        out.mkdir(parents=True, exist_ok=True)
+        for f, (raw, headline) in zip(files, SHOTS):
+            phone_image(raw_dir, raw, headline, size).save(f, optimize=True)
+        sheet = "overzicht.png" if name == "phone" else f"overzicht_{name}.png"
+        contact_sheet(files).save(OUT / sheet, optimize=True)
+
     if "--check" not in sys.argv:
-        PHONE.mkdir(parents=True, exist_ok=True)
-        for out, (raw, headline) in zip(phone_files, SHOTS):
-            phone_image(raw, headline).save(out, optimize=True)
+        OUT.mkdir(parents=True, exist_ok=True)
         feature_graphic().save(OUT / "feature_graphic.png", optimize=True)
         if ICON_SRC.exists():
             Image.open(ICON_SRC).resize((512, 512), Image.LANCZOS).save(OUT / "icon_512.png")
-        contact_sheet(phone_files).save(OUT / "overzicht.png", optimize=True)
 
-    items = [(f, (W, H)) for f in phone_files]
+    items = []
+    for name, (files, size) in out_files.items():
+        items += [(f, size) for f in files if f.exists()]
     items.append((OUT / "feature_graphic.png", (1024, 500)))
     items.append((OUT / "icon_512.png", None))
-    items.append((OUT / "overzicht.png", None))
+    for sheet in ["overzicht.png", "overzicht_tablet7.png", "overzicht_tablet10.png"]:
+        if (OUT / sheet).exists():
+            items.append((OUT / sheet, None))
     sys.exit(0 if check(items) else 1)
 
 

@@ -7,6 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/links.dart';
+import '../../../core/ui/content_width.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../games/games_registry.dart';
 import '../../pro/entitlement_service.dart';
@@ -31,7 +32,7 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: contentPadding(context, const EdgeInsets.symmetric(vertical: 8)),
         children: [
           ListTile(
             title: Text(l10n.theme),

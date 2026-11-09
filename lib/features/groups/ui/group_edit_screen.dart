@@ -1,3 +1,4 @@
+import '../../../core/ui/content_width.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -64,7 +65,8 @@ class _GroupEditScreenState extends ConsumerState<GroupEditScreen> {
             ),
         ],
       ),
-      body: Column(children: [
+      body: ContentWidth(
+        child: Column(children: [
         Expanded(
           child: ListView(
             padding: const EdgeInsets.all(16),
@@ -115,6 +117,7 @@ class _GroupEditScreenState extends ConsumerState<GroupEditScreen> {
           ),
         ),
       ]),
+      ),
     );
   }
 }
