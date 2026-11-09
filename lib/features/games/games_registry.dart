@@ -28,6 +28,7 @@ import 'ui/klaverjas_panel.dart';
 import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
 import 'ui/rikken_labels.dart';
+import '../../core/ui/suits.dart';
 import 'ui/duizenden_panel.dart';
 import 'ui/gronings_steps.dart' show suitSign;
 import 'ui/rikken_panel.dart';
@@ -46,6 +47,7 @@ class GameDefinition {
   const GameDefinition({
     required this.rules,
     required this.icon,
+    required this.suit,
     required this.name,
     required this.description,
     required this.entryBuilder,
@@ -62,6 +64,10 @@ class GameDefinition {
 
   final GameRules rules;
   final IconData icon;
+
+  /// The card suit shown on this game's card on the home screen. Fixed per
+  /// game, not derived from the order of the list.
+  final Suit suit;
   final String Function(AppLocalizations l10n) name;
   final String Function(AppLocalizations l10n) description;
   final RoundEntryBuilder entryBuilder;
@@ -111,6 +117,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   BoerenbridgeRules.typeId: GameDefinition(
     rules: const BoerenbridgeRules(),
     icon: Icons.style,
+    suit: Suit.spades,
     name: (l) => l.gameBoerenbridge,
     description: (l) => l.gameBoerenbridgeDesc,
     entryBuilder: (view, number, existing, onSubmit) => BoerenbridgeEntry(
@@ -148,6 +155,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   KlaverjasRules.typeId: GameDefinition(
     rules: const KlaverjasRules(),
     icon: Icons.groups,
+    suit: Suit.clubs,
     name: (l) => l.gameKlaverjassen,
     description: (l) => l.gameKlaverjassenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -191,6 +199,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   RikkenRules.typeId: GameDefinition(
     rules: const RikkenRules(),
     icon: Icons.looks_4,
+    suit: Suit.diamonds,
     name: (l) => l.gameRikken,
     description: (l) => l.gameRikkenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -208,6 +217,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   HeartsRules.typeId: GameDefinition(
     rules: const HeartsRules(),
     icon: Icons.favorite,
+    suit: Suit.hearts,
     name: (l) => l.gameHartenjagen,
     description: (l) => l.gameHartenjagenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -223,6 +233,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   ToepenRules.typeId: GameDefinition(
     rules: const ToepenRules(),
     icon: Icons.filter_5,
+    suit: Suit.spades,
     name: (l) => l.gameToepen,
     description: (l) => l.gameToepenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -233,6 +244,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   JokerenRules.typeId: GameDefinition(
     rules: const JokerenRules(),
     icon: Icons.theater_comedy,
+    suit: Suit.hearts,
     name: (l) => l.gameJokeren,
     description: (l) => l.gameJokerenDesc,
     entryBuilder: (view, number, existing, onSubmit) => CalculatorEntry(
@@ -247,6 +259,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   CanastaRules.typeId: GameDefinition(
     rules: const CanastaRules(),
     icon: Icons.diamond,
+    suit: Suit.clubs,
     name: (l) => l.gameCanasta,
     description: (l) => l.gameCanastaDesc,
     entryBuilder: (view, number, existing, onSubmit) => CalculatorEntry(
@@ -263,6 +276,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   DuizendenRules.typeId: GameDefinition(
     rules: const DuizendenRules(),
     icon: Icons.trending_up,
+    suit: Suit.diamonds,
     name: (l) => l.gameDuizenden,
     description: (l) => l.gameDuizendenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -280,6 +294,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
     icon: Icons.edit_note,
+    suit: Suit.spades,
     name: (l) => l.gameCustom,
     description: (l) => l.gameCustomDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
