@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
@@ -13,6 +12,7 @@ import '../../history/share.dart';
 import '../../settings/data/settings_repository.dart';
 import '../data/draft_store.dart';
 import '../data/game_repository.dart';
+import '../data/wakelock_controller.dart';
 import '../data/game_state.dart';
 import '../games_registry.dart';
 import '../rules/game_rules.dart';
@@ -55,6 +55,10 @@ class _GameScreenState extends ConsumerState<GameScreen>
   /// An earlier round that is loaded in the panel for correction.
   int? _editingRound;
 
+  late final WakelockController _wakelock;
+  ScaffoldMessengerState? _messenger;
+  bool _awake = false;
+
   /// Bumped to rebuild the panel from [_draft] (after an undo).
   int _generation = 0;
 
@@ -62,7 +66,10 @@ class _GameScreenState extends ConsumerState<GameScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _keepAwake(true);
+    _wakelock = ref.read(wakelockProvider); // never read ref in dispose
+    // The screen is only kept on when asked for (button, or the setting).
+    _awake = ref.read(prefsProvider).keepAwakeByDefault;
+    if (_awake) unawaited(_wakelock.set(true));
     ref.read(draftStoreProvider).load(widget.gameId).then((d) {
       if (!mounted) return;
       setState(() {
@@ -82,26 +89,53 @@ class _GameScreenState extends ConsumerState<GameScreen>
     _saver.dispose();
     _roundAdded.dispose();
     _panelInset.dispose();
-    _keepAwake(false);
+    unawaited(_wakelock.set(false));
+    final messenger = _messenger;
+    if (messenger != null && messenger.mounted) messenger.hideCurrentSnackBar();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Never lose a half-filled panel: write it out when the app leaves the screen.
-    if (state != AppLifecycleState.resumed) unawaited(_saver.flush());
+    if (state != AppLifecycleState.resumed) {
+      unawaited(_saver.flush());
+      // in the background the screen is no longer kept on; the button follows
+      if (_awake) {
+        unawaited(_wakelock.set(false));
+        setState(() => _awake = false);
+      }
+    }
   }
 
-  void _keepAwake(bool on) {
-    try {
-      unawaited(
-        (on ? WakelockPlus.enable() : WakelockPlus.disable()).catchError(
-          (_) {},
+  void _toggleAwake() {
+    final l10n = context.l10n;
+    final next = !_awake;
+    haptic(ref);
+    setState(() => _awake = next);
+    unawaited(_wakelock.set(next));
+    final messenger = _messenger = ScaffoldMessenger.of(context);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content: Text(next ? l10n.keepAwakeOn : l10n.keepAwakeOff),
         ),
       );
-    } catch (_) {
-      // no wakelock support (tests, desktop): the game still works
-    }
+  }
+
+  /// The screen-on button in the app bar: a filled gold sun when active, an
+  /// outlined grey one when off.
+  Widget _awakeButton(AppLocalizations l10n) {
+    final scheme = Theme.of(context).colorScheme;
+    return IconButton(
+      tooltip: l10n.keepAwakeTooltip,
+      isSelected: _awake,
+      icon: Icon(Icons.light_mode_outlined, color: scheme.onSurfaceVariant),
+      selectedIcon: Icon(Icons.light_mode, color: scheme.primary),
+      onPressed: _toggleAwake,
+    );
   }
 
   GameRepository get _repo => ref.read(gameRepositoryProvider);
@@ -391,6 +425,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
       appBar: AppBar(
         title: Text(def.name(l10n)),
         actions: [
+          _awakeButton(l10n),
           IconButton(
             tooltip: l10n.showProgress,
             icon: const Icon(Icons.show_chart),
@@ -504,6 +539,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
         appBar: AppBar(
           title: Text(def.name(l10n)),
           actions: [
+            _awakeButton(l10n),
             PopupMenuButton<String>(
               onSelected: (v) => switch (v) {
                 'copy' => showShareResult(context, view),

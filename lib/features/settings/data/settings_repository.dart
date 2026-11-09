@@ -54,6 +54,9 @@ class AppPrefs {
 
   bool get haptics => _values['haptics'] != '0';
 
+  /// Start every game with the screen kept on (off unless chosen).
+  bool get keepAwakeByDefault => _values['keepAwake'] == '1';
+
   Map<String, Object?> ruleOptions(GameRules rules) {
     final stored = _values['rules.${rules.type}'];
     return {

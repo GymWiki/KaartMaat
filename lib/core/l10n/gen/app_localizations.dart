@@ -472,6 +472,30 @@ abstract class AppLocalizations {
   /// **'Klaveren'**
   String get suitClubs;
 
+  /// No description provided for @keepAwakeOn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm blijft aan'**
+  String get keepAwakeOn;
+
+  /// No description provided for @keepAwakeOff.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm mag uit'**
+  String get keepAwakeOff;
+
+  /// No description provided for @keepAwakeTooltip.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm aan houden'**
+  String get keepAwakeTooltip;
+
+  /// No description provided for @settingKeepAwake.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm standaard aan tijdens spel'**
+  String get settingKeepAwake;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:

@@ -234,6 +234,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get suitClubs => 'Klaveren';
 
   @override
+  String get keepAwakeOn => 'Scherm blijft aan';
+
+  @override
+  String get keepAwakeOff => 'Scherm mag uit';
+
+  @override
+  String get keepAwakeTooltip => 'Scherm aan houden';
+
+  @override
+  String get settingKeepAwake => 'Scherm standaard aan tijdens spel';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

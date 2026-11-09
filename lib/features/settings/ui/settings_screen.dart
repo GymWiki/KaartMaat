@@ -51,6 +51,11 @@ class SettingsScreen extends ConsumerWidget {
             value: prefs.haptics,
             onChanged: (v) => repo.set('haptics', v ? '1' : '0'),
           ),
+          SwitchListTile(
+            title: Text(l10n.settingKeepAwake),
+            value: prefs.keepAwakeByDefault,
+            onChanged: (v) => repo.set('keepAwake', v ? '1' : '0'),
+          ),
           for (final def in gameDefinitions.values)
             if (def.rules.settingSpecs.isNotEmpty) ...[
               const Divider(),

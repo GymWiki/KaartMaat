@@ -75,6 +75,10 @@
   "suitDiamonds": "Ruiten",
   "suitSpades": "Schoppen",
   "suitClubs": "Klaveren",
+  "keepAwakeOn": "Scherm blijft aan",
+  "keepAwakeOff": "Scherm mag uit",
+  "keepAwakeTooltip": "Scherm aan houden",
+  "settingKeepAwake": "Scherm standaard aan tijdens spel",
   "resumeGame": "Hervat spel",
   "resumeSubtitle": "{game} · {count, plural, =0{nog geen rondes} =1{1 ronde} other{{count} rondes}}",
   "@resumeSubtitle": {
