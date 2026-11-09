@@ -45,6 +45,8 @@ dependencies:
   share_plus: ^13.3.1
   gal: ^2.3.3
   in_app_purchase: ^3.3.1
+  url_launcher: ^6.3.2
+  package_info_plus: ^10.2.2
 
 dev_dependencies:
   flutter_test:

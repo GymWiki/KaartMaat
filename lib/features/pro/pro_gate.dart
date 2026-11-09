@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/l10n.dart';
+import '../../core/links.dart';
 import 'entitlement_service.dart';
 import 'purchase_controller.dart';
 
@@ -179,6 +180,7 @@ class ProWall extends ConsumerWidget {
                         : l10n.proRestore,
                   ),
                 ),
+                const LegalLinks(),
               ],
             ),
           ),

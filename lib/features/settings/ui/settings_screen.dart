@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/db/providers.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
 import '../../../core/l10n/l10n.dart';
+import '../../../core/links.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../games/games_registry.dart';
 import '../../pro/entitlement_service.dart';
@@ -102,6 +105,37 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           const Divider(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Text(
+              l10n.aboutSection,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: Text(l10n.privacyPolicy),
+            trailing: const Icon(Icons.open_in_new, size: 18),
+            onTap: () => openLink(context, AppLinks.privacy),
+          ),
+          ListTile(
+            leading: const Icon(Icons.description_outlined),
+            title: Text(l10n.termsOfUse),
+            trailing: const Icon(Icons.open_in_new, size: 18),
+            onTap: () => openLink(context, AppLinks.terms),
+          ),
+          ListTile(
+            leading: const Icon(Icons.mail_outline),
+            title: Text(l10n.contactLabel),
+            subtitle: const Text(AppLinks.contactEmail),
+            onTap: () => openLink(context, AppLinks.contact),
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: Text(l10n.appVersion),
+            subtitle: const _AppVersion(),
+          ),
+          const Divider(),
           ListTile(
             leading: const Icon(Icons.delete_forever),
             title: Text(l10n.resetData),
@@ -120,4 +154,16 @@ class SettingsScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _AppVersion extends StatelessWidget {
+  const _AppVersion();
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<PackageInfo>(
+        future: PackageInfo.fromPlatform(),
+        builder: (_, snap) => Text(snap.hasData
+            ? '${snap.data!.version} (${snap.data!.buildNumber})'
+            : ''),
+      );
 }

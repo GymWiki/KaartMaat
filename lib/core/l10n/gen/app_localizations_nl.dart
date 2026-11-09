@@ -503,6 +503,24 @@ class AppLocalizationsNl extends AppLocalizations {
   String get rulesSection => 'Spelregels';
 
   @override
+  String get aboutSection => 'Over Kaartmaat';
+
+  @override
+  String get privacyPolicy => 'Privacyverklaring';
+
+  @override
+  String get termsOfUse => 'Gebruiksvoorwaarden';
+
+  @override
+  String get appVersion => 'Versie';
+
+  @override
+  String get contactLabel => 'Contact';
+
+  @override
+  String get linkOpenFailed => 'Kan de link niet openen.';
+
+  @override
   String get settingTargetScore => 'Doelscore (0 = geen)';
 
   @override

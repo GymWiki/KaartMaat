@@ -916,6 +916,42 @@ abstract class AppLocalizations {
   /// **'Spelregels'**
   String get rulesSection;
 
+  /// No description provided for @aboutSection.
+  ///
+  /// In nl, this message translates to:
+  /// **'Over Kaartmaat'**
+  String get aboutSection;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In nl, this message translates to:
+  /// **'Privacyverklaring'**
+  String get privacyPolicy;
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gebruiksvoorwaarden'**
+  String get termsOfUse;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In nl, this message translates to:
+  /// **'Versie'**
+  String get appVersion;
+
+  /// No description provided for @contactLabel.
+  ///
+  /// In nl, this message translates to:
+  /// **'Contact'**
+  String get contactLabel;
+
+  /// No description provided for @linkOpenFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kan de link niet openen.'**
+  String get linkOpenFailed;
+
   /// No description provided for @settingTargetScore.
   ///
   /// In nl, this message translates to:
