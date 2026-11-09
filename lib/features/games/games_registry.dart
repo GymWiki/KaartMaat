@@ -32,6 +32,7 @@ import '../../core/ui/suits.dart';
 import 'ui/duizenden_panel.dart';
 import 'ui/gronings_steps.dart' show suitSign;
 import 'ui/rikken_panel.dart';
+import 'ui/score_entry_panel.dart';
 import 'ui/toepen_panel.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
@@ -58,6 +59,7 @@ class GameDefinition {
     this.cellDetail,
     this.cellHighlight,
     this.liveRound = false,
+    this.liveRoundIf,
     this.statusLine,
     this.totalDetail,
   });
@@ -103,6 +105,12 @@ class GameDefinition {
   /// Counting games: the panel edits the latest round on every tap, and
   /// "next round" starts a new one, instead of confirming a round at a time.
   final bool liveRound;
+
+  /// Overrides [liveRound] per game when it depends on a setting (the
+  /// Algemene teller counts live only in its "Optellen" mode).
+  final bool Function(GameConfig config)? liveRoundIf;
+
+  bool isLive(GameConfig config) => liveRoundIf?.call(config) ?? liveRound;
 
   /// Marks a round-table cell with a check (e.g. an exact bid).
   final bool Function(GameView view, int roundIndex, String participant)?
@@ -299,8 +307,10 @@ final Map<String, GameDefinition> gameDefinitions = {
     description: (l) => l.gameCustomDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
         PointsEntry(view: view, existing: existing, onSubmit: onSubmit),
-    panelBuilder: (ctx) => CounterPanel(ctx: ctx),
-    liveRound: true,
+    panelBuilder: (ctx) => CustomRules.isEnterMode(ctx.view.config)
+        ? ScoreEntryPanel(ctx: ctx, rules: const CustomRules())
+        : CounterPanel(ctx: ctx),
+    liveRoundIf: (config) => !CustomRules.isEnterMode(config),
   ),
 };
 

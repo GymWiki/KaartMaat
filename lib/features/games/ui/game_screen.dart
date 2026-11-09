@@ -355,7 +355,8 @@ class _GameScreenState extends ConsumerState<GameScreen>
     final l10n = context.l10n;
     final editing = _editingRound != null;
     // Live counting games keep working on the latest round.
-    final liveNumber = def.liveRound && state.rounds.isNotEmpty
+    final live = def.isLive(state.config);
+    final liveNumber = live && state.rounds.isNotEmpty
         ? state.rounds.last.number
         : view.nextRoundNumber;
     final number = _editingRound ?? liveNumber;
@@ -394,7 +395,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
                   undoDraft: undoDraft,
                 ),
             onCancel: _stopEditing,
-            onNewRound: def.liveRound
+            onNewRound: live
                 ? (entries) async {
                     if (_confirming) return;
                     _confirming = true;

@@ -140,7 +140,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get duizendenReached => 'doel bereikt';
 
   @override
-  String duizendenOutOfRange(int min, int max) {
+  String scoreOutOfRange(int min, int max) {
     return 'Score buiten $min tot $max';
   }
 
@@ -150,7 +150,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get duizendenFillAll => 'Vul de score van alle spelers in';
+  String get scoreFillAll => 'Vul de score van alle spelers in';
 
   @override
   String get variantGronings => 'Gronings';
@@ -244,6 +244,23 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settingKeepAwake => 'Scherm standaard aan tijdens spel';
+
+  @override
+  String get settingInputMode => 'Invoermethode';
+
+  @override
+  String get inputModeAdd => 'Optellen';
+
+  @override
+  String get inputModeEnter => 'Invullen';
+
+  @override
+  String get inputModeHintAdd =>
+      'Tik op knoppen om punten bij spelers op te tellen.';
+
+  @override
+  String get inputModeHintEnter =>
+      'Vul per ronde de score van elke speler in met het numpad.';
 
   @override
   String get resumeGame => 'Hervat spel';

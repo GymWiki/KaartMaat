@@ -322,11 +322,11 @@ abstract class AppLocalizations {
   /// **'doel bereikt'**
   String get duizendenReached;
 
-  /// No description provided for @duizendenOutOfRange.
+  /// No description provided for @scoreOutOfRange.
   ///
   /// In nl, this message translates to:
   /// **'Score buiten {min} tot {max}'**
-  String duizendenOutOfRange(int min, int max);
+  String scoreOutOfRange(int min, int max);
 
   /// No description provided for @duizendenReaches.
   ///
@@ -334,11 +334,11 @@ abstract class AppLocalizations {
   /// **'{names} haalt de doelscore'**
   String duizendenReaches(String names);
 
-  /// No description provided for @duizendenFillAll.
+  /// No description provided for @scoreFillAll.
   ///
   /// In nl, this message translates to:
   /// **'Vul de score van alle spelers in'**
-  String get duizendenFillAll;
+  String get scoreFillAll;
 
   /// No description provided for @variantGronings.
   ///
@@ -495,6 +495,36 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Scherm standaard aan tijdens spel'**
   String get settingKeepAwake;
+
+  /// No description provided for @settingInputMode.
+  ///
+  /// In nl, this message translates to:
+  /// **'Invoermethode'**
+  String get settingInputMode;
+
+  /// No description provided for @inputModeAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Optellen'**
+  String get inputModeAdd;
+
+  /// No description provided for @inputModeEnter.
+  ///
+  /// In nl, this message translates to:
+  /// **'Invullen'**
+  String get inputModeEnter;
+
+  /// No description provided for @inputModeHintAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tik op knoppen om punten bij spelers op te tellen.'**
+  String get inputModeHintAdd;
+
+  /// No description provided for @inputModeHintEnter.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vul per ronde de score van elke speler in met het numpad.'**
+  String get inputModeHintEnter;
 
   /// No description provided for @resumeGame.
   ///

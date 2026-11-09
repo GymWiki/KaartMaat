@@ -71,6 +71,7 @@ class SettingSpec {
     this.max = 9999,
     this.options = const [],
     this.visibleIf,
+    this.segmented = false,
   });
 
   final String key;
@@ -85,6 +86,10 @@ class SettingSpec {
   /// Only shown in the settings editor while another setting has this value
   /// (for example the Gronings bid limits only matter for that variant).
   final (String key, Object value)? visibleIf;
+
+  /// Choice settings: show a segmented control (with a line of explanation
+  /// under it) instead of chips.
+  final bool segmented;
 }
 
 abstract class GameRules {

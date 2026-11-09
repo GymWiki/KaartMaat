@@ -31,6 +31,7 @@ String _settingLabel(AppLocalizations l10n, String key) => switch (key) {
       BoerenbridgeRules.wrongPerTrickKey => l10n.settingWrongPerTrick,
       BoerenbridgeRules.maxCardsKey => l10n.settingMaxCards,
       KlaverjasRules.variantKey => l10n.settingVariant,
+      CustomRules.inputModeKey => l10n.settingInputMode,
       KlaverjasRules.endModeKey => l10n.settingEndMode,
       KlaverjasRules.minBidKey => l10n.settingMinBid,
       KlaverjasRules.maxBidKey => l10n.settingMaxBid,
@@ -69,6 +70,8 @@ String optionLabel(AppLocalizations l10n, String option) => switch (option) {
       KlaverjasRules.amsterdams => l10n.variantAmsterdams,
       KlaverjasRules.rotterdams => l10n.variantRotterdams,
       KlaverjasRules.gronings => l10n.variantGronings,
+      CustomRules.inputModeAdd => l10n.inputModeAdd,
+      CustomRules.inputModeEnter => l10n.inputModeEnter,
       KlaverjasRules.endModeHands => l10n.endModeHands,
       KlaverjasRules.endModeTarget => l10n.endModeTarget,
       HeartsRules.moonOthers => l10n.moonOthers,
@@ -84,7 +87,13 @@ String? settingHint(AppLocalizations l10n, String key) =>
 
 /// One line under a choice that explains the selected option.
 String? optionHint(AppLocalizations l10n, String key, Object? option) =>
-    key == KlaverjasRules.variantKey
+    key == CustomRules.inputModeKey
+    ? switch (option) {
+        CustomRules.inputModeAdd => l10n.inputModeHintAdd,
+        CustomRules.inputModeEnter => l10n.inputModeHintEnter,
+        _ => null,
+      }
+    : key == KlaverjasRules.variantKey
         ? switch (option) {
             KlaverjasRules.amsterdams => l10n.variantHintAmsterdams,
             KlaverjasRules.rotterdams => l10n.variantHintRotterdams,
@@ -129,6 +138,48 @@ class SettingsEditor extends StatelessWidget {
                       ),
                 value: values[spec.key] == true,
                 onChanged: (v) => onChanged(spec.key, v),
+              ),
+            SettingKind.choice when spec.segmented => ListTile(
+                title: Text(settingLabel(l10n, spec.key)),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: SegmentedButton<String>(
+                          showSelectedIcon: false,
+                          segments: [
+                            for (final option in spec.options)
+                              ButtonSegment(
+                                value: option,
+                                label: Text(optionLabel(l10n, option)),
+                              ),
+                          ],
+                          selected: {
+                            (values[spec.key] ?? spec.defaultValue) as String,
+                          },
+                          onSelectionChanged: (v) =>
+                              onChanged(spec.key, v.first),
+                        ),
+                      ),
+                      if (optionHint(
+                            l10n,
+                            spec.key,
+                            values[spec.key] ?? spec.defaultValue,
+                          )
+                          case final hint?)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            hint,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             SettingKind.choice => ListTile(
                 title: Text(settingLabel(l10n, spec.key)),
