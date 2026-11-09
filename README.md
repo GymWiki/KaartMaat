@@ -1,16 +1,19 @@
-# kaartmaat
+# Kaartmaat
 
-Puntentelling voor kaart- en dobbelspellen
+Puntentelling voor kaart- en dobbelspellen. Android eerst, Nederlandse interface,
+volledig offline, zonder account, advertenties of tracking.
 
-## Getting Started
+## De app draaien
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+Na wijzigingen aan de database: `dart run build_runner build --force-jit --delete-conflicting-outputs`.
+Tests: `flutter test`.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Privacy
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Privacyverklaring](https://gymwiki.github.io/KaartMaat/privacy.html) ·
+[Gebruiksvoorwaarden](https://gymwiki.github.io/KaartMaat/voorwaarden.html)

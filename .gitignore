@@ -58,3 +58,15 @@ key.properties
 
 # golden test failure output
 test/failures/
+
+# More secrets / generated (extra safety)
+.env*
+local.properties
+android/key.properties
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+ios/Pods/
+.flutter-plugins
+.packages
+*.aab
+*.apk
