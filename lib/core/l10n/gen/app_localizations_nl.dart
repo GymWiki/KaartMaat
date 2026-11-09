@@ -506,6 +506,28 @@ class AppLocalizationsNl extends AppLocalizations {
   String get aboutSection => 'Over Kaartmaat';
 
   @override
+  String get settingsSectionDisplay => 'Weergave en gebruik';
+
+  @override
+  String get settingsSectionData => 'Gegevens';
+
+  @override
+  String get settingsSectionDeveloper => 'Ontwikkelaar';
+
+  @override
+  String get gameSettingsTitle => 'Spelinstellingen';
+
+  @override
+  String get gameSettingsSubtitle => 'Spelregels per spel instellen';
+
+  @override
+  String get proCardText =>
+      'Statistieken, historie en spelersgroepen. Alle spellen blijven gratis.';
+
+  @override
+  String get proActive => 'Pro actief. Bedankt voor je steun.';
+
+  @override
   String get privacyPolicy => 'Privacyverklaring';
 
   @override
@@ -653,7 +675,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get resetConfirm =>
-      'Alle spelers, spellen en instellingen definitief wissen?';
+      'Alle spelers, groepen, spellen, historie en instellingen worden gewist. Dit kan niet ongedaan worden gemaakt.';
 
   @override
   String get resetDone => 'Alle gegevens zijn gewist';

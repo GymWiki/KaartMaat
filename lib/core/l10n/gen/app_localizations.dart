@@ -922,6 +922,48 @@ abstract class AppLocalizations {
   /// **'Over Kaartmaat'**
   String get aboutSection;
 
+  /// No description provided for @settingsSectionDisplay.
+  ///
+  /// In nl, this message translates to:
+  /// **'Weergave en gebruik'**
+  String get settingsSectionDisplay;
+
+  /// No description provided for @settingsSectionData.
+  ///
+  /// In nl, this message translates to:
+  /// **'Gegevens'**
+  String get settingsSectionData;
+
+  /// No description provided for @settingsSectionDeveloper.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ontwikkelaar'**
+  String get settingsSectionDeveloper;
+
+  /// No description provided for @gameSettingsTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelinstellingen'**
+  String get gameSettingsTitle;
+
+  /// No description provided for @gameSettingsSubtitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelregels per spel instellen'**
+  String get gameSettingsSubtitle;
+
+  /// No description provided for @proCardText.
+  ///
+  /// In nl, this message translates to:
+  /// **'Statistieken, historie en spelersgroepen. Alle spellen blijven gratis.'**
+  String get proCardText;
+
+  /// No description provided for @proActive.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pro actief. Bedankt voor je steun.'**
+  String get proActive;
+
   /// No description provided for @privacyPolicy.
   ///
   /// In nl, this message translates to:
@@ -1195,7 +1237,7 @@ abstract class AppLocalizations {
   /// No description provided for @resetConfirm.
   ///
   /// In nl, this message translates to:
-  /// **'Alle spelers, spellen en instellingen definitief wissen?'**
+  /// **'Alle spelers, groepen, spellen, historie en instellingen worden gewist. Dit kan niet ongedaan worden gemaakt.'**
   String get resetConfirm;
 
   /// No description provided for @resetDone.

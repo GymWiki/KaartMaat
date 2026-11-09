@@ -9,6 +9,7 @@ import '../../features/groups/ui/group_edit_screen.dart';
 import '../../features/history/finished_game_screen.dart';
 import '../../features/history/history_screen.dart';
 import '../../features/players/ui/players_screen.dart';
+import '../../features/settings/ui/game_settings_screen.dart';
 import '../../features/settings/ui/settings_screen.dart';
 import '../../features/stats/stats_screen.dart';
 import '../l10n/l10n.dart';
@@ -31,6 +32,10 @@ final appRouter = GoRouter(
             GoRoute(path: path, builder: (_, _) => page),
           ]),
       ],
+    ),
+    GoRoute(
+      path: '/settings/games',
+      builder: (_, _) => const GameSettingsScreen(),
     ),
     GoRoute(
       path: '/new/:type',
