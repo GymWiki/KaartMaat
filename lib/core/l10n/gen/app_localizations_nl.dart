@@ -560,7 +560,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get issueOutOfRange => 'Waarde buiten het toegestane bereik';
 
   @override
-  String get settingDealerRestriction => 'Beperking voor de deler';
+  String get settingDealerRestriction => 'Bieden mag niet kloppen';
+
+  @override
+  String get settingDealerRestrictionHint =>
+      'Het totaal van alle biedingen mag niet gelijk zijn aan het aantal slagen. Zo is er altijd een verliezer.';
 
   @override
   String get settingExactBase => 'Punten bij exact goed (basis)';

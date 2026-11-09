@@ -79,6 +79,12 @@ String optionLabel(AppLocalizations l10n, String option) => switch (option) {
       _ => option,
     };
 
+/// Small explanation under a switch, or null.
+String? settingHint(AppLocalizations l10n, String key) =>
+    key == BoerenbridgeRules.dealerRestrictionKey
+        ? l10n.settingDealerRestrictionHint
+        : null;
+
 /// One line under a choice that explains the selected option.
 String? optionHint(AppLocalizations l10n, String key, Object? option) =>
     key == KlaverjasRules.variantKey
@@ -118,6 +124,12 @@ class SettingsEditor extends StatelessWidget {
           switch (spec.kind) {
             SettingKind.boolean => SwitchListTile(
                 title: Text(settingLabel(l10n, spec.key)),
+                subtitle: settingHint(l10n, spec.key) == null
+                    ? null
+                    : Text(
+                        settingHint(l10n, spec.key)!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                 value: values[spec.key] == true,
                 onChanged: (v) => onChanged(spec.key, v),
               ),

@@ -997,8 +997,14 @@ abstract class AppLocalizations {
   /// No description provided for @settingDealerRestriction.
   ///
   /// In nl, this message translates to:
-  /// **'Beperking voor de deler'**
+  /// **'Bieden mag niet kloppen'**
   String get settingDealerRestriction;
+
+  /// No description provided for @settingDealerRestrictionHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Het totaal van alle biedingen mag niet gelijk zijn aan het aantal slagen. Zo is er altijd een verliezer.'**
+  String get settingDealerRestrictionHint;
 
   /// No description provided for @settingExactBase.
   ///
