@@ -521,6 +521,90 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameSettingsSubtitle => 'Spelregels per spel instellen';
 
   @override
+  String get gameSettingsIntro =>
+      'Dit zijn de standaardwaarden voor nieuwe spellen. Bij het starten van een spel kun je ze nog aanpassen.';
+
+  @override
+  String get restoreDefaults => 'Standaardwaarden herstellen';
+
+  @override
+  String get restoreDefaultsDone => 'Standaardwaarden hersteld';
+
+  @override
+  String sumBoerenbridge(int base, int perTrick, int wrong) {
+    return '$base basis, $perTrick per slag, $wrong straf';
+  }
+
+  @override
+  String sumKlaverjasHands(String variant, int rounds) {
+    return '$variant · $rounds giffen';
+  }
+
+  @override
+  String sumKlaverjasTarget(String variant, int target) {
+    return '$variant · doel $target';
+  }
+
+  @override
+  String sumRikken(int perTrick, int slam) {
+    return '$perTrick per slag, slem $slam';
+  }
+
+  @override
+  String sumHearts(int total, int target) {
+    return '$total strafpunten, doel $target';
+  }
+
+  @override
+  String sumHeartsRounds(int total, int rounds) {
+    return '$total strafpunten, $rounds rondes';
+  }
+
+  @override
+  String sumToepen(int limit) {
+    return 'Uitvallen bij $limit punten';
+  }
+
+  @override
+  String get sumLowestWins => 'laagste wint';
+
+  @override
+  String get sumHighestWins => 'hoogste wint';
+
+  @override
+  String sumRoundsWin(int rounds, String win) {
+    return '$rounds rondes, $win';
+  }
+
+  @override
+  String sumTargetWin(int target, String win) {
+    return 'Doel $target, $win';
+  }
+
+  @override
+  String sumCanasta(int target, int natural, int mixed) {
+    return 'Doel $target, canasta $natural/$mixed';
+  }
+
+  @override
+  String sumTarget(int target) {
+    return 'Doel $target';
+  }
+
+  @override
+  String sumCustomAdd(int step) {
+    return 'Optellen, stap $step';
+  }
+
+  @override
+  String get sumCustomEnter => 'Invullen';
+
+  @override
+  String sumCustomTarget(String summary, int target) {
+    return '$summary · doel $target';
+  }
+
+  @override
   String get proCardText =>
       'Statistieken, historie en spelersgroepen. Alle spellen blijven gratis.';
 

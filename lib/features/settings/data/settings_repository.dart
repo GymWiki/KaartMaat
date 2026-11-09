@@ -39,6 +39,19 @@ class SettingsRepository {
     Object? value,
   ) =>
       set('rules.${rules.type}', jsonEncode({...current, key: value}));
+
+  /// Puts the default rule options of one game back (other games stay as
+  /// they are). Returns what was stored before, to hand to [restoreRuleOptions]
+  /// for an undo.
+  Future<String?> resetRuleOptions(GameRules rules) async {
+    final previous = await get('rules.${rules.type}');
+    await remove('rules.${rules.type}');
+    return previous;
+  }
+
+  /// Undo of [resetRuleOptions].
+  Future<void> restoreRuleOptions(GameRules rules, String? previous) =>
+      previous == null ? remove('rules.${rules.type}') : set('rules.${rules.type}', previous);
 }
 
 enum ThemeChoice { system, light, dark, oled }

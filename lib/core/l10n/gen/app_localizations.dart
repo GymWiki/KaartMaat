@@ -952,6 +952,120 @@ abstract class AppLocalizations {
   /// **'Spelregels per spel instellen'**
   String get gameSettingsSubtitle;
 
+  /// No description provided for @gameSettingsIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Dit zijn de standaardwaarden voor nieuwe spellen. Bij het starten van een spel kun je ze nog aanpassen.'**
+  String get gameSettingsIntro;
+
+  /// No description provided for @restoreDefaults.
+  ///
+  /// In nl, this message translates to:
+  /// **'Standaardwaarden herstellen'**
+  String get restoreDefaults;
+
+  /// No description provided for @restoreDefaultsDone.
+  ///
+  /// In nl, this message translates to:
+  /// **'Standaardwaarden hersteld'**
+  String get restoreDefaultsDone;
+
+  /// No description provided for @sumBoerenbridge.
+  ///
+  /// In nl, this message translates to:
+  /// **'{base} basis, {perTrick} per slag, {wrong} straf'**
+  String sumBoerenbridge(int base, int perTrick, int wrong);
+
+  /// No description provided for @sumKlaverjasHands.
+  ///
+  /// In nl, this message translates to:
+  /// **'{variant} · {rounds} giffen'**
+  String sumKlaverjasHands(String variant, int rounds);
+
+  /// No description provided for @sumKlaverjasTarget.
+  ///
+  /// In nl, this message translates to:
+  /// **'{variant} · doel {target}'**
+  String sumKlaverjasTarget(String variant, int target);
+
+  /// No description provided for @sumRikken.
+  ///
+  /// In nl, this message translates to:
+  /// **'{perTrick} per slag, slem {slam}'**
+  String sumRikken(int perTrick, int slam);
+
+  /// No description provided for @sumHearts.
+  ///
+  /// In nl, this message translates to:
+  /// **'{total} strafpunten, doel {target}'**
+  String sumHearts(int total, int target);
+
+  /// No description provided for @sumHeartsRounds.
+  ///
+  /// In nl, this message translates to:
+  /// **'{total} strafpunten, {rounds} rondes'**
+  String sumHeartsRounds(int total, int rounds);
+
+  /// No description provided for @sumToepen.
+  ///
+  /// In nl, this message translates to:
+  /// **'Uitvallen bij {limit} punten'**
+  String sumToepen(int limit);
+
+  /// No description provided for @sumLowestWins.
+  ///
+  /// In nl, this message translates to:
+  /// **'laagste wint'**
+  String get sumLowestWins;
+
+  /// No description provided for @sumHighestWins.
+  ///
+  /// In nl, this message translates to:
+  /// **'hoogste wint'**
+  String get sumHighestWins;
+
+  /// No description provided for @sumRoundsWin.
+  ///
+  /// In nl, this message translates to:
+  /// **'{rounds} rondes, {win}'**
+  String sumRoundsWin(int rounds, String win);
+
+  /// No description provided for @sumTargetWin.
+  ///
+  /// In nl, this message translates to:
+  /// **'Doel {target}, {win}'**
+  String sumTargetWin(int target, String win);
+
+  /// No description provided for @sumCanasta.
+  ///
+  /// In nl, this message translates to:
+  /// **'Doel {target}, canasta {natural}/{mixed}'**
+  String sumCanasta(int target, int natural, int mixed);
+
+  /// No description provided for @sumTarget.
+  ///
+  /// In nl, this message translates to:
+  /// **'Doel {target}'**
+  String sumTarget(int target);
+
+  /// No description provided for @sumCustomAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Optellen, stap {step}'**
+  String sumCustomAdd(int step);
+
+  /// No description provided for @sumCustomEnter.
+  ///
+  /// In nl, this message translates to:
+  /// **'Invullen'**
+  String get sumCustomEnter;
+
+  /// No description provided for @sumCustomTarget.
+  ///
+  /// In nl, this message translates to:
+  /// **'{summary} · doel {target}'**
+  String sumCustomTarget(String summary, int target);
+
   /// No description provided for @proCardText.
   ///
   /// In nl, this message translates to:
