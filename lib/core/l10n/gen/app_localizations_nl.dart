@@ -331,6 +331,71 @@ class AppLocalizationsNl extends AppLocalizations {
   String get groupChipAdd => 'Groep';
 
   @override
+  String get proTitle => 'Kaartmaat Pro';
+
+  @override
+  String get proIntro =>
+      'Alle spellen blijven gratis. Met Pro krijg je er dit bij:';
+
+  @override
+  String get proFeatureStats => 'Statistieken en de Kaartkoning van het jaar';
+
+  @override
+  String get proFeatureHistory => 'Historie van al je afgeronde spellen';
+
+  @override
+  String get proFeatureGroups => 'Spelersgroepen om snel te selecteren';
+
+  @override
+  String get proOnce => 'Eenmalig, geen abonnement';
+
+  @override
+  String get proUnlock => 'Ontgrendel Pro';
+
+  @override
+  String get proRestore => 'Aankopen herstellen';
+
+  @override
+  String get proRestoring => 'Aankopen worden hersteld…';
+
+  @override
+  String get proThanks => 'Bedankt! Pro is ontgrendeld';
+
+  @override
+  String get proPending =>
+      'Betaling in behandeling. Pro wordt ontgrendeld zodra de betaling is bevestigd.';
+
+  @override
+  String get proFailed =>
+      'De aankoop is niet gelukt. Er is niets afgeschreven. Probeer het later opnieuw.';
+
+  @override
+  String get proRestoreNone =>
+      'Er is geen eerdere aankoop gevonden bij dit account.';
+
+  @override
+  String get proProductError =>
+      'De prijs kon niet worden opgehaald. Controleer je verbinding en probeer het opnieuw.';
+
+  @override
+  String get proLoadingPrice => 'Prijs wordt geladen…';
+
+  @override
+  String get proRetry => 'Opnieuw proberen';
+
+  @override
+  String get proDebugOverride => 'Pro forceren (alleen debug)';
+
+  @override
+  String get proDebugAuto => 'Automatisch';
+
+  @override
+  String get proDebugOn => 'Pro aan';
+
+  @override
+  String get proDebugOff => 'Pro uit';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

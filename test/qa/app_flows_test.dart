@@ -16,6 +16,7 @@ import 'package:kaartmaat/features/games/games_registry.dart';
 import 'package:kaartmaat/features/groups/data/group_repository.dart';
 import 'package:kaartmaat/features/history/share_result_card.dart';
 import 'package:kaartmaat/features/players/data/player_repository.dart';
+import 'package:kaartmaat/features/settings/data/settings_repository.dart';
 
 import '../helpers.dart';
 
@@ -58,6 +59,7 @@ Future<void> boot(
   WidgetTester tester, {
   int seedPlayers = 9,
   Future<void> Function()? seed,
+  bool pro = true,
 }) async {
   d.driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   usePhoneScreen(tester);
@@ -71,6 +73,13 @@ Future<void> boot(
   );
 
   if (seed != null) await real(tester, seed);
+  // the screens behind Pro are tested as a Pro user (debug override)
+  if (pro) {
+    await real(
+      tester,
+      () => SettingsRepository(db).set('pro.debugOverride', 'on'),
+    );
+  }
   appRouter.go('/');
   await tester.pumpWidget(
     ProviderScope(
@@ -111,6 +120,7 @@ void appTest(String name, Future<void> Function(WidgetTester) body) {
 }
 
 void main() {
+  proWallTests();
   startGuardTests();
   setUpAll(() => initializeDateFormatting('nl'));
 
@@ -274,6 +284,80 @@ void main() {
     await tester.tap(find.text('Hervat spel'));
     await settle(tester);
     expect(find.text('Anna'), findsWidgets);
+  });
+}
+
+void proWallTests() {
+  appTest(
+    'Pro: no wall at startup, wall only when Statistieken or Historie opens',
+    (tester) async {
+      await boot(tester, pro: false);
+      // the home screen and the free parts never show the wall
+      expect(find.text('Kaartmaat Pro'), findsNothing);
+      expect(find.text('Ontgrendel Pro'), findsNothing);
+      await goTo(tester, '/players');
+      expect(find.text('Ontgrendel Pro'), findsNothing);
+      await goTo(tester, '/stats');
+      expect(find.text('Kaartmaat Pro'), findsOneWidget);
+      expect(find.text('Ontgrendel Pro'), findsOneWidget);
+      expect(
+        find.text('Kaartkoning ${DateTime.now().year}'),
+        findsOneWidget,
+        reason: 'sample preview',
+      );
+      await goTo(tester, '/history');
+      expect(find.text('Kaartmaat Pro'), findsOneWidget);
+      expect(
+        find.text('Klaverjassen'),
+        findsOneWidget,
+        reason: 'sample preview',
+      );
+    },
+  );
+
+  appTest('Pro: with Pro the real screens show', (tester) async {
+    await boot(tester); // pro by the debug override
+    await goTo(tester, '/stats');
+    expect(find.text('Kaartmaat Pro'), findsNothing);
+    expect(find.text('Nog geen afgeronde spellen'), findsWidgets);
+    await goTo(tester, '/history');
+    expect(find.text('Kaartmaat Pro'), findsNothing);
+  });
+
+  appTest('Pro: free users keep their games, and Pro shows them at once', (
+    tester,
+  ) async {
+    await boot(
+      tester,
+      seedPlayers: 2,
+      pro: false,
+      seed: () async {
+        final repo = GameRepository(db);
+        final gid = await repo.createGame('custom', ids, {});
+        await repo.addRound(gid, {
+          '${ids[0]}': {'points': 3},
+          '${ids[1]}': {'points': 1},
+        });
+        await repo.finish(gid);
+      },
+    );
+    // stored while free, behind the wall
+    final finished = await real(
+      tester,
+      () => GameRepository(db).watchFinished().first,
+    );
+    expect(finished.length, 1);
+    await goTo(tester, '/history');
+    expect(find.text('Ontgrendel Pro'), findsOneWidget);
+    expect(
+      find.textContaining('Winnaar: Anna'),
+      findsWidgets,
+      reason: 'own data in the preview',
+    );
+    // after the purchase the same data is there
+    await real(tester, () => SettingsRepository(db).set('pro.purchased', '1'));
+    await tester.pump(const Duration(milliseconds: 300));
+    await settle(tester);
   });
 }
 

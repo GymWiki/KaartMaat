@@ -628,6 +628,126 @@ abstract class AppLocalizations {
   /// **'Groep'**
   String get groupChipAdd;
 
+  /// No description provided for @proTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kaartmaat Pro'**
+  String get proTitle;
+
+  /// No description provided for @proIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alle spellen blijven gratis. Met Pro krijg je er dit bij:'**
+  String get proIntro;
+
+  /// No description provided for @proFeatureStats.
+  ///
+  /// In nl, this message translates to:
+  /// **'Statistieken en de Kaartkoning van het jaar'**
+  String get proFeatureStats;
+
+  /// No description provided for @proFeatureHistory.
+  ///
+  /// In nl, this message translates to:
+  /// **'Historie van al je afgeronde spellen'**
+  String get proFeatureHistory;
+
+  /// No description provided for @proFeatureGroups.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelersgroepen om snel te selecteren'**
+  String get proFeatureGroups;
+
+  /// No description provided for @proOnce.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eenmalig, geen abonnement'**
+  String get proOnce;
+
+  /// No description provided for @proUnlock.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ontgrendel Pro'**
+  String get proUnlock;
+
+  /// No description provided for @proRestore.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aankopen herstellen'**
+  String get proRestore;
+
+  /// No description provided for @proRestoring.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aankopen worden hersteld…'**
+  String get proRestoring;
+
+  /// No description provided for @proThanks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bedankt! Pro is ontgrendeld'**
+  String get proThanks;
+
+  /// No description provided for @proPending.
+  ///
+  /// In nl, this message translates to:
+  /// **'Betaling in behandeling. Pro wordt ontgrendeld zodra de betaling is bevestigd.'**
+  String get proPending;
+
+  /// No description provided for @proFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'De aankoop is niet gelukt. Er is niets afgeschreven. Probeer het later opnieuw.'**
+  String get proFailed;
+
+  /// No description provided for @proRestoreNone.
+  ///
+  /// In nl, this message translates to:
+  /// **'Er is geen eerdere aankoop gevonden bij dit account.'**
+  String get proRestoreNone;
+
+  /// No description provided for @proProductError.
+  ///
+  /// In nl, this message translates to:
+  /// **'De prijs kon niet worden opgehaald. Controleer je verbinding en probeer het opnieuw.'**
+  String get proProductError;
+
+  /// No description provided for @proLoadingPrice.
+  ///
+  /// In nl, this message translates to:
+  /// **'Prijs wordt geladen…'**
+  String get proLoadingPrice;
+
+  /// No description provided for @proRetry.
+  ///
+  /// In nl, this message translates to:
+  /// **'Opnieuw proberen'**
+  String get proRetry;
+
+  /// No description provided for @proDebugOverride.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pro forceren (alleen debug)'**
+  String get proDebugOverride;
+
+  /// No description provided for @proDebugAuto.
+  ///
+  /// In nl, this message translates to:
+  /// **'Automatisch'**
+  String get proDebugAuto;
+
+  /// No description provided for @proDebugOn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pro aan'**
+  String get proDebugOn;
+
+  /// No description provided for @proDebugOff.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pro uit'**
+  String get proDebugOff;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:
