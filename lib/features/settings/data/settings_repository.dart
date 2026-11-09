@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/db/database.dart';
 import '../../../core/db/providers.dart';
 import '../../games/rules/game_rules.dart';
+import '../../pro/entitlement_service.dart' show ProOverride;
 
 class SettingsRepository {
   SettingsRepository(this.db);
@@ -53,6 +54,15 @@ class AppPrefs {
       );
 
   bool get haptics => _values['haptics'] != '0';
+
+  /// Pro was bought (kept locally so it works offline).
+  bool get proPurchased => _values['pro.purchased'] == '1';
+
+  /// Debug-only override of the Pro status.
+  ProOverride get proOverride => ProOverride.values.firstWhere(
+    (o) => o.name == _values['pro.debugOverride'],
+    orElse: () => ProOverride.auto,
+  );
 
   /// Start every game with the screen kept on (off unless chosen).
   bool get keepAwakeByDefault => _values['keepAwake'] == '1';
