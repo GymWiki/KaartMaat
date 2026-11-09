@@ -1,0 +1,61 @@
+{
+  "title": "Boerenbridge",
+  "texts": {
+    "maxCardsText": {
+      "by": "maxCards",
+      "cases": {
+        "0": "Het maximum is 52 gedeeld door het aantal spelers, naar beneden afgerond (bij 4 spelers 13 kaarten).",
+        "default": "Het maximum is {maxCards} kaarten (of minder als 52 gedeeld door het aantal spelers lager uitkomt)."
+      }
+    },
+    "dealerText": {
+      "by": "dealerRestriction",
+      "cases": {
+        "true": "De deler biedt als laatste en mag niet het bod doen waardoor het totaal van alle biedingen gelijk is aan het aantal slagen. Zo kan nooit iedereen tegelijk gelijk krijgen.",
+        "false": "Er geldt geen beperking voor de deler: het totaal van de biedingen mag gelijk zijn aan het aantal slagen.",
+        "default": ""
+      }
+    }
+  },
+  "goal": [
+    "Voorspel in elke ronde precies hoeveel slagen je gaat winnen en haal dat ook. Wie na alle rondes de meeste punten heeft, wint."
+  ],
+  "needs": [
+    "3 tot en met 7 spelers.",
+    "Een gewoon kaartspel van 52 kaarten."
+  ],
+  "flow": [
+    "Ronde 1 wordt 1 kaart per speler gedeeld, ronde 2 twee kaarten, enzovoort tot het maximum, en daarna weer terug naar 1 kaart. De ronde met het maximum aantal kaarten wordt één keer gespeeld. {maxCardsText}",
+    "De eerste deler is speler 1; daarna schuift de deler elke ronde een plek naar links op.",
+    "Spreek vooraf af hoe troef wordt bepaald (meestal draait de deler een kaart om van de resterende stapel).",
+    "Bieden: de speler links van de deler begint, de deler biedt als laatste. Ieder noemt hoeveel slagen hij denkt te winnen (0 tot en met het aantal kaarten).",
+    "De speler links van de deler komt uit. Je moet de gevraagde kleur bekennen. De hoogste troef wint de slag, anders de hoogste kaart van de gevraagde kleur. De winnaar komt uit voor de volgende slag.",
+    "Voer na de ronde in hoeveel slagen iedereen echt won. De laatste speler wordt automatisch ingevuld: dat is wat er over is. De totalen moeten samen precies het aantal slagen zijn."
+  ],
+  "scoring": {
+    "intro": ["Per ronde krijg je punten voor wat je bood en wat je haalde:"],
+    "table": [
+      { "cols": ["Precies goed geboden", "{exactBase} + {exactPerTrick} per gewonnen slag"] },
+      { "cols": ["Niet precies goed", "−{wrongPerTrick} per slag verschil"] },
+      { "cols": ["Voorbeeld: 2 geboden, 2 gehaald", "{exactBase} + 2 × {exactPerTrick}"] },
+      { "cols": ["Voorbeeld: 2 geboden, 4 gehaald", "−2 × {wrongPerTrick}"] }
+    ],
+    "notes": [
+      "Het verschil telt in beide richtingen: te veel en te weinig slagen kosten evenveel."
+    ]
+  },
+  "rules": [
+    {
+      "title": "Bieden mag niet kloppen",
+      "text": "{dealerText}"
+    },
+    {
+      "title": "Rondes",
+      "text": "Het spel heeft 2 × maximum − 1 rondes. Staat een ronde open (er is geboden maar nog geen slagen ingevuld), dan blijft die bewaard en telt pas mee zodra je de slagen invult."
+    }
+  ],
+  "tips": [
+    "Bied laag met zwakke kaarten: een 0 is soms het veiligste bod.",
+    "Houd in de laatste slagen bij wie nog slagen nodig heeft; wie al zijn bod heeft, probeert slagen juist te vermijden."
+  ]
+}

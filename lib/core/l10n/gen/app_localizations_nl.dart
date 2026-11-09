@@ -132,12 +132,6 @@ class AppLocalizationsNl extends AppLocalizations {
       'Wie als eerste de doelscore haalt (standaard 1000) wint. Een score per ronde mag negatief zijn. Het spel eindigt aan het einde van een ronde: halen meer spelers de doelscore, dan wint de hoogste stand.';
 
   @override
-  String get settingMinEntry => 'Laagste score per ronde';
-
-  @override
-  String get settingMaxEntry => 'Hoogste score per ronde';
-
-  @override
   String duizendenToGo(int points) {
     return 'nog $points';
   }
@@ -146,7 +140,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get duizendenReached => 'doel bereikt';
 
   @override
-  String duizendenOutOfRange(int min, int max) {
+  String scoreOutOfRange(int min, int max) {
     return 'Score buiten $min tot $max';
   }
 
@@ -156,7 +150,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get duizendenFillAll => 'Vul de score van alle spelers in';
+  String get scoreFillAll => 'Vul de score van alle spelers in';
 
   @override
   String get variantGronings => 'Gronings';
@@ -238,6 +232,198 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get suitClubs => 'Klaveren';
+
+  @override
+  String get keepAwakeOn => 'Scherm blijft aan';
+
+  @override
+  String get keepAwakeOff => 'Scherm mag uit';
+
+  @override
+  String get keepAwakeTooltip => 'Scherm aan houden';
+
+  @override
+  String get settingKeepAwake => 'Scherm standaard aan tijdens spel';
+
+  @override
+  String get settingInputMode => 'Invoermethode';
+
+  @override
+  String get inputModeAdd => 'Optellen';
+
+  @override
+  String get inputModeEnter => 'Invullen';
+
+  @override
+  String get inputModeHintAdd =>
+      'Tik op knoppen om punten bij spelers op te tellen.';
+
+  @override
+  String get inputModeHintEnter =>
+      'Vul per ronde de score van elke speler in met het numpad.';
+
+  @override
+  String get dealerSemantics => 'Deler';
+
+  @override
+  String get firstBidderSemantics => 'Eerste bieder';
+
+  @override
+  String atTableTitle(int count) {
+    return 'Aan tafel ($count)';
+  }
+
+  @override
+  String get atTableHint =>
+      'Tik hieronder op spelers om ze aan tafel te zetten. Sleep om de zitvolgorde te wijzigen.';
+
+  @override
+  String get removeFromTable => 'Van tafel halen';
+
+  @override
+  String moveSeat(String name) {
+    return 'Verplaats $name';
+  }
+
+  @override
+  String showAllPlayers(int count) {
+    return 'Toon alle ($count)';
+  }
+
+  @override
+  String get showFewerPlayers => 'Toon minder';
+
+  @override
+  String get searchPlayer => 'Zoek speler';
+
+  @override
+  String get noPlayerMatch => 'Geen speler gevonden';
+
+  @override
+  String get saveAsGroup => 'Opslaan als groep';
+
+  @override
+  String groupSavedMsg(String name) {
+    return 'Groep $name opgeslagen';
+  }
+
+  @override
+  String groupSelectedMsg(String name) {
+    return '$name geselecteerd';
+  }
+
+  @override
+  String groupTruncatedMsg(String game, int max, String name) {
+    return '$game is max. $max spelers: de eerste $max van $name zijn gekozen';
+  }
+
+  @override
+  String maxPlayersMsg(String game, int max) {
+    return '$game is max. $max spelers';
+  }
+
+  @override
+  String groupChipLabel(String name, int count) {
+    return '$name ($count)';
+  }
+
+  @override
+  String get groupChipAdd => 'Groep';
+
+  @override
+  String get proTitle => 'Kaartmaat Pro';
+
+  @override
+  String get proIntro =>
+      'Alle spellen blijven gratis. Met Pro krijg je er dit bij:';
+
+  @override
+  String get proFeatureStats => 'Statistieken en de Kaartkoning van het jaar';
+
+  @override
+  String get proFeatureHistory => 'Historie van al je afgeronde spellen';
+
+  @override
+  String get proFeatureGroups => 'Spelersgroepen om snel te selecteren';
+
+  @override
+  String get proOnce => 'Eenmalig, geen abonnement';
+
+  @override
+  String get proUnlock => 'Ontgrendel Pro';
+
+  @override
+  String get proRestore => 'Aankopen herstellen';
+
+  @override
+  String get proRestoring => 'Aankopen worden hersteld…';
+
+  @override
+  String get proThanks => 'Bedankt! Pro is ontgrendeld';
+
+  @override
+  String get proPending =>
+      'Betaling in behandeling. Pro wordt ontgrendeld zodra de betaling is bevestigd.';
+
+  @override
+  String get proFailed =>
+      'De aankoop is niet gelukt. Er is niets afgeschreven. Probeer het later opnieuw.';
+
+  @override
+  String get proRestoreNone =>
+      'Er is geen eerdere aankoop gevonden bij dit account.';
+
+  @override
+  String get proProductError =>
+      'De prijs kon niet worden opgehaald. Controleer je verbinding en probeer het opnieuw.';
+
+  @override
+  String get proLoadingPrice => 'Prijs wordt geladen…';
+
+  @override
+  String get proRetry => 'Opnieuw proberen';
+
+  @override
+  String get proDebugOverride => 'Pro forceren (alleen debug)';
+
+  @override
+  String get proDebugAuto => 'Automatisch';
+
+  @override
+  String get proDebugOn => 'Pro aan';
+
+  @override
+  String get proDebugOff => 'Pro uit';
+
+  @override
+  String get rulebookTitle => 'Spelregels';
+
+  @override
+  String get rulebookTooltip => 'Spelregels';
+
+  @override
+  String get rulebookGoal => 'Doel';
+
+  @override
+  String get rulebookNeeds => 'Benodigdheden';
+
+  @override
+  String get rulebookFlow => 'Spelverloop';
+
+  @override
+  String get rulebookScoring => 'Puntentelling';
+
+  @override
+  String get rulebookRules => 'Regels en varianten';
+
+  @override
+  String get rulebookTips => 'Tips';
+
+  @override
+  String get rulebookScoringNote => 'Met de instellingen van dit spel';
+
+  @override
+  String get rulebookError => 'De spelregels konden niet worden geladen.';
 
   @override
   String get resumeGame => 'Hervat spel';
@@ -471,9 +657,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get seatOrderHint => 'Volgorde van selecteren is de zitvolgorde';
-
-  @override
   String get gameOver => 'Spel afgelopen';
 
   @override
@@ -560,7 +743,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get issueOutOfRange => 'Waarde buiten het toegestane bereik';
 
   @override
-  String get settingDealerRestriction => 'Beperking voor de deler';
+  String get settingDealerRestriction => 'Bieden mag niet kloppen';
+
+  @override
+  String get settingDealerRestrictionHint =>
+      'Het totaal van alle biedingen mag niet gelijk zijn aan het aantal slagen. Zo is er altijd een verliezer.';
 
   @override
   String get settingExactBase => 'Punten bij exact goed (basis)';

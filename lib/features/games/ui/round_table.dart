@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/ui/seat_chips.dart';
 import '../data/game_state.dart';
 
 /// Rounds as rows, players or teams as columns. The header with names and
@@ -25,6 +26,7 @@ class RoundTable extends StatefulWidget {
     this.cellDetail,
     this.cellHighlight,
     this.totalDetail,
+    this.seatMarker,
   });
 
   final GameView view;
@@ -36,6 +38,10 @@ class RoundTable extends StatefulWidget {
 
   /// Small line under a participant's total (for example "nog 340").
   final String? Function(String participant)? totalDetail;
+
+  /// Dealer / first bidder of the round being played, shown as a chip next
+  /// to the name in the column header (null for games without a dealer).
+  final SeatMarker? Function(String participant)? seatMarker;
 
   @override
   State<RoundTable> createState() => _RoundTableState();
@@ -260,7 +266,24 @@ class _RoundTableState extends State<RoundTable> {
           child: Row(
             children: [
               const SizedBox(width: 40),
-              for (final p in ids) numberCell(view.nameOf(p), size: 13),
+              for (final p in ids)
+                if (widget.seatMarker == null)
+                  numberCell(view.nameOf(p), size: 13)
+                else
+                  Expanded(
+                    child: Center(
+                      child: NameWithMarker(
+                        name: view.nameOf(p),
+                        marker: widget.seatMarker!(p),
+                        chipSize: 14,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: scheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ),
             ],
           ),
         ),

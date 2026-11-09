@@ -28,9 +28,12 @@ import 'ui/klaverjas_panel.dart';
 import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
 import 'ui/rikken_labels.dart';
+import '../../core/ui/seat_chips.dart';
+import '../../core/ui/suits.dart';
 import 'ui/duizenden_panel.dart';
 import 'ui/gronings_steps.dart' show suitSign;
 import 'ui/rikken_panel.dart';
+import 'ui/score_entry_panel.dart';
 import 'ui/toepen_panel.dart';
 
 /// Builds the score-entry body for one round. Call [onSubmit] with the
@@ -46,6 +49,7 @@ class GameDefinition {
   const GameDefinition({
     required this.rules,
     required this.icon,
+    required this.suit,
     required this.name,
     required this.description,
     required this.entryBuilder,
@@ -56,12 +60,18 @@ class GameDefinition {
     this.cellDetail,
     this.cellHighlight,
     this.liveRound = false,
+    this.liveRoundIf,
     this.statusLine,
     this.totalDetail,
+    this.seatMarkers,
   });
 
   final GameRules rules;
   final IconData icon;
+
+  /// The card suit shown on this game's card on the home screen. Fixed per
+  /// game, not derived from the order of the list.
+  final Suit suit;
   final String Function(AppLocalizations l10n) name;
   final String Function(AppLocalizations l10n) description;
   final RoundEntryBuilder entryBuilder;
@@ -94,9 +104,20 @@ class GameDefinition {
   final String? Function(AppLocalizations l10n, GameView view, String participant)?
       totalDetail;
 
+  /// Who deals and who bids first in [roundNumber], by participant (a player,
+  /// or a team in team games). Null for games without a dealer.
+  final Map<String, SeatMarker> Function(GameView view, int roundNumber)?
+      seatMarkers;
+
   /// Counting games: the panel edits the latest round on every tap, and
   /// "next round" starts a new one, instead of confirming a round at a time.
   final bool liveRound;
+
+  /// Overrides [liveRound] per game when it depends on a setting (the
+  /// Algemene teller counts live only in its "Optellen" mode).
+  final bool Function(GameConfig config)? liveRoundIf;
+
+  bool isLive(GameConfig config) => liveRoundIf?.call(config) ?? liveRound;
 
   /// Marks a round-table cell with a check (e.g. an exact bid).
   final bool Function(GameView view, int roundIndex, String participant)?
@@ -111,6 +132,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   BoerenbridgeRules.typeId: GameDefinition(
     rules: const BoerenbridgeRules(),
     icon: Icons.style,
+    suit: Suit.spades,
     name: (l) => l.gameBoerenbridge,
     description: (l) => l.gameBoerenbridgeDesc,
     entryBuilder: (view, number, existing, onSubmit) => BoerenbridgeEntry(
@@ -127,8 +149,15 @@ final Map<String, GameDefinition> gameDefinitions = {
       return [
         editing ? l.editRound(n) : l.roundOf(n, rules.totalRounds(cfg)),
         l.cardsCount(rules.cardsInRound(cfg, n)),
-        l.dealerLabel(view.nameOf(rules.dealer(cfg, n))),
       ].join(' · ');
+    },
+    seatMarkers: (view, n) {
+      const rules = BoerenbridgeRules();
+      final cfg = view.config;
+      return {
+        rules.dealer(cfg, n): SeatMarker.dealer,
+        rules.bidOrder(cfg, n).first: SeatMarker.firstBidder,
+      };
     },
     cellDetail: (l, view, i, p) {
       final e = view.state.rounds[i].entries[p];
@@ -148,6 +177,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   KlaverjasRules.typeId: GameDefinition(
     rules: const KlaverjasRules(),
     icon: Icons.groups,
+    suit: Suit.clubs,
     name: (l) => l.gameKlaverjassen,
     description: (l) => l.gameKlaverjassenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -163,8 +193,20 @@ final Map<String, GameDefinition> gameDefinitions = {
         editing
             ? l.editRound(n)
             : (total == null ? l.roundTitle(n) : l.roundOf(n, total)),
-        l.dealerLabel(view.nameOf(rules.dealer(cfg, n))),
       ].join(' · ');
+    },
+    // the dealer's team and the team of the player left of the dealer
+    seatMarkers: (view, n) {
+      const rules = KlaverjasRules();
+      final cfg = view.config;
+      String teamOf(String player) =>
+          rules.membersOf(cfg, KlaverjasRules.wij).contains(player)
+          ? KlaverjasRules.wij
+          : KlaverjasRules.zij;
+      return {
+        teamOf(rules.dealer(cfg, n)): SeatMarker.dealer,
+        teamOf(rules.bidStarter(cfg, n)): SeatMarker.firstBidder,
+      };
     },
     cellDetail: (l, view, i, team) {
       const rules = KlaverjasRules();
@@ -191,6 +233,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   RikkenRules.typeId: GameDefinition(
     rules: const RikkenRules(),
     icon: Icons.looks_4,
+    suit: Suit.diamonds,
     name: (l) => l.gameRikken,
     description: (l) => l.gameRikkenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -208,6 +251,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   HeartsRules.typeId: GameDefinition(
     rules: const HeartsRules(),
     icon: Icons.favorite,
+    suit: Suit.hearts,
     name: (l) => l.gameHartenjagen,
     description: (l) => l.gameHartenjagenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -223,6 +267,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   ToepenRules.typeId: GameDefinition(
     rules: const ToepenRules(),
     icon: Icons.filter_5,
+    suit: Suit.spades,
     name: (l) => l.gameToepen,
     description: (l) => l.gameToepenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -233,6 +278,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   JokerenRules.typeId: GameDefinition(
     rules: const JokerenRules(),
     icon: Icons.theater_comedy,
+    suit: Suit.hearts,
     name: (l) => l.gameJokeren,
     description: (l) => l.gameJokerenDesc,
     entryBuilder: (view, number, existing, onSubmit) => CalculatorEntry(
@@ -247,6 +293,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   CanastaRules.typeId: GameDefinition(
     rules: const CanastaRules(),
     icon: Icons.diamond,
+    suit: Suit.clubs,
     name: (l) => l.gameCanasta,
     description: (l) => l.gameCanastaDesc,
     entryBuilder: (view, number, existing, onSubmit) => CalculatorEntry(
@@ -263,6 +310,7 @@ final Map<String, GameDefinition> gameDefinitions = {
   DuizendenRules.typeId: GameDefinition(
     rules: const DuizendenRules(),
     icon: Icons.trending_up,
+    suit: Suit.diamonds,
     name: (l) => l.gameDuizenden,
     description: (l) => l.gameDuizendenDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
@@ -280,12 +328,15 @@ final Map<String, GameDefinition> gameDefinitions = {
   CustomRules.typeId: GameDefinition(
     rules: const CustomRules(),
     icon: Icons.edit_note,
+    suit: Suit.spades,
     name: (l) => l.gameCustom,
     description: (l) => l.gameCustomDesc,
     entryBuilder: (view, number, existing, onSubmit) =>
         PointsEntry(view: view, existing: existing, onSubmit: onSubmit),
-    panelBuilder: (ctx) => CounterPanel(ctx: ctx),
-    liveRound: true,
+    panelBuilder: (ctx) => CustomRules.isEnterMode(ctx.view.config)
+        ? ScoreEntryPanel(ctx: ctx, rules: const CustomRules())
+        : CounterPanel(ctx: ctx),
+    liveRoundIf: (config) => !CustomRules.isEnterMode(config),
   ),
 };
 

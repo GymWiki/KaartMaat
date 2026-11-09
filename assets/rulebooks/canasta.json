@@ -1,0 +1,61 @@
+{
+  "title": "Canasta",
+  "texts": {
+    "targetText": {
+      "by": "targetInclusive",
+      "cases": {
+        "true": "Het spel eindigt aan het einde van een gif zodra een team {targetScore} punten of meer heeft.",
+        "false": "Het spel eindigt aan het einde van een gif zodra een team meer dan {targetScore} punten heeft.",
+        "default": ""
+      }
+    }
+  },
+  "goal": [
+    "Als team zoveel mogelijk punten halen door kaarten op tafel te leggen, canasta's te maken (rijen van 7 kaarten) en als eerste uit te gaan. {targetText} Het team met het hoogste totaal wint."
+  ],
+  "needs": [
+    "Precies 4 spelers in twee teams: spelers op plaats 1 en 3 tegen 2 en 4. Maten zitten tegenover elkaar.",
+    "Twee kaartspellen met jokers (108 kaarten)."
+  ],
+  "flow": [
+    "Deel elke speler een hand, leg de rest als trekstapel en draai één kaart om als begin van de aflegstapel.",
+    "Je beurt: trek een kaart (of neem de aflegstapel als je mag), leg kaarten neer in combinaties van gelijke waarde en gooi een kaart af.",
+    "Een combinatie bestaat uit minstens drie kaarten van dezelfde waarde. Jokers en tweeën zijn wild, maar er mogen er nooit meer wild zijn dan gewone kaarten. Zwarte drieën kun je alleen gebruiken om uit te gaan.",
+    "Rode drieën leg je meteen apart en je trekt een nieuwe kaart; ze leveren bonus op.",
+    "Een rij van 7 kaarten is een canasta. Zonder wilde kaarten is die natuurlijk, anders gemengd.",
+    "Wie al zijn kaarten kwijt is (met minstens één canasta in het team), gaat uit en de gif eindigt.",
+    "Tel per team: bonussen plus de waarde van de neergelegde kaarten min de kaarten die nog in de hand zitten. Voer dit bedrag voor bedrag in; de app telt het totaal."
+  ],
+  "scoring": {
+    "intro": ["Bonussen (Classic, aanpasbaar bij de spelregels):"],
+    "table": [
+      { "cols": ["Natuurlijke canasta", "{naturalCanasta}"] },
+      { "cols": ["Gemengde canasta", "{mixedCanasta}"] },
+      { "cols": ["Uitgaan", "{goOut}"] },
+      { "cols": ["Dicht uitgaan (zonder eerder neer te leggen)", "{goOutConcealed}"] },
+      { "cols": ["Rode drie (per stuk)", "{redThree}"] },
+      { "cols": ["Alle vier rode drieën", "{allRedThrees}"] },
+      { "cols": ["Joker", "50"] },
+      { "cols": ["Aas of twee", "20"] },
+      { "cols": ["Heer tot en met acht", "10"] },
+      { "cols": ["Zeven tot en met vier, zwarte drie", "5"] }
+    ],
+    "notes": [
+      "Per gif geldt: bonussen + neergelegde kaarten − kaarten in de hand.",
+      "Het minimum voor de eerste keer neerleggen hangt af van de score van je team vóór de gif: onder 0 punten 15, van 0 tot 1500 punten 50, van 1500 tot 3000 punten 90, vanaf 3000 punten 120."
+    ]
+  },
+  "rules": [
+    {
+      "title": "Niet in de app",
+      "text": "De app houdt alleen bedragen bij en controleert geen combinaties. Straf voor rode drieën zonder neergelegde combinaties en andere details reken je zelf uit en voer je als bedrag in."
+    },
+    {
+      "title": "Amerikaanse variant",
+      "text": "De Amerikaanse versie gebruikt een andere doelscore en andere openingswaarden. Pas de doelscore aan bij de spelregels als jullie die spelen."
+    }
+  ],
+  "tips": [
+    "Probeer niet te veel van je kaarten vast te houden: uitgaan levert bonus op en kaarten in de hand kosten punten."
+  ]
+}

@@ -7,6 +7,8 @@ import '../../core/l10n/l10n.dart';
 import '../games/data/game_repository.dart';
 import '../games/data/game_state.dart';
 import '../games/games_registry.dart';
+import '../pro/pro_gate.dart';
+import '../pro/pro_previews.dart';
 import '../stats/filter_bar.dart';
 import '../stats/stats_calculator.dart';
 
@@ -19,9 +21,7 @@ class HistoryScreen extends ConsumerWidget {
     final all = ref.watch(finishedGamesProvider).value ?? const <GameState>[];
     final games = applyFilter(all, ref.watch(historyFilterProvider));
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.historyTitle)),
-      body: all.isEmpty
+    final content = all.isEmpty
           ? Center(child: Text(l10n.historyEmpty))
           : Column(children: [
               FilterBar(provider: historyFilterProvider, games: all),
@@ -30,7 +30,15 @@ class HistoryScreen extends ConsumerWidget {
                     ? Center(child: Text(l10n.historyNoMatch))
                     : ListView(children: [for (final g in games) _GameTile(state: g)]),
               ),
-            ]),
+            ]);
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.historyTitle)),
+      // Pro: free users see a faded preview of their own history (or a sample)
+      body: ProGate(
+        preview: all.isEmpty ? const SampleHistoryPreview() : content,
+        child: content,
+      ),
     );
   }
 }

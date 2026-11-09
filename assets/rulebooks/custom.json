@@ -1,0 +1,55 @@
+{
+  "title": "Algemene teller",
+  "texts": {
+    "inputText": {
+      "by": "inputMode",
+      "cases": {
+        "add": "Je telt punten op met de plus- en min-knoppen, in stappen van {step}. Met 'volgende ronde' begin je een nieuwe ronde.",
+        "enter": "Aan het eind van elke ronde typ je de score van elke speler in op het cijferblok.",
+        "default": ""
+      }
+    },
+    "winText": {
+      "by": "lowestWins",
+      "cases": {
+        "true": "Laagste score wint.",
+        "false": "Hoogste score wint.",
+        "default": ""
+      }
+    },
+    "targetText": {
+      "by": "targetScore",
+      "cases": {
+        "0": "Er is geen doelscore: jullie bepalen zelf wanneer het spel klaar is.",
+        "default": "Het spel is afgelopen zodra een speler {targetScore} punten of meer heeft."
+      }
+    }
+  },
+  "goal": [
+    "Een teller voor elk spel waarvoor de app geen eigen regelboek of puntentelling heeft, bijvoorbeeld pesten, ezelen of een eigen huisspel."
+  ],
+  "needs": [
+    "2 tot en met 8 spelers.",
+    "Kaarten, dobbelstenen of iets anders; welk spel je speelt bepaal jij."
+  ],
+  "flow": [
+    "Kies de spelers en stel de invoermethode en een eventuele doelscore in.",
+    "Speel jullie spel volgens je eigen regels.",
+    "Houd de scores bij. {inputText}",
+    "De ronde-tabel en grafiek laten de stand zien. Rond het spel af als het klaar is."
+  ],
+  "scoring": {
+    "intro": ["Alle scores zijn punten die jullie zelf geven. De app telt alleen op."],
+    "table": [
+      { "cols": ["Stap per tik (alleen bij optellen)", "{step}"], "if": "inputMode=add" },
+      { "cols": ["Doelscore (0 = geen)", "{targetScore}"] }
+    ],
+    "notes": [
+      "{winText}",
+      "{targetText}"
+    ]
+  },
+  "tips": [
+    "Gebruik 'Invullen' als je de scores pas na de ronde weet, en 'Optellen' als je tijdens het spel punten krijgt."
+  ]
+}

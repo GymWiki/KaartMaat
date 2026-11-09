@@ -45,7 +45,7 @@ class HomeScreen extends ConsumerWidget {
               for (var i = 0; i < games.length; i++)
                 _GameCard(
                   def: games[i],
-                  suit: suitAt(i),
+                  suit: games[i].suit,
                   onTap: () => context.push('/new/${games[i].id}'),
                 ),
             ],

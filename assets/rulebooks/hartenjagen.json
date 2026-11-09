@@ -1,0 +1,66 @@
+{
+  "title": "Hartenjagen",
+  "texts": {
+    "endText": {
+      "by": "rounds",
+      "cases": {
+        "0": "Het spel eindigt zodra een speler {targetScore} strafpunten of meer heeft; de speler met de minste strafpunten wint.",
+        "default": "Er worden {rounds} giffen gespeeld, of minder als eerder een speler {targetScore} strafpunten heeft. Wie dan de minste strafpunten heeft, wint."
+      }
+    },
+    "moonText": {
+      "by": "moonMode",
+      "cases": {
+        "others": "Wie alle strafkaarten wint (de maan schiet), krijgt 0 punten en elke andere speler krijgt de volle {totalPoints} strafpunten.",
+        "shooter": "Wie alle strafkaarten wint (de maan schiet), krijgt −{totalPoints} punten en de anderen 0.",
+        "default": ""
+      }
+    }
+  },
+  "goal": [
+    "Vermijd strafkaarten: harten en de schoppenvrouw. Wie het einde van het spel haalt met de minste strafpunten, wint. {endText}"
+  ],
+  "needs": [
+    "3 tot en met 6 spelers. Met 4 spelers gebruik je alle 52 kaarten; bij andere aantallen worden er kaarten uit het spel gehaald zodat iedereen evenveel krijgt.",
+    "Een kaartspel van 52 kaarten."
+  ],
+  "flow": [
+    "Deel alle kaarten. Aan het begin van de gif geef je een aantal kaarten door aan je buurman (de richting wisselt meestal per gif).",
+    "Wie de klaveren twee heeft, komt uit. Je moet de gevraagde kleur bekennen. Harten mag je pas uitkomen nadat er een hart is gespeeld (of als je niets anders hebt).",
+    "Er is geen troef. De hoogste kaart van de gevraagde kleur wint de slag en de winnaar neemt alle kaarten. Daarin liggende strafkaarten zijn voor hem.",
+    "Na afloop telt iedereen zijn strafkaarten. Voer in de app per speler het aantal harten in en wie de schoppenvrouw had. De laatste speler wordt automatisch ingevuld.",
+    "Geef een nieuwe gif; de deler schuift op."
+  ],
+  "scoring": {
+    "intro": ["Strafpunten per gif, samen altijd {totalPoints}:"],
+    "table": [
+      { "cols": ["Elk hart", "1"] },
+      { "cols": ["Schoppenvrouw", "{queenPoints}"] },
+      { "cols": ["Samen per gif", "{totalPoints}"] },
+      { "cols": ["Uitvalgrens (doelscore, 0 = geen)", "{targetScore}"] }
+    ],
+    "notes": [
+      "Lager is beter: de speler met de laagste totaalscore wint."
+    ]
+  },
+  "rules": [
+    {
+      "title": "De maan schieten",
+      "text": "{moonText}",
+      "if": "moonEnabled"
+    },
+    {
+      "title": "De maan schieten staat uit",
+      "text": "In dit spel is 'maan schieten' niet toegestaan: elke gif levert gewoon de strafkaarten op zoals ze liggen.",
+      "if": "!moonEnabled"
+    },
+    {
+      "title": "Andere puntentellingen",
+      "text": "Sommige groepen tellen anders. Pas het aantal strafpunten per gif en de waarde van de schoppenvrouw aan bij de spelregels."
+    }
+  ],
+  "tips": [
+    "Gooi hoge kaarten van de kleur waarin je zwak staat weg bij het doorgeven.",
+    "Probeer de schoppenvrouw naar een ander te laten gaan door lage schoppen te spelen."
+  ]
+}

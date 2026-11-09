@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,6 +6,7 @@ import '../../../core/db/providers.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/dialogs.dart';
 import '../../games/games_registry.dart';
+import '../../pro/entitlement_service.dart';
 import '../data/settings_repository.dart';
 import 'settings_editor.dart';
 
@@ -51,6 +53,39 @@ class SettingsScreen extends ConsumerWidget {
             value: prefs.haptics,
             onChanged: (v) => repo.set('haptics', v ? '1' : '0'),
           ),
+          SwitchListTile(
+            title: Text(l10n.settingKeepAwake),
+            value: prefs.keepAwakeByDefault,
+            onChanged: (v) => repo.set('keepAwake', v ? '1' : '0'),
+          ),
+          if (kDebugMode)
+            ListTile(
+              title: Text(l10n.proDebugOverride),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: SegmentedButton<ProOverride>(
+                  showSelectedIcon: false,
+                  segments: [
+                    ButtonSegment(
+                      value: ProOverride.auto,
+                      label: Text(l10n.proDebugAuto),
+                    ),
+                    ButtonSegment(
+                      value: ProOverride.on,
+                      label: Text(l10n.proDebugOn),
+                    ),
+                    ButtonSegment(
+                      value: ProOverride.off,
+                      label: Text(l10n.proDebugOff),
+                    ),
+                  ],
+                  selected: {prefs.proOverride},
+                  onSelectionChanged: (v) => ref
+                      .read(entitlementProvider.notifier)
+                      .setOverride(v.first),
+                ),
+              ),
+            ),
           for (final def in gameDefinitions.values)
             if (def.rules.settingSpecs.isNotEmpty) ...[
               const Divider(),

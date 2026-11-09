@@ -1,0 +1,64 @@
+{
+  "title": "Toepen",
+  "texts": {
+    "povertyText": {
+      "by": "poverty",
+      "cases": {
+        "true": "Wie op {limit} min 1 punt staat, is 'op pelt' en wordt in de app gemarkeerd. Op pelt telt voor het toepen als een extra toep.",
+        "false": "De markering 'op pelt' staat uit.",
+        "default": ""
+      }
+    },
+    "endText": {
+      "by": "playOn",
+      "cases": {
+        "true": "Er wordt doorgespeeld tot één speler over is; die wint.",
+        "false": "Het spel is afgelopen zodra de eerste speler uitvalt.",
+        "default": ""
+      }
+    }
+  },
+  "goal": [
+    "Win zoveel mogelijk rondes en blijf onder de uitvalgrens van {limit} strafpunten. {endText}"
+  ],
+  "needs": [
+    "2 tot en met 8 spelers (meestal 4).",
+    "Een kaartspel van 32 kaarten (7 tot en met aas)."
+  ],
+  "flow": [
+    "Elke speler krijgt 4 kaarten. Er worden 4 slagen gespeeld.",
+    "Je moet de gevraagde kleur bekennen. Volgens veel groepen is de volgorde van hoog naar laag: 10, 9, 8, 7, aas, heer, vrouw, boer. Alleen de laatste slag bepaalt de winnaar van de ronde.",
+    "Wie denkt de ronde te winnen, kan 'toepen' (op tafel kloppen). De anderen kiezen: meegaan of passen. Wie past, is uit de ronde en krijgt strafpunten.",
+    "Na elke toep wordt de inzet van de ronde één punt hoger.",
+    "Tik in de app bij elke speler het aantal strafpunten van de ronde aan. De winnaar krijgt niets."
+  ],
+  "scoring": {
+    "intro": [
+      "Per ronde krijgen spelers strafpunten. Een speler is uit het spel bij {limit} punten of meer. {endText}"
+    ],
+    "table": [
+      { "cols": ["Winnaar van de ronde", "0 punten"] },
+      { "cols": ["Meegegaan en verloren", "aantal toepen + 1"] },
+      { "cols": ["Gepast bij toep nummer j", "j punten"] },
+      { "cols": ["Uitvalgrens", "{limit}"] }
+    ],
+    "notes": [
+      "{povertyText}",
+      "In de app voer je de uitgedeelde strafpunten per speler gewoon in; eerdere versies rekenden de toepen zelf uit en die oude spellen tellen nog hetzelfde."
+    ]
+  },
+  "rules": [
+    {
+      "title": "Uitvalgrens",
+      "text": "Bronnen verschillen: 10 of 15 punten komt het meest voor. Daarom is de grens instelbaar, nu {limit}."
+    },
+    {
+      "title": "Niet in de app",
+      "text": "Regionale varianten als vuile was, blind toepen en een kans op toep kent de app niet. Tel zulke strafpunten gewoon bij de ronde op."
+    }
+  ],
+  "tips": [
+    "Toep alleen als je zeker van je kaarten bent, of als bluf: wie een slechte hand heeft, past liever vroeg.",
+    "Houd bij wie op pelt staat; die speler heeft weinig te verliezen en kan gevaarlijk toepen."
+  ]
+}

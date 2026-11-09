@@ -11,6 +11,16 @@ class CustomRules extends GameRules {
   /// Amount the plus/minus buttons add per tap (entry UI only).
   static const stepKey = 'step';
 
+  /// How scores are entered: "add" (tap buttons to add points, live) or
+  /// "enter" (type every player's score per round on the number pad). Stored
+  /// with the game; games saved before it existed count as "add".
+  static const inputModeKey = 'inputMode';
+  static const inputModeAdd = 'add';
+  static const inputModeEnter = 'enter';
+
+  static bool isEnterMode(GameConfig config) =>
+      config.settings[inputModeKey] == inputModeEnter;
+
   @override
   String get type => typeId;
 
@@ -23,11 +33,19 @@ class CustomRules extends GameRules {
   @override
   List<SettingSpec> get settingSpecs => const [
         SettingSpec(
+          key: inputModeKey,
+          kind: SettingKind.choice,
+          defaultValue: inputModeAdd,
+          options: [inputModeAdd, inputModeEnter],
+          segmented: true,
+        ),
+        SettingSpec(
           key: stepKey,
           kind: SettingKind.integer,
           defaultValue: 1,
           min: 1,
           max: 1000,
+          visibleIf: (inputModeKey, inputModeAdd),
         ),
         SettingSpec(
           key: targetScoreKey,

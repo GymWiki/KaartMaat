@@ -26,7 +26,13 @@ light and one-handed: fast input and never losing state come first.
   for confirmation, make variants a setting.
 - No dependencies beyond what a phase needs; name each one and why.
 - Never commit secrets, keystores or certificates.
-- No paywall, purchases or entitlement code for now.
+- Pro: one non-consumable purchase (`kaartmaat_pro`) unlocks Statistieken,
+  Historie (finished games) and player groups; all games stay free. Every Pro
+  check goes through `EntitlementService` (`lib/features/pro/`, watch
+  `entitlementProvider`), never the store directly; UI parts use `ProGate`.
+  Game data is always stored, only showing it is gated. Pro is stored locally
+  and is never taken away because the store could not be reached.
+- `in_app_purchase` is the one dependency added for Pro (store purchases).
 
 ## Commands
 - Codegen (Drift): `dart run build_runner build --force-jit --delete-conflicting-outputs`

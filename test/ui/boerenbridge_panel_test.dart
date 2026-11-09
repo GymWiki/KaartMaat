@@ -177,7 +177,7 @@ void main() {
       final confirm = find.widgetWithText(FilledButton, 'Ronde afronden');
       expect(tester.widget<FilledButton>(confirm).onPressed, isNotNull);
       // the automatic player cannot be changed to something else
-      await tester.tap(find.text('P1 · deler'));
+      await tester.tap(find.text('P1').first);
       await tester.pump();
       await tester.tap(number('1'), warnIfMissed: false);
       await tester.pump();

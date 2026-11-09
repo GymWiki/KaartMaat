@@ -310,18 +310,6 @@ abstract class AppLocalizations {
   /// **'Wie als eerste de doelscore haalt (standaard 1000) wint. Een score per ronde mag negatief zijn. Het spel eindigt aan het einde van een ronde: halen meer spelers de doelscore, dan wint de hoogste stand.'**
   String get duizendenHint;
 
-  /// No description provided for @settingMinEntry.
-  ///
-  /// In nl, this message translates to:
-  /// **'Laagste score per ronde'**
-  String get settingMinEntry;
-
-  /// No description provided for @settingMaxEntry.
-  ///
-  /// In nl, this message translates to:
-  /// **'Hoogste score per ronde'**
-  String get settingMaxEntry;
-
   /// No description provided for @duizendenToGo.
   ///
   /// In nl, this message translates to:
@@ -334,11 +322,11 @@ abstract class AppLocalizations {
   /// **'doel bereikt'**
   String get duizendenReached;
 
-  /// No description provided for @duizendenOutOfRange.
+  /// No description provided for @scoreOutOfRange.
   ///
   /// In nl, this message translates to:
   /// **'Score buiten {min} tot {max}'**
-  String duizendenOutOfRange(int min, int max);
+  String scoreOutOfRange(int min, int max);
 
   /// No description provided for @duizendenReaches.
   ///
@@ -346,11 +334,11 @@ abstract class AppLocalizations {
   /// **'{names} haalt de doelscore'**
   String duizendenReaches(String names);
 
-  /// No description provided for @duizendenFillAll.
+  /// No description provided for @scoreFillAll.
   ///
   /// In nl, this message translates to:
   /// **'Vul de score van alle spelers in'**
-  String get duizendenFillAll;
+  String get scoreFillAll;
 
   /// No description provided for @variantGronings.
   ///
@@ -483,6 +471,342 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'Klaveren'**
   String get suitClubs;
+
+  /// No description provided for @keepAwakeOn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm blijft aan'**
+  String get keepAwakeOn;
+
+  /// No description provided for @keepAwakeOff.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm mag uit'**
+  String get keepAwakeOff;
+
+  /// No description provided for @keepAwakeTooltip.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm aan houden'**
+  String get keepAwakeTooltip;
+
+  /// No description provided for @settingKeepAwake.
+  ///
+  /// In nl, this message translates to:
+  /// **'Scherm standaard aan tijdens spel'**
+  String get settingKeepAwake;
+
+  /// No description provided for @settingInputMode.
+  ///
+  /// In nl, this message translates to:
+  /// **'Invoermethode'**
+  String get settingInputMode;
+
+  /// No description provided for @inputModeAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Optellen'**
+  String get inputModeAdd;
+
+  /// No description provided for @inputModeEnter.
+  ///
+  /// In nl, this message translates to:
+  /// **'Invullen'**
+  String get inputModeEnter;
+
+  /// No description provided for @inputModeHintAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tik op knoppen om punten bij spelers op te tellen.'**
+  String get inputModeHintAdd;
+
+  /// No description provided for @inputModeHintEnter.
+  ///
+  /// In nl, this message translates to:
+  /// **'Vul per ronde de score van elke speler in met het numpad.'**
+  String get inputModeHintEnter;
+
+  /// No description provided for @dealerSemantics.
+  ///
+  /// In nl, this message translates to:
+  /// **'Deler'**
+  String get dealerSemantics;
+
+  /// No description provided for @firstBidderSemantics.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eerste bieder'**
+  String get firstBidderSemantics;
+
+  /// No description provided for @atTableTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aan tafel ({count})'**
+  String atTableTitle(int count);
+
+  /// No description provided for @atTableHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tik hieronder op spelers om ze aan tafel te zetten. Sleep om de zitvolgorde te wijzigen.'**
+  String get atTableHint;
+
+  /// No description provided for @removeFromTable.
+  ///
+  /// In nl, this message translates to:
+  /// **'Van tafel halen'**
+  String get removeFromTable;
+
+  /// No description provided for @moveSeat.
+  ///
+  /// In nl, this message translates to:
+  /// **'Verplaats {name}'**
+  String moveSeat(String name);
+
+  /// No description provided for @showAllPlayers.
+  ///
+  /// In nl, this message translates to:
+  /// **'Toon alle ({count})'**
+  String showAllPlayers(int count);
+
+  /// No description provided for @showFewerPlayers.
+  ///
+  /// In nl, this message translates to:
+  /// **'Toon minder'**
+  String get showFewerPlayers;
+
+  /// No description provided for @searchPlayer.
+  ///
+  /// In nl, this message translates to:
+  /// **'Zoek speler'**
+  String get searchPlayer;
+
+  /// No description provided for @noPlayerMatch.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen speler gevonden'**
+  String get noPlayerMatch;
+
+  /// No description provided for @saveAsGroup.
+  ///
+  /// In nl, this message translates to:
+  /// **'Opslaan als groep'**
+  String get saveAsGroup;
+
+  /// No description provided for @groupSavedMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groep {name} opgeslagen'**
+  String groupSavedMsg(String name);
+
+  /// No description provided for @groupSelectedMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} geselecteerd'**
+  String groupSelectedMsg(String name);
+
+  /// No description provided for @groupTruncatedMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'{game} is max. {max} spelers: de eerste {max} van {name} zijn gekozen'**
+  String groupTruncatedMsg(String game, int max, String name);
+
+  /// No description provided for @maxPlayersMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'{game} is max. {max} spelers'**
+  String maxPlayersMsg(String game, int max);
+
+  /// No description provided for @groupChipLabel.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} ({count})'**
+  String groupChipLabel(String name, int count);
+
+  /// No description provided for @groupChipAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groep'**
+  String get groupChipAdd;
+
+  /// No description provided for @proTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Kaartmaat Pro'**
+  String get proTitle;
+
+  /// No description provided for @proIntro.
+  ///
+  /// In nl, this message translates to:
+  /// **'Alle spellen blijven gratis. Met Pro krijg je er dit bij:'**
+  String get proIntro;
+
+  /// No description provided for @proFeatureStats.
+  ///
+  /// In nl, this message translates to:
+  /// **'Statistieken en de Kaartkoning van het jaar'**
+  String get proFeatureStats;
+
+  /// No description provided for @proFeatureHistory.
+  ///
+  /// In nl, this message translates to:
+  /// **'Historie van al je afgeronde spellen'**
+  String get proFeatureHistory;
+
+  /// No description provided for @proFeatureGroups.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelersgroepen om snel te selecteren'**
+  String get proFeatureGroups;
+
+  /// No description provided for @proOnce.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eenmalig, geen abonnement'**
+  String get proOnce;
+
+  /// No description provided for @proUnlock.
+  ///
+  /// In nl, this message translates to:
+  /// **'Ontgrendel Pro'**
+  String get proUnlock;
+
+  /// No description provided for @proRestore.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aankopen herstellen'**
+  String get proRestore;
+
+  /// No description provided for @proRestoring.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aankopen worden hersteld…'**
+  String get proRestoring;
+
+  /// No description provided for @proThanks.
+  ///
+  /// In nl, this message translates to:
+  /// **'Bedankt! Pro is ontgrendeld'**
+  String get proThanks;
+
+  /// No description provided for @proPending.
+  ///
+  /// In nl, this message translates to:
+  /// **'Betaling in behandeling. Pro wordt ontgrendeld zodra de betaling is bevestigd.'**
+  String get proPending;
+
+  /// No description provided for @proFailed.
+  ///
+  /// In nl, this message translates to:
+  /// **'De aankoop is niet gelukt. Er is niets afgeschreven. Probeer het later opnieuw.'**
+  String get proFailed;
+
+  /// No description provided for @proRestoreNone.
+  ///
+  /// In nl, this message translates to:
+  /// **'Er is geen eerdere aankoop gevonden bij dit account.'**
+  String get proRestoreNone;
+
+  /// No description provided for @proProductError.
+  ///
+  /// In nl, this message translates to:
+  /// **'De prijs kon niet worden opgehaald. Controleer je verbinding en probeer het opnieuw.'**
+  String get proProductError;
+
+  /// No description provided for @proLoadingPrice.
+  ///
+  /// In nl, this message translates to:
+  /// **'Prijs wordt geladen…'**
+  String get proLoadingPrice;
+
+  /// No description provided for @proRetry.
+  ///
+  /// In nl, this message translates to:
+  /// **'Opnieuw proberen'**
+  String get proRetry;
+
+  /// No description provided for @proDebugOverride.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pro forceren (alleen debug)'**
+  String get proDebugOverride;
+
+  /// No description provided for @proDebugAuto.
+  ///
+  /// In nl, this message translates to:
+  /// **'Automatisch'**
+  String get proDebugAuto;
+
+  /// No description provided for @proDebugOn.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pro aan'**
+  String get proDebugOn;
+
+  /// No description provided for @proDebugOff.
+  ///
+  /// In nl, this message translates to:
+  /// **'Pro uit'**
+  String get proDebugOff;
+
+  /// No description provided for @rulebookTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelregels'**
+  String get rulebookTitle;
+
+  /// No description provided for @rulebookTooltip.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelregels'**
+  String get rulebookTooltip;
+
+  /// No description provided for @rulebookGoal.
+  ///
+  /// In nl, this message translates to:
+  /// **'Doel'**
+  String get rulebookGoal;
+
+  /// No description provided for @rulebookNeeds.
+  ///
+  /// In nl, this message translates to:
+  /// **'Benodigdheden'**
+  String get rulebookNeeds;
+
+  /// No description provided for @rulebookFlow.
+  ///
+  /// In nl, this message translates to:
+  /// **'Spelverloop'**
+  String get rulebookFlow;
+
+  /// No description provided for @rulebookScoring.
+  ///
+  /// In nl, this message translates to:
+  /// **'Puntentelling'**
+  String get rulebookScoring;
+
+  /// No description provided for @rulebookRules.
+  ///
+  /// In nl, this message translates to:
+  /// **'Regels en varianten'**
+  String get rulebookRules;
+
+  /// No description provided for @rulebookTips.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tips'**
+  String get rulebookTips;
+
+  /// No description provided for @rulebookScoringNote.
+  ///
+  /// In nl, this message translates to:
+  /// **'Met de instellingen van dit spel'**
+  String get rulebookScoringNote;
+
+  /// No description provided for @rulebookError.
+  ///
+  /// In nl, this message translates to:
+  /// **'De spelregels konden niet worden geladen.'**
+  String get rulebookError;
 
   /// No description provided for @resumeGame.
   ///
@@ -868,12 +1192,6 @@ abstract class AppLocalizations {
   /// **'{rank}. {name}: {score}'**
   String shareTotalLine(int rank, String name, int score);
 
-  /// No description provided for @seatOrderHint.
-  ///
-  /// In nl, this message translates to:
-  /// **'Volgorde van selecteren is de zitvolgorde'**
-  String get seatOrderHint;
-
   /// No description provided for @gameOver.
   ///
   /// In nl, this message translates to:
@@ -997,8 +1315,14 @@ abstract class AppLocalizations {
   /// No description provided for @settingDealerRestriction.
   ///
   /// In nl, this message translates to:
-  /// **'Beperking voor de deler'**
+  /// **'Bieden mag niet kloppen'**
   String get settingDealerRestriction;
+
+  /// No description provided for @settingDealerRestrictionHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Het totaal van alle biedingen mag niet gelijk zijn aan het aantal slagen. Zo is er altijd een verliezer.'**
+  String get settingDealerRestrictionHint;
 
   /// No description provided for @settingExactBase.
   ///

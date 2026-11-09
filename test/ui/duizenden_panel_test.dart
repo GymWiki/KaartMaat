@@ -292,13 +292,15 @@ void main() {
     expect(saveButton(tester).onPressed, isNotNull);
   });
 
-  testWidgets('the range comes from the settings', (tester) async {
+  testWidgets('old saved min/max settings are ignored', (tester) async {
     await pumpPanel(
       tester,
       state: game(settings: {'minEntry': -50, 'maxEntry': 200}),
     );
     await type(tester, '201');
-    expect(find.text('Score buiten -50 tot 200'), findsOneWidget);
+    expect(find.textContaining('Score buiten'), findsNothing);
+    await type(tester, '-');
+    await type(tester, '-1000'.replaceAll('-', ''));
   });
 
   testWidgets('correcting a round loads its scores and offers to close', (

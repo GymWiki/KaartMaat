@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/l10n/l10n.dart';
 import '../games/data/game_repository.dart';
 import '../games/data/game_state.dart';
+import '../pro/pro_gate.dart';
+import '../pro/pro_previews.dart';
 import 'filter_bar.dart';
 import 'stats_calculator.dart';
 
@@ -20,9 +22,7 @@ class StatsScreen extends ConsumerWidget {
     final year = filter.year ?? DateTime.now().year;
     final king = kaartkoning(all, year, groupId: filter.groupId);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.statsTitle)),
-      body: all.isEmpty
+    final content = all.isEmpty
           ? Center(child: Text(l10n.statsEmpty))
           : Column(children: [
               FilterBar(provider: statsFilterProvider, games: all),
@@ -77,7 +77,15 @@ class StatsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-            ]),
+            ]);
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.statsTitle)),
+      // Pro: free users see a faded preview of their own data (or a sample)
+      body: ProGate(
+        preview: all.isEmpty ? const SampleStatsPreview() : content,
+        child: content,
+      ),
     );
   }
 }

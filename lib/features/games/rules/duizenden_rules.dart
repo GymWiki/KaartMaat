@@ -16,10 +16,18 @@ class DuizendenRules extends GameRules {
   static const typeId = 'duizenden';
   static const targetScoreKey = 'targetScore';
 
-  /// Allowed score per player per round. Anything outside is blocked, to
-  /// catch typos.
-  static const minEntryKey = 'minEntry';
-  static const maxEntryKey = 'maxEntry';
+  /// Allowed score per player per round, in one place. Anything outside is
+  /// blocked, to catch typos. These are not settings: older saved games may
+  /// still carry minEntry/maxEntry values, which are simply ignored.
+  static const minEntry = -999;
+  static const maxEntry = 9999;
+
+  /// Most characters a typed score can have (digits plus a minus sign are
+  /// counted by the pad as digits only).
+  static final int maxDigits = [
+    maxEntry.abs().toString().length,
+    minEntry.abs().toString().length,
+  ].reduce((a, b) => a > b ? a : b);
 
   @override
   String get type => typeId;
@@ -38,42 +46,15 @@ class DuizendenRules extends GameRules {
       defaultValue: 1000,
       max: 100000,
     ),
-    SettingSpec(
-      key: minEntryKey,
-      kind: SettingKind.integer,
-      defaultValue: -999,
-      min: -99999,
-      max: 0,
-    ),
-    SettingSpec(
-      key: maxEntryKey,
-      kind: SettingKind.integer,
-      defaultValue: 9999,
-      max: 99999,
-    ),
   ];
-
-  int minEntry(GameConfig config) =>
-      (config.settings[minEntryKey] as num?)?.toInt() ?? -999;
-
-  int maxEntry(GameConfig config) =>
-      (config.settings[maxEntryKey] as num?)?.toInt() ?? 9999;
-
-  /// Most characters a typed score can have, so the pad can stop in time.
-  int maxDigits(GameConfig config) {
-    final hi = maxEntry(config).abs().toString().length;
-    final lo = minEntry(config).abs().toString().length;
-    return hi > lo ? hi : lo;
-  }
 
   @override
   RoundIssue? validateRound(GameConfig config, RoundData round) {
-    final lo = minEntry(config), hi = maxEntry(config);
     for (final p in config.participants) {
       final value = round.entries[p]?['points'];
       if (value == null) return RoundIssue.missingEntry;
       if (value is! int) return RoundIssue.invalidValue;
-      if (value < lo || value > hi) return RoundIssue.outOfRange;
+      if (value < minEntry || value > maxEntry) return RoundIssue.outOfRange;
     }
     return null;
   }

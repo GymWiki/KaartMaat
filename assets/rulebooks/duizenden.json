@@ -1,0 +1,37 @@
+{
+  "title": "Duizenden",
+  "goal": [
+    "Verzamel over meerdere rondes punten. Wie als eerste {targetScore} punten of meer heeft, wint."
+  ],
+  "needs": [
+    "2 tot en met 8 spelers.",
+    "Het soort spel (kaarten of dobbelstenen) en hoe je punten verdient, bepaal je aan tafel: de app houdt alleen de scores bij."
+  ],
+  "flow": [
+    "Speel een ronde volgens de afspraken van jullie tafel.",
+    "Voer na de ronde voor elke speler het aantal punten in dat hij of zij verdiende. Een score mag negatief zijn.",
+    "De app telt de rondes op en toont na elke ronde de stand en de voortgang naar {targetScore}.",
+    "Heeft aan het eind van een ronde iemand {targetScore} punten of meer, dan is het spel afgelopen."
+  ],
+  "scoring": {
+    "intro": ["De app rekent zo:"],
+    "table": [
+      { "cols": ["Doelscore", "{targetScore}"] },
+      { "cols": ["Laagste score per ronde", "−999"] },
+      { "cols": ["Hoogste score per ronde", "9999"] }
+    ],
+    "notes": [
+      "Het spel wordt alleen aan het einde van een ronde beoordeeld. Wie het hoogste totaal heeft op dat moment, wint; staan twee spelers gelijk, dan winnen ze samen.",
+      "Over de doelscore heen gaan mag: het hoogste totaal telt, niet 'precies {targetScore}'."
+    ]
+  },
+  "rules": [
+    {
+      "title": "Spelregels van het spel zelf",
+      "text": "De app kent geen kaart- of dobbelregels voor Duizenden, alleen het optellen en de doelscore. Hoe je punten haalt, spreek je zelf af."
+    }
+  ],
+  "tips": [
+    "Pas de doelscore aan bij de spelregels voor een korter of langer spel."
+  ]
+}

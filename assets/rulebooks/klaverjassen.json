@@ -1,0 +1,92 @@
+{
+  "title": "Klaverjassen",
+  "texts": {
+    "variantName": {
+      "by": "variant",
+      "cases": { "amsterdams": "Amsterdams", "rotterdams": "Rotterdams", "gronings": "Gronings", "default": "" }
+    },
+    "endText": {
+      "by": "endMode",
+      "cases": {
+        "hands": "Er worden {rounds} giffen gespeeld; wie dan het hoogste totaal heeft, wint.",
+        "target": "Het spel eindigt zodra een team {targetScore} punten of meer heeft; het hoogste totaal wint.",
+        "default": "Het spel eindigt na {rounds} giffen of zodra een team {targetScore} punten heeft, wat het eerst komt."
+      }
+    },
+    "natText": {
+      "by": "tieIsNat",
+      "cases": {
+        "true": "De spelende partij is ook nat als ze precies evenveel punten haalt als de tegenpartij.",
+        "false": "Evenveel punten als de tegenpartij is niet nat: de spelende partij houdt dan haar eigen punten.",
+        "default": ""
+      }
+    }
+  },
+  "goal": [
+    "Twee teams van twee spelers spelen tegen elkaar. Per gif probeer je met je team meer punten te halen dan de tegenpartij, met kaartpunten en roem. {endText}",
+    "Je speelt nu de variant {variantName}."
+  ],
+  "needs": [
+    "Precies 4 spelers, in twee teams: de spelers op plaats 1 en 3 zijn 'Wij', de spelers op plaats 2 en 4 zijn 'Zij'. Maten zitten tegenover elkaar.",
+    "Een kaartspel van 32 kaarten (7 tot en met aas)."
+  ],
+  "flow": [
+    "De deler schudt en deelt elke speler 8 kaarten. Na elke gif schuift de deler een plek naar links op; in de eerste gif deelt speler 1.",
+    "De speler links van de deler bepaalt de troefkleur. Het team dat troef kiest is de 'spelende partij'. Hoe precies wordt bepaald wie mag kiezen, verschilt per streek; de app houdt alleen bij welk team speelt.",
+    { "text": "Gronings: voordat er gespeeld wordt, wordt er geboden. De speler links van de deler begint; de deler biedt als laatste. Een eerste bod is een veelvoud van 10 van minimaal {minBid} en hoogstens {maxBid}. Een hoger bod is steeds +10, +20 of +30. Passen mag. Bieden alle spelers pas, dan speelt de speler links van de deler voor het laagste bod ({minBid}).", "if": "variant=gronings" },
+    "De speler links van de deler komt uit. Je speelt 8 slagen. Je moet de gevraagde kleur bekennen; kun je dat niet, dan gelden de troefregels hieronder.",
+    "De hoogste kaart van de gevraagde kleur wint de slag, tenzij er getroefd is: de hoogste troef wint dan. De winnaar van een slag komt uit voor de volgende.",
+    "Tel na de laatste slag per team de kaartpunten en de roem bij elkaar en voer die in de app in. De app rekent uit of de spelende partij nat is en wat elk team scoort."
+  ],
+  "scoring": {
+    "intro": [
+      "Elke gif is samen 162 kaartpunten waard: 152 voor de kaarten en 10 voor de laatste slag. Kaartwaarden:"
+    ],
+    "table": [
+      { "cols": ["Troef: boer", "20"] },
+      { "cols": ["Troef: negen", "14"] },
+      { "cols": ["Aas (alle kleuren)", "11"] },
+      { "cols": ["Tien", "10"] },
+      { "cols": ["Heer", "4"] },
+      { "cols": ["Vrouw", "3"] },
+      { "cols": ["Boer (geen troef)", "2"] },
+      { "cols": ["Negen (geen troef), acht en zeven", "0"] },
+      { "cols": ["Laatste slag", "10"] },
+      { "cols": ["Roem: drie opeenvolgende kaarten van één kleur", "{roemThree}"] },
+      { "cols": ["Roem: vier opeenvolgende kaarten van één kleur", "{roemFour}"] },
+      { "cols": ["Roem: stuk (heer en vrouw van troef)", "{roemStuk}"] },
+      { "cols": ["Roem: vier gelijke kaarten", "{roemFourEqual}"] },
+      { "cols": ["Roem: vier boeren", "{roemFourJacks}"] },
+      { "cols": ["Bonus voor pit (alle 8 slagen)", "{pitBonus}"] }
+    ],
+    "notes": [
+      "Opeenvolgend zijn kaarten in de gewone volgorde 7, 8, 9, 10, boer, vrouw, heer, aas. Een drie op rij met het stuk erin voer je in als 'drie op rij' plus 'stuk' ({roemThree} + {roemStuk}).",
+      "Haalt de spelende partij meer punten (kaartpunten plus roem) dan de tegenpartij, dan scoort elk team zijn eigen punten. {natText}",
+      "Nat: de spelende partij krijgt niets. De tegenpartij krijgt alle kaartpunten en alle roem, ook die van de spelende partij.",
+      "Pit: haalt de spelende partij alle 8 slagen, dan krijgt ze alle 162 kaartpunten, haar roem en de pitbonus. De tegenpartij krijgt niets, ook geen roem.",
+      { "text": "Gronings: de spelende partij moet het bod halen met kaartpunten plus roem. Precies het bod is gehaald; minder is nat. Bij nat gaat alles naar de tegenpartij, zoals hierboven.", "if": "variant=gronings" }
+    ]
+  },
+  "rules": [
+    {
+      "title": "Troeven en overtroeven",
+      "text": "Kun je de gevraagde kleur niet bekennen, dan moet je troeven (Rotterdams: altijd). Wordt er troef gevraagd, dan moet je de hoogste troef op tafel overtroeven als je kunt. Amsterdams en Gronings: ligt de slag al bij je maat, dan hoef je niet te troeven."
+    },
+    {
+      "title": "Amsterdams en Rotterdams",
+      "text": "In de app rekenen beide varianten hetzelfde. Het verschil zit in het spelen: bij Rotterdams moet je altijd troeven als je niet kunt bekennen, ook als je maat de slag heeft."
+    },
+    {
+      "title": "Gronings",
+      "text": "Elke gif begint met bieden. De spelende partij is de partij van de hoogste bieder en kiest troef. Het laagste en hoogste bod stel je in bij de spelregels."
+    },
+    {
+      "title": "Vier gelijke",
+      "text": "Vier gelijke kaarten (bijvoorbeeld vier heren) leveren {roemFourEqual} roem op, vier boeren {roemFourJacks}. Clubs en streken verschillen hierin, daarom zijn beide bedragen instelbaar."
+    }
+  ],
+  "tips": [
+    "Spreek vooraf af welke variant en welke roemwaarden jullie gebruiken; beide staan bij de spelregels voordat je start.",
+    "Tel de kaartpunten van één team: de andere is 162 min dat getal. De app controleert dat beide samen 162 zijn."
+  ]
+}
