@@ -100,6 +100,9 @@ void appTest(String name, Future<void> Function(WidgetTester) body) {
     try {
       await body(tester);
     } finally {
+      // let snackbars (undo, max players) finish before the app goes away
+      await tester.pump(const Duration(seconds: 5));
+      await tester.pump(const Duration(seconds: 1));
       await tester.pumpWidget(const SizedBox());
       await tester.pump(const Duration(seconds: 1));
       await tester.runAsync(db.close);
@@ -158,7 +161,7 @@ void main() {
 
         var selected = 0;
         for (final n in names) {
-          await tester.tap(find.widgetWithText(FilterChip, n));
+          await tester.tap(find.widgetWithText(ActionChip, n));
           await settle(tester, 2);
           selected = (selected + 1).clamp(0, rules.maxPlayers);
           expect(
@@ -168,8 +171,7 @@ void main() {
           );
         }
         // 9 players tapped: never more than the maximum can be selected
-        final chips = tester.widgetList<FilterChip>(find.byType(FilterChip));
-        expect(chips.where((c) => c.selected).length, rules.maxPlayers);
+        expect(find.text('Start spel'), findsOneWidget);
         expect(enabled(), isTrue);
       },
     );
@@ -245,7 +247,7 @@ void main() {
     );
     await settle(tester);
     await goTo(tester, '/new/klaverjassen');
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Vrijdag'));
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Vrijdag (4)'));
     await settle(tester, 2);
     await tester.tap(find.text('Start spel'));
     await settle(tester);
@@ -306,8 +308,8 @@ void startGuardTests() {
   ) async {
     await boot(tester, seedPlayers: 2);
     await goTo(tester, '/new/custom');
-    await tester.tap(find.widgetWithText(FilterChip, 'Anna'));
-    await tester.tap(find.widgetWithText(FilterChip, 'Bas'));
+    await tester.tap(find.widgetWithText(ActionChip, 'Anna'));
+    await tester.tap(find.widgetWithText(ActionChip, 'Bas'));
     await settle(tester, 2);
     final start = find.text('Start spel');
     // two taps without a frame in between, like a nervous double tap

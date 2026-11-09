@@ -269,6 +269,68 @@ class AppLocalizationsNl extends AppLocalizations {
   String get firstBidderSemantics => 'Eerste bieder';
 
   @override
+  String atTableTitle(int count) {
+    return 'Aan tafel ($count)';
+  }
+
+  @override
+  String get atTableHint =>
+      'Tik hieronder op spelers om ze aan tafel te zetten. Sleep om de zitvolgorde te wijzigen.';
+
+  @override
+  String get removeFromTable => 'Van tafel halen';
+
+  @override
+  String moveSeat(String name) {
+    return 'Verplaats $name';
+  }
+
+  @override
+  String showAllPlayers(int count) {
+    return 'Toon alle ($count)';
+  }
+
+  @override
+  String get showFewerPlayers => 'Toon minder';
+
+  @override
+  String get searchPlayer => 'Zoek speler';
+
+  @override
+  String get noPlayerMatch => 'Geen speler gevonden';
+
+  @override
+  String get saveAsGroup => 'Opslaan als groep';
+
+  @override
+  String groupSavedMsg(String name) {
+    return 'Groep $name opgeslagen';
+  }
+
+  @override
+  String groupSelectedMsg(String name) {
+    return '$name geselecteerd';
+  }
+
+  @override
+  String groupTruncatedMsg(String game, int max, String name) {
+    return '$game is max. $max spelers: de eerste $max van $name zijn gekozen';
+  }
+
+  @override
+  String maxPlayersMsg(String game, int max) {
+    return '$game is max. $max spelers';
+  }
+
+  @override
+  String groupChipLabel(String name, int count) {
+    return '$name ($count)';
+  }
+
+  @override
+  String get groupChipAdd => 'Groep';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override
@@ -498,9 +560,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String shareTotalLine(int rank, String name, int score) {
     return '$rank. $name: $score';
   }
-
-  @override
-  String get seatOrderHint => 'Volgorde van selecteren is de zitvolgorde';
 
   @override
   String get gameOver => 'Spel afgelopen';

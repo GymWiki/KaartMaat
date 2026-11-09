@@ -21,6 +21,26 @@ class PlayerRepository {
               PlayerRef(id: r.id, name: r.name, avatar: r.avatar),
           ]);
 
+  /// When each player last took part in a game (the day the game was
+  /// started), for ordering the player list: recent first. Derived from the
+  /// games, nothing extra is stored.
+  Stream<Map<int, DateTime>> watchLastPlayed() => db
+      .customSelect(
+        'SELECT gp.player_id AS player_id, MAX(g.created_at) AS last '
+        'FROM game_players gp JOIN games g ON g.id = gp.game_id '
+        'GROUP BY gp.player_id',
+        readsFrom: {db.gamePlayers, db.games},
+      )
+      .watch()
+      .map(
+        (rows) => {
+          for (final r in rows)
+            r.read<int>('player_id'): DateTime.fromMillisecondsSinceEpoch(
+              r.read<int>('last') * 1000,
+            ),
+        },
+      );
+
   /// Returns the new id, or the reason the name was refused.
   Future<({int? id, PlayerNameError? error})> add(String name) async {
     final error = await _check(name, null);
@@ -63,6 +83,9 @@ class PlayerRepository {
 
 final playerRepositoryProvider =
     Provider((ref) => PlayerRepository(ref.watch(databaseProvider)));
+
+final lastPlayedProvider = StreamProvider<Map<int, DateTime>>(
+    (ref) => ref.watch(playerRepositoryProvider).watchLastPlayed());
 
 final playersProvider = StreamProvider<List<PlayerRef>>(
     (ref) => ref.watch(playerRepositoryProvider).watchActive());

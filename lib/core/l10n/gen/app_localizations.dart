@@ -538,6 +538,96 @@ abstract class AppLocalizations {
   /// **'Eerste bieder'**
   String get firstBidderSemantics;
 
+  /// No description provided for @atTableTitle.
+  ///
+  /// In nl, this message translates to:
+  /// **'Aan tafel ({count})'**
+  String atTableTitle(int count);
+
+  /// No description provided for @atTableHint.
+  ///
+  /// In nl, this message translates to:
+  /// **'Tik hieronder op spelers om ze aan tafel te zetten. Sleep om de zitvolgorde te wijzigen.'**
+  String get atTableHint;
+
+  /// No description provided for @removeFromTable.
+  ///
+  /// In nl, this message translates to:
+  /// **'Van tafel halen'**
+  String get removeFromTable;
+
+  /// No description provided for @moveSeat.
+  ///
+  /// In nl, this message translates to:
+  /// **'Verplaats {name}'**
+  String moveSeat(String name);
+
+  /// No description provided for @showAllPlayers.
+  ///
+  /// In nl, this message translates to:
+  /// **'Toon alle ({count})'**
+  String showAllPlayers(int count);
+
+  /// No description provided for @showFewerPlayers.
+  ///
+  /// In nl, this message translates to:
+  /// **'Toon minder'**
+  String get showFewerPlayers;
+
+  /// No description provided for @searchPlayer.
+  ///
+  /// In nl, this message translates to:
+  /// **'Zoek speler'**
+  String get searchPlayer;
+
+  /// No description provided for @noPlayerMatch.
+  ///
+  /// In nl, this message translates to:
+  /// **'Geen speler gevonden'**
+  String get noPlayerMatch;
+
+  /// No description provided for @saveAsGroup.
+  ///
+  /// In nl, this message translates to:
+  /// **'Opslaan als groep'**
+  String get saveAsGroup;
+
+  /// No description provided for @groupSavedMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groep {name} opgeslagen'**
+  String groupSavedMsg(String name);
+
+  /// No description provided for @groupSelectedMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} geselecteerd'**
+  String groupSelectedMsg(String name);
+
+  /// No description provided for @groupTruncatedMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'{game} is max. {max} spelers: de eerste {max} van {name} zijn gekozen'**
+  String groupTruncatedMsg(String game, int max, String name);
+
+  /// No description provided for @maxPlayersMsg.
+  ///
+  /// In nl, this message translates to:
+  /// **'{game} is max. {max} spelers'**
+  String maxPlayersMsg(String game, int max);
+
+  /// No description provided for @groupChipLabel.
+  ///
+  /// In nl, this message translates to:
+  /// **'{name} ({count})'**
+  String groupChipLabel(String name, int count);
+
+  /// No description provided for @groupChipAdd.
+  ///
+  /// In nl, this message translates to:
+  /// **'Groep'**
+  String get groupChipAdd;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:
@@ -921,12 +1011,6 @@ abstract class AppLocalizations {
   /// In nl, this message translates to:
   /// **'{rank}. {name}: {score}'**
   String shareTotalLine(int rank, String name, int score);
-
-  /// No description provided for @seatOrderHint.
-  ///
-  /// In nl, this message translates to:
-  /// **'Volgorde van selecteren is de zitvolgorde'**
-  String get seatOrderHint;
 
   /// No description provided for @gameOver.
   ///
