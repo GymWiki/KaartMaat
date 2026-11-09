@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/ui/player_selector.dart';
+import '../../../core/ui/seat_chips.dart';
 import '../../../core/ui/quick_button_row.dart';
 import '../../../core/ui/suits.dart';
 import '../../../core/ui/touch.dart';
@@ -98,6 +99,11 @@ class GroningsBidStep extends StatelessWidget {
             for (final p in order)
               PlayerChipData(
                 label: nameOf(p),
+                marker: p == rules.dealer(config, number)
+                    ? SeatMarker.dealer
+                    : p == starter
+                    ? SeatMarker.firstBidder
+                    : null,
                 value: latest[p]?.toString(),
                 done: highest?.player == p,
               ),

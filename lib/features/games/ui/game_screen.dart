@@ -500,6 +500,9 @@ class _GameScreenState extends ConsumerState<GameScreen>
                 totalDetail: def.totalDetail == null
                     ? null
                     : (p) => def.totalDetail!(l10n, view, p),
+                seatMarker: def.seatMarkers == null
+                    ? null
+                    : (p) => def.seatMarkers!(view, number)[p],
               ),
             ),
           ],

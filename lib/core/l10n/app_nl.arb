@@ -84,6 +84,8 @@
   "inputModeEnter": "Invullen",
   "inputModeHintAdd": "Tik op knoppen om punten bij spelers op te tellen.",
   "inputModeHintEnter": "Vul per ronde de score van elke speler in met het numpad.",
+  "dealerSemantics": "Deler",
+  "firstBidderSemantics": "Eerste bieder",
   "resumeGame": "Hervat spel",
   "resumeSubtitle": "{game} · {count, plural, =0{nog geen rondes} =1{1 ronde} other{{count} rondes}}",
   "@resumeSubtitle": {

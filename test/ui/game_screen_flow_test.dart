@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kaartmaat/core/db/database.dart';
 import 'package:kaartmaat/core/ui/quick_button_row.dart';
+import 'package:kaartmaat/core/ui/seat_chips.dart';
 import 'package:kaartmaat/features/games/data/draft_store.dart';
 import 'package:kaartmaat/features/games/data/game_repository.dart';
 import 'package:kaartmaat/features/games/data/game_state.dart';
@@ -44,8 +45,10 @@ class _FakeRepo extends GameRepository {
   }
 
   @override
-  Future<void> addRound(int gameId, Entries entries) async =>
-      _set([...state.rounds, RoundData(number: state.rounds.length + 1, entries: entries)]);
+  Future<void> addRound(int gameId, Entries entries) async => _set([
+    ...state.rounds,
+    RoundData(number: state.rounds.length + 1, entries: entries),
+  ]);
 
   @override
   Future<Entries?> upsertRound(int gameId, int number, Entries entries) async {
@@ -62,7 +65,8 @@ class _FakeRepo extends GameRepository {
   }
 
   @override
-  Future<void> updateRound(int gameId, int number, Entries entries) async => _set([
+  Future<void> updateRound(int gameId, int number, Entries entries) async =>
+      _set([
         for (final r in state.rounds)
           r.number == number ? RoundData(number: number, entries: entries) : r,
       ]);
@@ -80,39 +84,40 @@ class _MemoryDrafts extends DraftStore {
   Future<Map<String, Object?>?> load(int gameId) async => data[gameId];
 
   @override
-  Future<void> save(int gameId, Map<String, Object?> draft) async => data[gameId] = draft;
+  Future<void> save(int gameId, Map<String, Object?> draft) async =>
+      data[gameId] = draft;
 
   @override
   Future<void> clear(int gameId) async => data.remove(gameId);
 }
 
 GameState newGame({List<RoundData> rounds = const []}) => GameState(
-      id: 1,
-      type: 'boerenbridge',
-      createdAt: DateTime(2026, 5, 1),
-      finishedAt: null,
-      settings: const BoerenbridgeRules().defaultSettings,
-      players: const [
-        PlayerRef(id: 1, name: 'Anna'),
-        PlayerRef(id: 2, name: 'Bas'),
-        PlayerRef(id: 3, name: 'Chris'),
-      ],
-      rounds: rounds,
-    );
+  id: 1,
+  type: 'boerenbridge',
+  createdAt: DateTime(2026, 5, 1),
+  finishedAt: null,
+  settings: const BoerenbridgeRules().defaultSettings,
+  players: const [
+    PlayerRef(id: 1, name: 'Anna'),
+    PlayerRef(id: 2, name: 'Bas'),
+    PlayerRef(id: 3, name: 'Chris'),
+  ],
+  rounds: rounds,
+);
 
 GameState countingGame() => GameState(
-      id: 1,
-      type: 'custom',
-      createdAt: DateTime(2026, 5, 1),
-      finishedAt: null,
-      settings: const CustomRules().defaultSettings,
-      players: const [
-        PlayerRef(id: 1, name: 'Anna'),
-        PlayerRef(id: 2, name: 'Bas'),
-        PlayerRef(id: 3, name: 'Chris'),
-      ],
-      rounds: const [],
-    );
+  id: 1,
+  type: 'custom',
+  createdAt: DateTime(2026, 5, 1),
+  finishedAt: null,
+  settings: const CustomRules().defaultSettings,
+  players: const [
+    PlayerRef(id: 1, name: 'Anna'),
+    PlayerRef(id: 2, name: 'Bas'),
+    PlayerRef(id: 3, name: 'Chris'),
+  ],
+  rounds: const [],
+);
 
 /// The whole Boerenbridge round on ONE screen: bids, tricks, confirm, undo,
 /// and correcting an earlier round.
@@ -124,8 +129,19 @@ void main() {
   setUp(() => db = AppDatabase(NativeDatabase.memory()));
   tearDown(() => db.close());
 
-  Finder number(String text) =>
-      find.descendant(of: find.byType(QuickButtonRow), matching: find.text(text));
+  /// The dealer chip next to [name] (in the table header and on the tile).
+  Finder dealerOf(String name) => find.descendant(
+    of: find.ancestor(
+      of: find.text(name),
+      matching: find.byType(NameWithMarker),
+    ),
+    matching: find.byType(DealerChip),
+  );
+
+  Finder number(String text) => find.descendant(
+    of: find.byType(QuickButtonRow),
+    matching: find.text(text),
+  );
 
   Future<void> openGame(WidgetTester tester, GameState state) async {
     usePhoneScreen(tester);
@@ -151,13 +167,16 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   }
 
-  testWidgets('a full round without leaving the screen, then undo', (tester) async {
+  testWidgets('a full round without leaving the screen, then undo', (
+    tester,
+  ) async {
     await openGame(tester, newGame());
 
     // Round 1: dealer is Anna, bidding order Bas, Chris, Anna. Table on top,
     // panel at the bottom: one screen.
     expect(find.byType(Scaffold), findsOneWidget);
-    expect(find.textContaining('Deler: Anna'), findsOneWidget);
+    expect(dealerOf('Anna'), findsWidgets);
+    expect(dealerOf('Bas'), findsNothing);
 
     await tester.tap(number('1')); // Bas bids 1
     await tester.pump();
@@ -173,8 +192,10 @@ void main() {
 
     // The bids were stored as an open round and the panel asks for the tricks.
     expect(repo.state.rounds.length, 1);
-    expect(repo.state.rounds.single.entries.values.map((e) => e['tricks']),
-        everyElement(isNull));
+    expect(
+      repo.state.rounds.single.entries.values.map((e) => e['tricks']),
+      everyElement(isNull),
+    );
     expect(find.text('Ronde afronden'), findsOneWidget);
 
     await tester.tap(number('1')); // Bas wins the trick
@@ -187,12 +208,18 @@ void main() {
     }
 
     final entries = repo.state.rounds.single.entries;
-    expect([for (final p in ['1', '2', '3']) entries[p]!['tricks']], [0, 1, 0]);
+    expect(
+      [
+        for (final p in ['1', '2', '3']) entries[p]!['tricks'],
+      ],
+      [0, 1, 0],
+    );
     expect(find.byType(SnackBar), findsNothing); // undo lives in the round bar
     expect(find.text('+1'), findsOneWidget); // new round: confirmation plays
     // the next round is ready: dealer Bas, and the draft is gone
     expect(find.textContaining('Ronde 2 van'), findsOneWidget);
-    expect(find.textContaining('Deler: Bas'), findsOneWidget);
+    expect(dealerOf('Bas'), findsWidgets);
+    expect(dealerOf('Anna'), findsNothing);
     expect(drafts.data, isEmpty);
 
     // undo brings the round back to the tricks step, with the tricks as typed
@@ -202,8 +229,10 @@ void main() {
     await tester.pump();
     await tester.pump();
     expect(find.text('+1'), findsNothing); // undo: no particle
-    expect(repo.state.rounds.single.entries.values.map((e) => e['tricks']),
-        everyElement(isNull));
+    expect(
+      repo.state.rounds.single.entries.values.map((e) => e['tricks']),
+      everyElement(isNull),
+    );
     expect(find.text('Ronde afronden'), findsOneWidget);
     final confirm = find.widgetWithText(FilledButton, 'Ronde afronden');
     expect(tester.widget<FilledButton>(confirm).onPressed, isNotNull);
@@ -211,15 +240,21 @@ void main() {
     await close(tester);
   });
 
-  testWidgets('tapping an earlier round corrects it in the same panel', (tester) async {
-    final done = RoundData(number: 1, entries: {
-      '1': {'bid': 0, 'tricks': 0},
-      '2': {'bid': 1, 'tricks': 1},
-      '3': {'bid': 1, 'tricks': 0},
-    });
+  testWidgets('tapping an earlier round corrects it in the same panel', (
+    tester,
+  ) async {
+    final done = RoundData(
+      number: 1,
+      entries: {
+        '1': {'bid': 0, 'tricks': 0},
+        '2': {'bid': 1, 'tricks': 1},
+        '3': {'bid': 1, 'tricks': 0},
+      },
+    );
     await openGame(tester, newGame(rounds: [done]));
 
-    expect(find.textContaining('Deler: Bas'), findsOneWidget); // round 2 is the next one
+    expect(dealerOf('Bas'), findsWidgets);
+    expect(dealerOf('Anna'), findsNothing); // round 2 is the next one
     await tester.tap(find.text('bod 1 · 1'));
     await tester.pump();
     await tester.pump();
@@ -237,15 +272,20 @@ void main() {
     await tester.tap(find.byIcon(Icons.close));
     await tester.pump();
     await tester.pump();
-    expect(find.textContaining('Deler: Bas'), findsOneWidget); // back on the new round
-    expect(repo.state.rounds.single.entries['2'], {'bid': 1, 'tricks': 1}); // untouched
+    expect(dealerOf('Bas'), findsWidgets);
+    expect(dealerOf('Anna'), findsNothing); // back on the new round
+    expect(repo.state.rounds.single.entries['2'], {
+      'bid': 1,
+      'tricks': 1,
+    }); // untouched
     expect(find.text('+1'), findsNothing); // editing/closing: no particle
 
     await close(tester);
   });
 
-  testWidgets('a half-filled panel is restored when the screen opens again',
-      (tester) async {
+  testWidgets('a half-filled panel is restored when the screen opens again', (
+    tester,
+  ) async {
     await openGame(tester, newGame());
     await tester.tap(number('1')); // Bas bids 1
     await tester.pump();
@@ -276,50 +316,54 @@ void main() {
     await close(tester);
   });
 
-  testWidgets('counting live: taps are stored at once, next round, correcting an old one',
-      (tester) async {
-    final semantics = tester.ensureSemantics();
-    await openGame(tester, countingGame());
-    Finder tile(String name) => find.descendant(
-        of: find.byType(CounterPanel), matching: find.text(name));
-    int points(int round, String player) =>
-        repo.state.rounds[round - 1].entries[player]!['points'] as int;
+  testWidgets(
+    'counting live: taps are stored at once, next round, correcting an old one',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      await openGame(tester, countingGame());
+      Finder tile(String name) => find.descendant(
+        of: find.byType(CounterPanel),
+        matching: find.text(name),
+      );
+      int points(int round, String player) =>
+          repo.state.rounds[round - 1].entries[player]!['points'] as int;
 
-    // nothing yet: the first tap creates round 1
-    expect(repo.state.rounds, isEmpty);
-    await tester.tap(tile('Anna'));
-    await tester.pump();
-    await tester.tap(tile('Anna'));
-    await tester.pump();
-    expect(repo.state.rounds.length, 1);
-    expect(points(1, '1'), 2);
+      // nothing yet: the first tap creates round 1
+      expect(repo.state.rounds, isEmpty);
+      await tester.tap(tile('Anna'));
+      await tester.pump();
+      await tester.tap(tile('Anna'));
+      await tester.pump();
+      expect(repo.state.rounds.length, 1);
+      expect(points(1, '1'), 2);
 
-    // next round: a new empty round, taps now go there
-    await tester.tap(find.text('Volgende ronde'));
-    await tester.pump();
-    await tester.pump();
-    expect(repo.state.rounds.length, 2);
-    await tester.tap(tile('Bas'));
-    await tester.pump();
-    expect(points(2, '2'), 1);
-    expect(points(1, '2'), 0);
+      // next round: a new empty round, taps now go there
+      await tester.tap(find.text('Volgende ronde'));
+      await tester.pump();
+      await tester.pump();
+      expect(repo.state.rounds.length, 2);
+      await tester.tap(tile('Bas'));
+      await tester.pump();
+      expect(points(2, '2'), 1);
+      expect(points(1, '2'), 0);
 
-    // tap round 1 in the table: corrected in the same panel, then back
-    await tester.tap(find.bySemanticsLabel(RegExp('^Ronde 1, ')));
-    await tester.pump();
-    await tester.pump();
-    expect(find.textContaining('Ronde 1 corrigeren'), findsWidgets);
-    await tester.tap(tile('Anna'));
-    await tester.pump();
-    expect(points(1, '1'), 3);
-    await tester.tap(find.text('Klaar'));
-    await tester.pump();
-    await tester.pump();
-    await tester.tap(tile('Chris'));
-    await tester.pump();
-    expect(points(2, '3'), 1);
+      // tap round 1 in the table: corrected in the same panel, then back
+      await tester.tap(find.bySemanticsLabel(RegExp('^Ronde 1, ')));
+      await tester.pump();
+      await tester.pump();
+      expect(find.textContaining('Ronde 1 corrigeren'), findsWidgets);
+      await tester.tap(tile('Anna'));
+      await tester.pump();
+      expect(points(1, '1'), 3);
+      await tester.tap(find.text('Klaar'));
+      await tester.pump();
+      await tester.pump();
+      await tester.tap(tile('Chris'));
+      await tester.pump();
+      expect(points(2, '3'), 1);
 
-    await close(tester);
-    semantics.dispose();
-  });
+      await close(tester);
+      semantics.dispose();
+    },
+  );
 }

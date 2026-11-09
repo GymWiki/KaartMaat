@@ -263,6 +263,12 @@ class AppLocalizationsNl extends AppLocalizations {
       'Vul per ronde de score van elke speler in met het numpad.';
 
   @override
+  String get dealerSemantics => 'Deler';
+
+  @override
+  String get firstBidderSemantics => 'Eerste bieder';
+
+  @override
   String get resumeGame => 'Hervat spel';
 
   @override

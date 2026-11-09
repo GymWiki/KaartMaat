@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/ui/live_score_preview.dart';
 import '../../../core/ui/player_selector.dart';
+import '../../../core/ui/seat_chips.dart';
 import '../../../core/ui/quick_button_row.dart';
 import '../../../core/ui/touch.dart';
 import '../../settings/data/settings_repository.dart';
@@ -279,9 +280,12 @@ class _BoerenbridgePanelState extends ConsumerState<BoerenbridgePanel> {
           chips: [
             for (final p in order)
               PlayerChipData(
-                label: p == dealer
-                    ? '${view.nameOf(p)} · ${l10n.dealerTag}'
-                    : view.nameOf(p),
+                label: view.nameOf(p),
+                marker: p == dealer
+                    ? SeatMarker.dealer
+                    : p == order.first
+                    ? SeatMarker.firstBidder
+                    : null,
                 value: (tricksStep ? eff[p] : bids[p])?.toString(),
                 done: (tricksStep ? eff[p] : bids[p]) != null,
               ),

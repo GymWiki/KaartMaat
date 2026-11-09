@@ -28,6 +28,7 @@ import 'ui/klaverjas_panel.dart';
 import 'ui/points_entry.dart';
 import 'ui/rikken_entry.dart';
 import 'ui/rikken_labels.dart';
+import '../../core/ui/seat_chips.dart';
 import '../../core/ui/suits.dart';
 import 'ui/duizenden_panel.dart';
 import 'ui/gronings_steps.dart' show suitSign;
@@ -62,6 +63,7 @@ class GameDefinition {
     this.liveRoundIf,
     this.statusLine,
     this.totalDetail,
+    this.seatMarkers,
   });
 
   final GameRules rules;
@@ -101,6 +103,11 @@ class GameDefinition {
   /// target, for example).
   final String? Function(AppLocalizations l10n, GameView view, String participant)?
       totalDetail;
+
+  /// Who deals and who bids first in [roundNumber], by participant (a player,
+  /// or a team in team games). Null for games without a dealer.
+  final Map<String, SeatMarker> Function(GameView view, int roundNumber)?
+      seatMarkers;
 
   /// Counting games: the panel edits the latest round on every tap, and
   /// "next round" starts a new one, instead of confirming a round at a time.
@@ -142,8 +149,15 @@ final Map<String, GameDefinition> gameDefinitions = {
       return [
         editing ? l.editRound(n) : l.roundOf(n, rules.totalRounds(cfg)),
         l.cardsCount(rules.cardsInRound(cfg, n)),
-        l.dealerLabel(view.nameOf(rules.dealer(cfg, n))),
       ].join(' · ');
+    },
+    seatMarkers: (view, n) {
+      const rules = BoerenbridgeRules();
+      final cfg = view.config;
+      return {
+        rules.dealer(cfg, n): SeatMarker.dealer,
+        rules.bidOrder(cfg, n).first: SeatMarker.firstBidder,
+      };
     },
     cellDetail: (l, view, i, p) {
       final e = view.state.rounds[i].entries[p];
@@ -179,8 +193,20 @@ final Map<String, GameDefinition> gameDefinitions = {
         editing
             ? l.editRound(n)
             : (total == null ? l.roundTitle(n) : l.roundOf(n, total)),
-        l.dealerLabel(view.nameOf(rules.dealer(cfg, n))),
       ].join(' · ');
+    },
+    // the dealer's team and the team of the player left of the dealer
+    seatMarkers: (view, n) {
+      const rules = KlaverjasRules();
+      final cfg = view.config;
+      String teamOf(String player) =>
+          rules.membersOf(cfg, KlaverjasRules.wij).contains(player)
+          ? KlaverjasRules.wij
+          : KlaverjasRules.zij;
+      return {
+        teamOf(rules.dealer(cfg, n)): SeatMarker.dealer,
+        teamOf(rules.bidStarter(cfg, n)): SeatMarker.firstBidder,
+      };
     },
     cellDetail: (l, view, i, team) {
       const rules = KlaverjasRules();

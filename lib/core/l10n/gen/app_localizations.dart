@@ -526,6 +526,18 @@ abstract class AppLocalizations {
   /// **'Vul per ronde de score van elke speler in met het numpad.'**
   String get inputModeHintEnter;
 
+  /// No description provided for @dealerSemantics.
+  ///
+  /// In nl, this message translates to:
+  /// **'Deler'**
+  String get dealerSemantics;
+
+  /// No description provided for @firstBidderSemantics.
+  ///
+  /// In nl, this message translates to:
+  /// **'Eerste bieder'**
+  String get firstBidderSemantics;
+
   /// No description provided for @resumeGame.
   ///
   /// In nl, this message translates to:

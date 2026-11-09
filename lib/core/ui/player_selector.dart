@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/l10n.dart';
 import '../theme/app_theme.dart';
+import 'seat_chips.dart';
 import 'touch.dart';
 
 class PlayerChipData {
@@ -14,6 +15,7 @@ class PlayerChipData {
     this.caption,
     this.highlight = false,
     this.error = false,
+    this.marker,
   });
 
   final String label;
@@ -32,6 +34,9 @@ class PlayerChipData {
 
   /// Marks the chip as holding an unacceptable value.
   final bool error;
+
+  /// Dealer or first bidder: shown as a small chip next to the name.
+  final SeatMarker? marker;
 }
 
 /// Row of players (wrapping, never scrolling) to pick whose value is being
@@ -82,6 +87,9 @@ class PlayerSelector extends StatelessWidget {
                 selected: i == selectedIndex,
                 label: [
                   chips[i].label,
+                  if (chips[i].marker == SeatMarker.dealer) l10n.dealerSemantics,
+                  if (chips[i].marker == SeatMarker.firstBidder)
+                    l10n.firstBidderSemantics,
                   if (chips[i].value != null) chips[i].value!,
                   if (chips[i].caption != null) chips[i].caption!,
                   if (chips[i].done) l10n.entered,
@@ -118,10 +126,10 @@ class PlayerSelector extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              chips[i].label,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            NameWithMarker(
+                              name: chips[i].label,
+                              marker: chips[i].marker,
+                              chipSize: 15,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: i == selectedIndex
